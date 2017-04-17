@@ -128,6 +128,8 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 
 ## Why?
 
+[![Join the chat at https://gitter.im/voku/Stringy](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/voku/Stringy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 In part due to a lack of multibyte support (including UTF-8) across many of
 PHP's standard string functions. But also to offer an OO wrapper around the
 `mbstring` module's multibyte-compatible functions. Stringy handles some quirks,
