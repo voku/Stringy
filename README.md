@@ -10,6 +10,7 @@ WARNING: this is only a extened Fork of "https://github.com/danielstjules/String
 [![Latest Stable Version](https://poser.pugx.org/voku/stringy/v/stable)](https://packagist.org/packages/voku/stringy) [![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) [![Latest Unstable Version](https://poser.pugx.org/voku/stringy/v/unstable)](https://packagist.org/packages/voku/stringy)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/Stringy/badge.svg)](https://travis-ci.org/voku/Stringy)
 [![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvoku%2FStringy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvoku%2FStringy?ref=badge_shield)
 
 
 A PHP string manipulation library with multibyte support. Compatible with PHP
@@ -1301,3 +1302,6 @@ From the project directory, tests can be ran using `phpunit`
 ## License
 
 Released under the MIT License - see `LICENSE.txt` for details.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvoku%2FStringy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvoku%2FStringy?ref=badge_large)
