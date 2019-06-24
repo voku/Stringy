@@ -9,10 +9,7 @@ use voku\helper\EmailCheck;
 use voku\helper\URLify;
 use voku\helper\UTF8;
 
-/**
- * Class Stringy
- */
-class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
+class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * An instance's string.
@@ -90,6 +87,16 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function __toString()
     {
         return (string) $this->str;
+    }
+
+    /**
+     * Returns value which can be serialized by json_encode().
+     *
+     * @return string The current value of the $str property
+     */
+    public function jsonSerialize()
+    {
+        return (string) $this;
     }
 
     /**
