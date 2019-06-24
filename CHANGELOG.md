@@ -1,3 +1,9 @@
+### 5.1.0 (2019-06-25)
+- add CollectionStringy - StaticStringy::collection()
+- "Implemented JsonSerializable" | thanks @ifcanduela
+- "fix for the Greek letter Theta" | thanks @nikosv
+
+
 ### 5.0.3 (2019-06-24)
 - fix regex for php 7.3
 
