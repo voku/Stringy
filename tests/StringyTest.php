@@ -2692,6 +2692,17 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($str, $stringy->toString());
     }
 
+    public function testJsonEncode()
+    {
+        $stringy = S::create('lall 123 \' - öäü');
+
+        $json = \json_encode($stringy);
+        static::assertSame('"lall 123 \' - \u00f6\u00e4\u00fc"', $json);
+
+        $stringyFoo = \json_decode($json);
+        static::assertSame('lall 123 \' - öäü', $stringyFoo);
+    }
+
     /**
      * @dataProvider isLowerCaseProvider()
      *

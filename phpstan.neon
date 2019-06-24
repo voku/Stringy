@@ -9,4 +9,5 @@ parameters:
         - '/Parameter #1 \$function of function call_user_func_array expects callable\(\): mixed, array\(Stringy\\Stringy, string\) given\./'
         - '/Method Stringy\\Stringy::lines\(\) should return array<static\(Stringy\\Stringy\)> but returns array<string>\./'
         - '/Method Stringy\\Stringy::split\(\) should return array<static\(Stringy\\Stringy\)> but returns array<string>\./'
+        - '/Call to function is_array\(\) with \(iterable\<string\|Stringy\\Stringy\>&Stringy\\Stringy\)\|string will always evaluate to false\./'
 
