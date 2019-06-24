@@ -287,6 +287,13 @@ if the first argument is an array or object without a __toString method.
 $stringy = S::create('fòôbàř', 'UTF-8'); // 'fòôbàř'
 ```
 
+If you need a collection of Stringy objects you can use the S::collection()
+method. 
+
+```php
+$stringyCollection = S::collection(['fòôbàř', 'lall', 'öäü']);
+```
+
 ## Instance Methods
 
 Stringy objects are immutable. All examples below make use of PHP 5.6

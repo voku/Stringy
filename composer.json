@@ -30,6 +30,8 @@
   ],
   "require": {
     "php": ">=7.0.0",
+    "ext-json": "*",
+    "voku/arrayy": "~5.11",
     "voku/portable-utf8": "~5.4",
     "voku/urlify": "~4.1",
     "voku/anti-xss": "~4.1",

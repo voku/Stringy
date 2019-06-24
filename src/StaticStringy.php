@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Stringy;
 
 /**
- * Class StaticStringy
- *
  * INFO: "Method Parameter Information" via PhpStorm |
  * https://www.jetbrains.com/phpstorm/help/viewing-method-parameter-information.html
  *
@@ -117,6 +115,35 @@ class StaticStringy
      * @var array
      */
     protected static $methodArgs = null;
+
+    /**
+     * @param null|string[]|string|Stringy|Stringy[] $input
+     *
+     * @return CollectionStringy
+     */
+    public static function collection($input = null): CollectionStringy
+    {
+        // init
+        $newCollection = new CollectionStringy();
+
+        if ($input === null) {
+            return $newCollection;
+        }
+
+        if (!\is_array($input)) {
+            $input = [$input];
+        }
+
+        foreach ($input as &$stringOrStringy) {
+            if (\is_string($stringOrStringy)) {
+                $stringOrStringy = new Stringy($stringOrStringy);
+            }
+
+            $newCollection[] = $stringOrStringy;
+        }
+
+        return $newCollection;
+    }
 
     /**
      * Creates an instance of Stringy and invokes the given method with the
