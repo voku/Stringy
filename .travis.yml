@@ -45,8 +45,8 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist
-  - php vendor/bin/phpstan analyse --level=7 --configuration=phpstan.neon src
+  - vendor/bin/phpunit -c phpunit.xml.dist
+  - vendor/bin/phpstan analyse
 
 after_script:
   - php vendor/bin/coveralls -v
