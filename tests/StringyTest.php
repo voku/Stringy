@@ -602,6 +602,44 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function indexOfLastIgnoreCaseProvider(): array
+    {
+        return [
+            [6, 'foo & bar', 'Bar'],
+            [6, 'foo & bar', 'bAr', 0],
+            [false, 'foo & bar', 'baZ'],
+            [false, 'foo & bar', 'baZ', 0],
+            [12, 'foo & bar & foo', 'fOo', 0],
+            [0, 'foo & bar & foo', 'fOO', -5],
+            [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
+            [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
+            [12, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
+            [0, 'fòô & bàř & fòô', 'fòÔ', -5, 'UTF-8'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function indexOfIgnoreCaseProvider(): array
+    {
+        return [
+            [6, 'foo & bar', 'Bar'],
+            [6, 'foo & bar', 'bar', 0],
+            [false, 'foo & bar', 'Baz'],
+            [false, 'foo & bar', 'bAz', 0],
+            [0, 'foo & bar & foo', 'foO', 0],
+            [12, 'foo & bar & foo', 'fOO', 5],
+            [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
+            [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
+            [0, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
+            [12, 'fòô & bàř & fòô', 'fòÔ', 5, 'UTF-8'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function indexOfProvider(): array
     {
         return [
@@ -1189,6 +1227,32 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['<XSS >', '<XSS STYLE="behavior: url(xss.htc);">'],
             ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
             ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function emptyProvider(): array
+    {
+        return [
+            [true, ''],
+            [
+                false,
+                'Hello',
+            ],
+            [
+                false,
+                1,
+            ],
+            [
+                false,
+                1.1,
+            ],
+            [
+                true,
+                null,
+            ],
         ];
     }
 
@@ -2492,6 +2556,21 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider indexOfIgnoreCaseProvider()
+     *
+     * @param      $expected
+     * @param      $str
+     * @param      $subStr
+     * @param int  $offset
+     * @param null $encoding
+     */
+    public function testIndexOfIgnoreCase($expected, $str, $subStr, $offset = 0, $encoding = null)
+    {
+        $result = S::create($str, $encoding)->indexOfIgnoreCase($subStr, $offset);
+        static::assertSame($expected, $result);
+    }
+
+    /**
      * @dataProvider indexOfLastProvider()
      *
      * @param      $expected
@@ -2503,6 +2582,21 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOfLast($subStr, $offset);
+        static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider indexOfLastIgnoreCaseProvider()
+     *
+     * @param      $expected
+     * @param      $str
+     * @param      $subStr
+     * @param int  $offset
+     * @param null $encoding
+     */
+    public function testIndexOfLastIgnoreCase($expected, $str, $subStr, $offset = 0, $encoding = null)
+    {
+        $result = S::create($str, $encoding)->indexOfLastIgnoreCase($subStr, $offset);
         static::assertSame($expected, $result);
     }
 
@@ -3098,6 +3192,19 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $result = S::create($str, $encoding)->prepend($string);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
+    }
+
+    /**
+     * @dataProvider emptyProvider()
+     *
+     * @param      $expected
+     * @param      $str
+     * @param null $encoding
+     */
+    public function testEmpty($expected, $str, $encoding = null)
+    {
+        $result = S::create($str, $encoding)->isEmpty();
+        static::assertSame($expected, $result);
     }
 
     /**

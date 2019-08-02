@@ -1885,13 +1885,13 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         $stringy->str = \str_replace('@', $replacement, $stringy->str);
 
         $stringy->str = (string) \preg_replace(
-            '/[^a-zA-Z\\d\s\-_' . \preg_quote($replacement, '/') . ']/u',
+            '/[^a-zA-Z\\d\\s\\-_' . \preg_quote($replacement, '/') . ']/u',
             '',
             $stringy->str
         );
-        $stringy->str = (string) \preg_replace("/^['\s']+|['\s']+\$/", '', \strtolower($stringy->str));
-        $stringy->str = (string) \preg_replace('/\B([A-Z])/', '/-\\1/', $stringy->str);
-        $stringy->str = (string) \preg_replace('/[\-_\s]+/', $replacement, $stringy->str);
+        $stringy->str = (string) \preg_replace('/^[\'\\s]+|[\'\\s]+$/', '', \strtolower($stringy->str));
+        $stringy->str = (string) \preg_replace('/\\B([A-Z])/', '/-\\1/', $stringy->str);
+        $stringy->str = (string) \preg_replace('/[\\-_\\s]+/', $replacement, $stringy->str);
 
         $l = \strlen($replacement);
         if (\strpos($stringy->str, $replacement) === 0) {
@@ -2527,6 +2527,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         static $charsArray;
 
+        /** @noinspection NullCoalescingOperatorCanBeUsedInspection */
         if (isset($charsArray)) {
             return $charsArray;
         }
