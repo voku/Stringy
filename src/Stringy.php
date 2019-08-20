@@ -1861,16 +1861,17 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Converts the string into an URL slug. This includes replacing non-ASCII
      * characters with their closest ASCII equivalents, removing remaining
      * non-ASCII and non-alphanumeric characters, and replacing whitespace with
-     * $replacement. The replacement defaults to a single dash, and the string
+     * $separator. The separator defaults to a single dash, and the string
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
      *
-     * @param string $replacement The string used to replace whitespace
-     * @param string $language    Language of the source string
+     * @param string $separator     The string used to replace whitespace
+     * @param string $replacements  A map of replaceable strings
+     * @param string $language      Language of the source string
      *
      * @return static Object whose $str has been converted to an URL slug
      */
-    public function slugify(string $replacement = '-', string $language = 'en'): self
+    public function slugify(string $separator = '-', array $replacements = [], string $language = 'en'): self
     {
         $stringy = self::create($this->str);
 
@@ -1882,23 +1883,27 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         foreach ($this->charsArray() as $key => $value) {
             $stringy->str = \str_replace($value, $key, $stringy->str);
         }
-        $stringy->str = \str_replace('@', $replacement, $stringy->str);
+        $stringy->str = \str_replace('@', $separator, $stringy->str);
 
         $stringy->str = (string) \preg_replace(
-            '/[^a-zA-Z\\d\\s\\-_' . \preg_quote($replacement, '/') . ']/u',
+            '/[^a-zA-Z\\d\\s\\-_' . \preg_quote($separator, '/') . ']/u',
             '',
             $stringy->str
         );
         $stringy->str = (string) \preg_replace('/^[\'\\s]+|[\'\\s]+$/', '', \strtolower($stringy->str));
         $stringy->str = (string) \preg_replace('/\\B([A-Z])/', '/-\\1/', $stringy->str);
-        $stringy->str = (string) \preg_replace('/[\\-_\\s]+/', $replacement, $stringy->str);
+        $stringy->str = (string) \preg_replace('/[\\-_\\s]+/', $separator, $stringy->str);
 
-        $l = \strlen($replacement);
-        if (\strpos($stringy->str, $replacement) === 0) {
+        foreach ($replacements as $from => $to) {
+            $stringy->str = \str_replace($from, $to, $stringy->str);
+        }
+
+        $l = \strlen($separator);
+        if (\strpos($stringy->str, $separator) === 0) {
             $stringy->str = (string) \substr($stringy->str, $l);
         }
 
-        if (\substr($stringy->str, -$l) === $replacement) {
+        if (\substr($stringy->str, -$l) === $separator) {
             $stringy->str = (string) \substr($stringy->str, 0, \strlen($stringy->str) - $l);
         }
 
@@ -1912,17 +1917,17 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * $replacement. The replacement defaults to a single dash, and the string
      * is also converted to lowercase.
      *
-     * @param string $replacement [optional] <p>The string used to replace whitespace. Default: '-'</p>
+     * @param string $separator [optional] <p>The string used to replace whitespace. Default: '-'</p>
      * @param string $language    [optional] <p>The language for the url. Default: 'de'</p>
      * @param bool   $strToLower  [optional] <p>string to lower. Default: true</p>
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
      */
-    public function urlify(string $replacement = '-', string $language = 'de', bool $strToLower = true): self
+    public function urlify(string $separator = '-', string $language = 'en', bool $strToLower = true): self
     {
         return static::create(
-            URLify::slug($this->str, $language, $replacement, $strToLower),
+            URLify::slug($this->str, $language, $separator, $strToLower),
             $this->encoding
         );
     }

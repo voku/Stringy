@@ -76,7 +76,7 @@ namespace Stringy;
  * @method static Stringy safeTruncate(string $stringInput, int $length, string $substring = '', string $encoding = null)
  * @method static Stringy shuffle(string $stringInput, string $encoding = null)
  * @method static Stringy shortenAfterWord(string $stringInput, int $length, string $strAddOn)
- * @method static Stringy slugify(string $stringInput, string $replacement = '-', string $language = 'de', boolean $strToLower = true)
+ * @method static Stringy slugify(string $stringInput, string $separator = '-', array $replacements = [], string $language = 'en')
  * @method static Stringy stripeCssMediaQueries(string $stringInput)
  * @method static Stringy stripeEmptyHtmlTags(string $stringInput)
  * @method static Stringy utf8ify(string $stringInput)
