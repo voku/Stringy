@@ -1865,15 +1865,22 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
      *
-     * @param string $separator     The string used to replace whitespace
-     * @param string $replacements  A map of replaceable strings
-     * @param string $language      Language of the source string
+     * @param string   $separator    The string used to replace whitespace
+     * @param string   $language     Language of the source string
+     * @param string[] $replacements A map of replaceable strings
      *
      * @return static Object whose $str has been converted to an URL slug
      */
-    public function slugify(string $separator = '-', array $replacements = [], string $language = 'en'): self
-    {
+    public function slugify(
+        string $separator = '-',
+        string $language = 'en',
+        array $replacements = []
+    ): self {
         $stringy = self::create($this->str);
+
+        foreach ($replacements as $from => $to) {
+            $stringy->str = \str_replace($from, $to, $stringy->str);
+        }
 
         $langSpecific = self::langSpecificCharsArray($language);
         if (!empty($langSpecific)) {
@@ -1894,10 +1901,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         $stringy->str = (string) \preg_replace('/\\B([A-Z])/', '/-\\1/', $stringy->str);
         $stringy->str = (string) \preg_replace('/[\\-_\\s]+/', $separator, $stringy->str);
 
-        foreach ($replacements as $from => $to) {
-            $stringy->str = \str_replace($from, $to, $stringy->str);
-        }
-
         $l = \strlen($separator);
         if (\strpos($stringy->str, $separator) === 0) {
             $stringy->str = (string) \substr($stringy->str, $l);
@@ -1917,17 +1920,25 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * $replacement. The replacement defaults to a single dash, and the string
      * is also converted to lowercase.
      *
-     * @param string $separator [optional] <p>The string used to replace whitespace. Default: '-'</p>
-     * @param string $language    [optional] <p>The language for the url. Default: 'de'</p>
-     * @param bool   $strToLower  [optional] <p>string to lower. Default: true</p>
+     * @param string $separator  [optional] <p>The string used to replace whitespace. Default: '-'</p>
+     * @param string $language   [optional] <p>The language for the url. Default: 'de'</p>
+     * @param bool   $strToLower [optional] <p>string to lower. Default: true</p>
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
      */
-    public function urlify(string $separator = '-', string $language = 'en', bool $strToLower = true): self
-    {
+    public function urlify(
+        string $separator = '-',
+        string $language = 'de',
+        bool $strToLower = true
+    ): self {
         return static::create(
-            URLify::slug($this->str, $language, $separator, $strToLower),
+            URLify::slug(
+                $this->str,
+                $language,
+                $separator,
+                $strToLower
+            ),
             $this->encoding
         );
     }

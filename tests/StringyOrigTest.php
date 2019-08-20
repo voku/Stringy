@@ -1311,6 +1311,16 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
+    public function testSlugifyWithReplacement()
+    {
+        $text = 'Texttile/Machine Learning';
+        $expected = 'texttile-machine-learning';
+
+        $actual = s::create($text)->slugify('-', 'en', ['/' => '-'])->toString();
+
+        static::assertEquals($expected, $actual);
+    }
+
     public function slugifyProvider()
     {
         return [
