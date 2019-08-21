@@ -3780,15 +3780,16 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider titleizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param null $ignore
-     * @param null $encoding
+     * @param             $expected
+     * @param             $str
+     * @param array|null  $ignore
+     * @param string|null $word_define_chars
+     * @param string|null $encoding
      */
-    public function testTitleize($expected, $str, $ignore = null, $encoding = null)
+    public function testTitleize($expected, $str, $ignore = null, $word_define_chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->titleize($ignore);
+        $result = $stringy->titleize($ignore, $word_define_chars);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());
@@ -4314,6 +4315,10 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
         return [
             ['Title Case', 'TITLE CASE'],
+            ['Up-to-Date', 'up-to-date', ['to'], '-'],
+            ['Up-to-Date', 'up-to-date', ['to'], '-*'],
+            ['Up-To-Date', 'up-to-date', [], '-*'],
+            ['Up-To-D*A*T*E*', 'up-to-d*a*t*e*', [], '-*'],
             ['Testing The Method', 'testing the method'],
             ['Testing the Method', 'testing the method', $ignore],
             [
@@ -4321,7 +4326,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
                 'i like to watch DVDs at home',
                 $ignore,
             ],
-            ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'],
+            ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, null, 'UTF-8'],
         ];
     }
 

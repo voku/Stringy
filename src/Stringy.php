@@ -1865,9 +1865,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
      *
-     * @param string   $separator    The string used to replace whitespace
-     * @param string   $language     Language of the source string
-     * @param string[] $replacements A map of replaceable strings
+     * @param string   $separator    [optional] <p>The string used to replace whitespace.</p>
+     * @param string   $language     [optional] <p>Language of the source string.</p>
+     * @param string[] $replacements [optional] <p>A map of replaceable strings.</p>
      *
      * @return static Object whose $str has been converted to an URL slug
      */
@@ -2183,15 +2183,30 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Also accepts an array, $ignore, allowing you to list words not to be
      * capitalized.
      *
-     * @param array|string[]|null $ignore [optional] <p>An array of words not to capitalize or null. Default: null</p>
+     * @param array|string[]|null $ignore            [optional] <p>An array of words not to capitalize or null. Default: null</p>
+     * @param string|null         $word_define_chars [optional] <p>An string of chars that will be used as whitespace separator === words.</p>
+     * @param string|null         $language          [optional] <p>Language of the source string.</p>
      *
      * @return static
      *                <p>Object with a titleized $str.</p>
      */
-    public function titleize(array $ignore = null): self
+    public function titleize(
+        array $ignore = null,
+        string $word_define_chars = null,
+        string $language = null
+    ): self
     {
         return static::create(
-            $this->utf8::str_titleize($this->str, $ignore, $this->encoding),
+            $this->utf8::str_titleize(
+                $this->str,
+                $ignore,
+                $this->encoding,
+                false,
+                $language,
+                false,
+                true,
+                $word_define_chars
+            ),
             $this->encoding
         );
     }
@@ -2214,7 +2229,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function titleizeForHumans(array $ignore = []): self
     {
         return static::create(
-            $this->utf8::str_titleize_for_humans($this->str, $ignore, $this->encoding),
+            $this->utf8::str_titleize_for_humans(
+                $this->str,
+                $ignore,
+                $this->encoding
+            ),
             $this->encoding
         );
     }
@@ -2246,9 +2265,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * en, en_GB, or en-GB. For example, passing "de" results in "äöü" mapping
      * to "aeoeue" rather than "aou" as in other languages.
      *
-     * @param string $language          Language of the source string
-     * @param bool   $removeUnsupported Whether or not to remove the
-     *                                  unsupported characters
+     * @param string $language          [optional] <p>Language of the source string.</p>
+     * @param bool   $removeUnsupported [optional] <p>Whether or not to remove the
+     *                                  unsupported characters.</p>
      *
      * @return static
      *                <p>Object whose $str contains only ASCII characters.</p>
@@ -3242,7 +3261,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * For example, German will map 'ä' to 'ae', while other languages
      * will simply return 'a'.
      *
-     * @param string $language Language of the source string
+     * @param string $language [optional] <p>Language of the source string</p>
      *
      * @return array an array of replacements
      */

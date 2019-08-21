@@ -76,7 +76,7 @@ namespace Stringy;
  * @method static Stringy safeTruncate(string $stringInput, int $length, string $substring = '', string $encoding = null)
  * @method static Stringy shuffle(string $stringInput, string $encoding = null)
  * @method static Stringy shortenAfterWord(string $stringInput, int $length, string $strAddOn)
- * @method static Stringy slugify(string $stringInput, string $separator = '-', string $language = 'en', array $replacements = [])
+ * @method static Stringy slugify(string $stringInput, string $separator = '-', string $language = 'en', array $replacements = [], string $encoding = null)
  * @method static Stringy stripeCssMediaQueries(string $stringInput)
  * @method static Stringy stripeEmptyHtmlTags(string $stringInput)
  * @method static Stringy utf8ify(string $stringInput)
@@ -104,6 +104,9 @@ namespace Stringy;
  * @method static Stringy underscored(string $stringInput, string $encoding = null)
  * @method static Stringy upperCamelize(string $stringInput, string $encoding = null)
  * @method static Stringy upperCaseFirst(string $stringInput, string $encoding = null)
+ *
+ * @deprecated <p>Please use e.g. (new Stringy('foo'))->upperCaseFirst() instead or write your own small wrapper, because I can't protect you from BC from new parameters,
+ *                if you use this class, thanks.</p>
  */
 class StaticStringy
 {
