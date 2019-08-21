@@ -1,3 +1,9 @@
+### 5.1.1 (2019-08-21)
+- extend "titleize" -> allow to specify what a word is
+- extend "slugify" -> allow to specify replacements in the string
+- optimize the regex for unicode strings
+
+
 ### 5.1.0 (2019-06-25)
 - add CollectionStringy - StaticStringy::collection()
 - "Implemented JsonSerializable" | thanks @ifcanduela
