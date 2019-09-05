@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stringy;
 
 use voku\helper\AntiXSS;
+use voku\helper\ASCII;
 use voku\helper\EmailCheck;
 use voku\helper\URLify;
 use voku\helper\UTF8;
@@ -30,6 +31,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @var UTF8
      */
     private $utf8;
+
+    /**
+     * @var ASCII
+     */
+    private $ascii;
 
     /**
      * Initializes a Stringy object and assigns both str and encoding properties
@@ -65,6 +71,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         $this->str = (string) $str;
 
+        static $ASCII = null;
+        if ($ASCII === null) {
+            $ASCII = new ASCII();
+        }
+        $this->ascii = $ASCII;
+
         static $UTF8 = null;
         if ($UTF8 === null) {
             $UTF8 = new UTF8();
@@ -91,6 +103,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns value which can be serialized by json_encode().
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      *
      * @return string The current value of the $str property
      */
@@ -1869,48 +1883,23 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string   $language     [optional] <p>Language of the source string.</p>
      * @param string[] $replacements [optional] <p>A map of replaceable strings.</p>
      *
-     * @return static Object whose $str has been converted to an URL slug
+     * @return static
+     *                <p>Object whose $str has been converted to an URL slug.</p>
      */
     public function slugify(
         string $separator = '-',
         string $language = 'en',
         array $replacements = []
     ): self {
-        $stringy = self::create($this->str);
-
-        foreach ($replacements as $from => $to) {
-            $stringy->str = \str_replace($from, $to, $stringy->str);
-        }
-
-        $langSpecific = self::langSpecificCharsArray($language);
-        if (!empty($langSpecific)) {
-            $stringy->str = \str_replace($langSpecific[0], $langSpecific[1], $stringy->str);
-        }
-
-        foreach ($this->charsArray() as $key => $value) {
-            $stringy->str = \str_replace($value, $key, $stringy->str);
-        }
-        $stringy->str = \str_replace('@', $separator, $stringy->str);
-
-        $stringy->str = (string) \preg_replace(
-            '/[^a-zA-Z\\d\\s\\-_' . \preg_quote($separator, '/') . ']/u',
-            '',
-            $stringy->str
+        return static::create(
+            $this->ascii::to_slugify(
+                $this->str,
+                $separator,
+                $language,
+                $replacements
+            ),
+            $this->encoding
         );
-        $stringy->str = (string) \preg_replace('/^[\'\\s]+|[\'\\s]+$/', '', \strtolower($stringy->str));
-        $stringy->str = (string) \preg_replace('/\\B([A-Z])/', '/-\\1/', $stringy->str);
-        $stringy->str = (string) \preg_replace('/[\\-_\\s]+/', $separator, $stringy->str);
-
-        $l = \strlen($separator);
-        if (\strpos($stringy->str, $separator) === 0) {
-            $stringy->str = (string) \substr($stringy->str, $l);
-        }
-
-        if (\substr($stringy->str, -$l) === $separator) {
-            $stringy->str = (string) \substr($stringy->str, 0, \strlen($stringy->str) - $l);
-        }
-
-        return static::create($stringy->str, $this->encoding);
     }
 
     /**
@@ -2173,7 +2162,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function tidy(): self
     {
         return static::create(
-            $this->utf8::normalize_msword($this->str),
+            $this->ascii::normalize_msword($this->str),
             $this->encoding
         );
     }
@@ -2194,8 +2183,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         array $ignore = null,
         string $word_define_chars = null,
         string $language = null
-    ): self
-    {
+    ): self {
         return static::create(
             $this->utf8::str_titleize(
                 $this->str,
@@ -2243,16 +2231,17 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * replaced with their closest ASCII counterparts, and the rest are removed
      * unless instructed otherwise.
      *
-     * @param bool $strict [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance |
-     *                     Default: false</p>
+     * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance |
+     *                        Default: false</p>
+     * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
      *
      * @return static
      *                <p>Object whose $str contains only ASCII characters.</p>
      */
-    public function toTransliterate(bool $strict = false): self
+    public function toTransliterate(bool $strict = false, string $unknown = '?'): self
     {
         return static::create(
-            $this->utf8::to_ascii($this->str, '?', $strict),
+            $this->ascii::to_transliterate($this->str, $unknown, $strict),
             $this->encoding
         );
     }
@@ -2272,26 +2261,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object whose $str contains only ASCII characters.</p>
      */
-    public function toAscii(string $language = 'en', bool $removeUnsupported = true)
+    public function toAscii(string $language = 'en', bool $removeUnsupported = true): self
     {
-        // init
-        $str = $this->str;
-
-        $langSpecific = self::langSpecificCharsArray($language);
-        if (!empty($langSpecific)) {
-            $str = \str_replace($langSpecific[0], $langSpecific[1], $str);
-        }
-
-        foreach ($this->charsArray() as $key => $value) {
-            $str = \str_replace($value, $key, $str);
-        }
-
-        if ($removeUnsupported) {
-            /** @noinspection NotOptimalRegularExpressionsInspection */
-            $str = \preg_replace('/[^\\x20-\\x7E]/u', '', $str);
-        }
-
-        return static::create($str, $this->encoding);
+        return static::create(
+            $this->ascii::to_ascii(
+                $this->str,
+                $language,
+                $removeUnsupported
+            ),
+            $this->encoding
+        );
     }
 
     /**
@@ -2555,692 +2534,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the replacements for the toAscii() method.
      *
+     * @noinspection PhpUnused
+     *
      * @return array
      *               <p>An array of replacements.</p>
+     *
+     * @deprecated this is only here for backward-compatibly reasons
      */
     protected function charsArray(): array
     {
-        static $charsArray;
-
-        /** @noinspection NullCoalescingOperatorCanBeUsedInspection */
-        if (isset($charsArray)) {
-            return $charsArray;
-        }
-
-        return $charsArray = [
-            '0' => ['°', '₀', '۰', '０'],
-            '1' => ['¹', '₁', '۱', '１'],
-            '2' => ['²', '₂', '۲', '２'],
-            '3' => ['³', '₃', '۳', '３'],
-            '4' => ['⁴', '₄', '۴', '٤', '４'],
-            '5' => ['⁵', '₅', '۵', '٥', '５'],
-            '6' => ['⁶', '₆', '۶', '٦', '６'],
-            '7' => ['⁷', '₇', '۷', '７'],
-            '8' => ['⁸', '₈', '۸', '８'],
-            '9' => ['⁹', '₉', '۹', '９'],
-            'a' => [
-                'à',
-                'á',
-                'ả',
-                'ã',
-                'ạ',
-                'ă',
-                'ắ',
-                'ằ',
-                'ẳ',
-                'ẵ',
-                'ặ',
-                'â',
-                'ấ',
-                'ầ',
-                'ẩ',
-                'ẫ',
-                'ậ',
-                'ā',
-                'ą',
-                'å',
-                'α',
-                'ά',
-                'ἀ',
-                'ἁ',
-                'ἂ',
-                'ἃ',
-                'ἄ',
-                'ἅ',
-                'ἆ',
-                'ἇ',
-                'ᾀ',
-                'ᾁ',
-                'ᾂ',
-                'ᾃ',
-                'ᾄ',
-                'ᾅ',
-                'ᾆ',
-                'ᾇ',
-                'ὰ',
-                'ά',
-                'ᾰ',
-                'ᾱ',
-                'ᾲ',
-                'ᾳ',
-                'ᾴ',
-                'ᾶ',
-                'ᾷ',
-                'а',
-                'أ',
-                'အ',
-                'ာ',
-                'ါ',
-                'ǻ',
-                'ǎ',
-                'ª',
-                'ა',
-                'अ',
-                'ا',
-                'ａ',
-                'ä',
-            ],
-            'b' => ['б', 'β', 'ب', 'ဗ', 'ბ', 'ｂ'],
-            'c' => ['ç', 'ć', 'č', 'ĉ', 'ċ', 'ｃ'],
-            'd' => [
-                'ď',
-                'ð',
-                'đ',
-                'ƌ',
-                'ȡ',
-                'ɖ',
-                'ɗ',
-                'ᵭ',
-                'ᶁ',
-                'ᶑ',
-                'д',
-                'δ',
-                'د',
-                'ض',
-                'ဍ',
-                'ဒ',
-                'დ',
-                'ｄ',
-            ],
-            'e' => [
-                'é',
-                'è',
-                'ẻ',
-                'ẽ',
-                'ẹ',
-                'ê',
-                'ế',
-                'ề',
-                'ể',
-                'ễ',
-                'ệ',
-                'ë',
-                'ē',
-                'ę',
-                'ě',
-                'ĕ',
-                'ė',
-                'ε',
-                'έ',
-                'ἐ',
-                'ἑ',
-                'ἒ',
-                'ἓ',
-                'ἔ',
-                'ἕ',
-                'ὲ',
-                'έ',
-                'е',
-                'ё',
-                'э',
-                'є',
-                'ə',
-                'ဧ',
-                'ေ',
-                'ဲ',
-                'ე',
-                'ए',
-                'إ',
-                'ئ',
-                'ｅ',
-            ],
-            'f' => ['ф', 'φ', 'ف', 'ƒ', 'ფ', 'ｆ'],
-            'g' => [
-                'ĝ',
-                'ğ',
-                'ġ',
-                'ģ',
-                'г',
-                'ґ',
-                'γ',
-                'ဂ',
-                'გ',
-                'گ',
-                'ｇ',
-            ],
-            'h' => ['ĥ', 'ħ', 'η', 'ή', 'ح', 'ه', 'ဟ', 'ှ', 'ჰ', 'ｈ'],
-            'i' => [
-                'í',
-                'ì',
-                'ỉ',
-                'ĩ',
-                'ị',
-                'î',
-                'ï',
-                'ī',
-                'ĭ',
-                'į',
-                'ı',
-                'ι',
-                'ί',
-                'ϊ',
-                'ΐ',
-                'ἰ',
-                'ἱ',
-                'ἲ',
-                'ἳ',
-                'ἴ',
-                'ἵ',
-                'ἶ',
-                'ἷ',
-                'ὶ',
-                'ί',
-                'ῐ',
-                'ῑ',
-                'ῒ',
-                'ΐ',
-                'ῖ',
-                'ῗ',
-                'і',
-                'ї',
-                'и',
-                'ဣ',
-                'ိ',
-                'ီ',
-                'ည်',
-                'ǐ',
-                'ი',
-                'इ',
-                'ی',
-                'ｉ',
-            ],
-            'j' => ['ĵ', 'ј', 'Ј', 'ჯ', 'ج', 'ｊ'],
-            'k' => [
-                'ķ',
-                'ĸ',
-                'к',
-                'κ',
-                'Ķ',
-                'ق',
-                'ك',
-                'က',
-                'კ',
-                'ქ',
-                'ک',
-                'ｋ',
-            ],
-            'l' => [
-                'ł',
-                'ľ',
-                'ĺ',
-                'ļ',
-                'ŀ',
-                'л',
-                'λ',
-                'ل',
-                'လ',
-                'ლ',
-                'ｌ',
-            ],
-            'm' => ['м', 'μ', 'م', 'မ', 'მ', 'ｍ'],
-            'n' => [
-                'ñ',
-                'ń',
-                'ň',
-                'ņ',
-                'ŉ',
-                'ŋ',
-                'ν',
-                'н',
-                'ن',
-                'န',
-                'ნ',
-                'ｎ',
-            ],
-            'o' => [
-                'ó',
-                'ò',
-                'ỏ',
-                'õ',
-                'ọ',
-                'ô',
-                'ố',
-                'ồ',
-                'ổ',
-                'ỗ',
-                'ộ',
-                'ơ',
-                'ớ',
-                'ờ',
-                'ở',
-                'ỡ',
-                'ợ',
-                'ø',
-                'ō',
-                'ő',
-                'ŏ',
-                'ο',
-                'ὀ',
-                'ὁ',
-                'ὂ',
-                'ὃ',
-                'ὄ',
-                'ὅ',
-                'ὸ',
-                'ό',
-                'о',
-                'و',
-                'ို',
-                'ǒ',
-                'ǿ',
-                'º',
-                'ო',
-                'ओ',
-                'ｏ',
-                'ö',
-            ],
-            'p' => ['п', 'π', 'ပ', 'პ', 'پ', 'ｐ'],
-            'q' => ['ყ', 'ｑ'],
-            'r' => ['ŕ', 'ř', 'ŗ', 'р', 'ρ', 'ر', 'რ', 'ｒ'],
-            's' => [
-                'ś',
-                'š',
-                'ş',
-                'с',
-                'σ',
-                'ș',
-                'ς',
-                'س',
-                'ص',
-                'စ',
-                'ſ',
-                'ს',
-                'ｓ',
-            ],
-            't' => [
-                'ť',
-                'ţ',
-                'т',
-                'τ',
-                'ț',
-                'ت',
-                'ط',
-                'ဋ',
-                'တ',
-                'ŧ',
-                'თ',
-                'ტ',
-                'ｔ',
-            ],
-            'u' => [
-                'ú',
-                'ù',
-                'ủ',
-                'ũ',
-                'ụ',
-                'ư',
-                'ứ',
-                'ừ',
-                'ử',
-                'ữ',
-                'ự',
-                'û',
-                'ū',
-                'ů',
-                'ű',
-                'ŭ',
-                'ų',
-                'µ',
-                'у',
-                'ဉ',
-                'ု',
-                'ူ',
-                'ǔ',
-                'ǖ',
-                'ǘ',
-                'ǚ',
-                'ǜ',
-                'უ',
-                'उ',
-                'ｕ',
-                'ў',
-                'ü',
-            ],
-            'v' => ['в', 'ვ', 'ϐ', 'ｖ'],
-            'w' => ['ŵ', 'ω', 'ώ', 'ဝ', 'ွ', 'ｗ'],
-            'x' => ['χ', 'ξ', 'ｘ'],
-            'y' => [
-                'ý',
-                'ỳ',
-                'ỷ',
-                'ỹ',
-                'ỵ',
-                'ÿ',
-                'ŷ',
-                'й',
-                'ы',
-                'υ',
-                'ϋ',
-                'ύ',
-                'ΰ',
-                'ي',
-                'ယ',
-                'ｙ',
-            ],
-            'z'    => ['ź', 'ž', 'ż', 'з', 'ζ', 'ز', 'ဇ', 'ზ', 'ｚ'],
-            'aa'   => ['ع', 'आ', 'آ'],
-            'ae'   => ['æ', 'ǽ'],
-            'ai'   => ['ऐ'],
-            'ch'   => ['ч', 'ჩ', 'ჭ', 'چ'],
-            'dj'   => ['ђ', 'đ'],
-            'dz'   => ['џ', 'ძ'],
-            'ei'   => ['ऍ'],
-            'gh'   => ['غ', 'ღ'],
-            'ii'   => ['ई'],
-            'ij'   => ['ĳ'],
-            'kh'   => ['х', 'خ', 'ხ'],
-            'lj'   => ['љ'],
-            'nj'   => ['њ'],
-            'oe'   => ['œ', 'ؤ'],
-            'oi'   => ['ऑ'],
-            'oii'  => ['ऒ'],
-            'ps'   => ['ψ'],
-            'sh'   => ['ш', 'შ', 'ش'],
-            'shch' => ['щ'],
-            'ss'   => ['ß'],
-            'sx'   => ['ŝ'],
-            'th'   => ['þ', 'ϑ', 'θ', 'ث', 'ذ', 'ظ'],
-            'ts'   => ['ц', 'ც', 'წ'],
-            'uu'   => ['ऊ'],
-            'ya'   => ['я'],
-            'yu'   => ['ю'],
-            'zh'   => ['ж', 'ჟ', 'ژ'],
-            '(c)'  => ['©'],
-            'A'    => [
-                'Á',
-                'À',
-                'Ả',
-                'Ã',
-                'Ạ',
-                'Ă',
-                'Ắ',
-                'Ằ',
-                'Ẳ',
-                'Ẵ',
-                'Ặ',
-                'Â',
-                'Ấ',
-                'Ầ',
-                'Ẩ',
-                'Ẫ',
-                'Ậ',
-                'Å',
-                'Ā',
-                'Ą',
-                'Α',
-                'Ά',
-                'Ἀ',
-                'Ἁ',
-                'Ἂ',
-                'Ἃ',
-                'Ἄ',
-                'Ἅ',
-                'Ἆ',
-                'Ἇ',
-                'ᾈ',
-                'ᾉ',
-                'ᾊ',
-                'ᾋ',
-                'ᾌ',
-                'ᾍ',
-                'ᾎ',
-                'ᾏ',
-                'Ᾰ',
-                'Ᾱ',
-                'Ὰ',
-                'Ά',
-                'ᾼ',
-                'А',
-                'Ǻ',
-                'Ǎ',
-                'Ａ',
-                'Ä',
-            ],
-            'B' => ['Б', 'Β', 'ब', 'Ｂ'],
-            'C' => ['Ç', 'Ć', 'Č', 'Ĉ', 'Ċ', 'Ｃ'],
-            'D' => [
-                'Ď',
-                'Ð',
-                'Đ',
-                'Ɖ',
-                'Ɗ',
-                'Ƌ',
-                'ᴅ',
-                'ᴆ',
-                'Д',
-                'Δ',
-                'Ｄ',
-            ],
-            'E' => [
-                'É',
-                'È',
-                'Ẻ',
-                'Ẽ',
-                'Ẹ',
-                'Ê',
-                'Ế',
-                'Ề',
-                'Ể',
-                'Ễ',
-                'Ệ',
-                'Ë',
-                'Ē',
-                'Ę',
-                'Ě',
-                'Ĕ',
-                'Ė',
-                'Ε',
-                'Έ',
-                'Ἐ',
-                'Ἑ',
-                'Ἒ',
-                'Ἓ',
-                'Ἔ',
-                'Ἕ',
-                'Έ',
-                'Ὲ',
-                'Е',
-                'Ё',
-                'Э',
-                'Є',
-                'Ə',
-                'Ｅ',
-            ],
-            'F' => ['Ф', 'Φ', 'Ｆ'],
-            'G' => ['Ğ', 'Ġ', 'Ģ', 'Г', 'Ґ', 'Γ', 'Ｇ'],
-            'H' => ['Η', 'Ή', 'Ħ', 'Ｈ'],
-            'I' => [
-                'Í',
-                'Ì',
-                'Ỉ',
-                'Ĩ',
-                'Ị',
-                'Î',
-                'Ï',
-                'Ī',
-                'Ĭ',
-                'Į',
-                'İ',
-                'Ι',
-                'Ί',
-                'Ϊ',
-                'Ἰ',
-                'Ἱ',
-                'Ἳ',
-                'Ἴ',
-                'Ἵ',
-                'Ἶ',
-                'Ἷ',
-                'Ῐ',
-                'Ῑ',
-                'Ὶ',
-                'Ί',
-                'И',
-                'І',
-                'Ї',
-                'Ǐ',
-                'ϒ',
-                'Ｉ',
-            ],
-            'J' => ['Ｊ'],
-            'K' => ['К', 'Κ', 'Ｋ'],
-            'L' => ['Ĺ', 'Ł', 'Л', 'Λ', 'Ļ', 'Ľ', 'Ŀ', 'ल', 'Ｌ'],
-            'M' => ['М', 'Μ', 'Ｍ'],
-            'N' => ['Ń', 'Ñ', 'Ň', 'Ņ', 'Ŋ', 'Н', 'Ν', 'Ｎ'],
-            'O' => [
-                'Ó',
-                'Ò',
-                'Ỏ',
-                'Õ',
-                'Ọ',
-                'Ô',
-                'Ố',
-                'Ồ',
-                'Ổ',
-                'Ỗ',
-                'Ộ',
-                'Ơ',
-                'Ớ',
-                'Ờ',
-                'Ở',
-                'Ỡ',
-                'Ợ',
-                'Ø',
-                'Ō',
-                'Ő',
-                'Ŏ',
-                'Ο',
-                'Ό',
-                'Ὀ',
-                'Ὁ',
-                'Ὂ',
-                'Ὃ',
-                'Ὄ',
-                'Ὅ',
-                'Ὸ',
-                'Ό',
-                'О',
-                'Ө',
-                'Ǒ',
-                'Ǿ',
-                'Ｏ',
-                'Ö',
-            ],
-            'P' => ['П', 'Π', 'Ｐ'],
-            'Q' => ['Ｑ'],
-            'R' => ['Ř', 'Ŕ', 'Р', 'Ρ', 'Ŗ', 'Ｒ'],
-            'S' => ['Ş', 'Ŝ', 'Ș', 'Š', 'Ś', 'С', 'Σ', 'Ｓ'],
-            'T' => ['Ť', 'Ţ', 'Ŧ', 'Ț', 'Т', 'Τ', 'Ｔ'],
-            'U' => [
-                'Ú',
-                'Ù',
-                'Ủ',
-                'Ũ',
-                'Ụ',
-                'Ư',
-                'Ứ',
-                'Ừ',
-                'Ử',
-                'Ữ',
-                'Ự',
-                'Û',
-                'Ū',
-                'Ů',
-                'Ű',
-                'Ŭ',
-                'Ų',
-                'У',
-                'Ǔ',
-                'Ǖ',
-                'Ǘ',
-                'Ǚ',
-                'Ǜ',
-                'Ｕ',
-                'Ў',
-                'Ü',
-            ],
-            'V' => ['В', 'Ｖ'],
-            'W' => ['Ω', 'Ώ', 'Ŵ', 'Ｗ'],
-            'X' => ['Χ', 'Ξ', 'Ｘ'],
-            'Y' => [
-                'Ý',
-                'Ỳ',
-                'Ỷ',
-                'Ỹ',
-                'Ỵ',
-                'Ÿ',
-                'Ῠ',
-                'Ῡ',
-                'Ὺ',
-                'Ύ',
-                'Ы',
-                'Й',
-                'Υ',
-                'Ϋ',
-                'Ŷ',
-                'Ｙ',
-            ],
-            'Z'    => ['Ź', 'Ž', 'Ż', 'З', 'Ζ', 'Ｚ'],
-            'AE'   => ['Æ', 'Ǽ'],
-            'Ch'   => ['Ч'],
-            'Dj'   => ['Ђ'],
-            'Dz'   => ['Џ'],
-            'Gx'   => ['Ĝ'],
-            'Hx'   => ['Ĥ'],
-            'Ij'   => ['Ĳ'],
-            'Jx'   => ['Ĵ'],
-            'Kh'   => ['Х'],
-            'Lj'   => ['Љ'],
-            'Nj'   => ['Њ'],
-            'Oe'   => ['Œ'],
-            'Ps'   => ['Ψ'],
-            'Sh'   => ['Ш'],
-            'Shch' => ['Щ'],
-            'Ss'   => ['ẞ'],
-            'Th'   => ['Þ', 'Θ'],
-            'Ts'   => ['Ц'],
-            'Ya'   => ['Я'],
-            'Yu'   => ['Ю'],
-            'Zh'   => ['Ж'],
-            ' '    => [
-                "\xC2\xA0",
-                "\xE2\x80\x80",
-                "\xE2\x80\x81",
-                "\xE2\x80\x82",
-                "\xE2\x80\x83",
-                "\xE2\x80\x84",
-                "\xE2\x80\x85",
-                "\xE2\x80\x86",
-                "\xE2\x80\x87",
-                "\xE2\x80\x88",
-                "\xE2\x80\x89",
-                "\xE2\x80\x8A",
-                "\xE2\x80\xAF",
-                "\xE2\x81\x9F",
-                "\xE3\x80\x80",
-                "\xEF\xBE\xA0",
-            ],
-        ];
+        return $this->ascii::charsArrayWithMultiLanguageValues();
     }
 
     /**
@@ -3254,48 +2557,5 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     protected function matchesPattern(string $pattern): bool
     {
         return $this->utf8::str_matches_pattern($this->str, $pattern);
-    }
-
-    /**
-     * Returns language-specific replacements for the toAscii() method.
-     * For example, German will map 'ä' to 'ae', while other languages
-     * will simply return 'a'.
-     *
-     * @param string $language [optional] <p>Language of the source string</p>
-     *
-     * @return array an array of replacements
-     */
-    protected static function langSpecificCharsArray(string $language = 'en'): array
-    {
-        $split = \preg_split('/[-_]/', $language);
-        if ($split === false) {
-            return [];
-        }
-
-        if (!isset($split[0])) {
-            return [];
-        }
-
-        $language = \strtolower($split[0]);
-        static $charsArray = [];
-
-        if (isset($charsArray[$language])) {
-            return $charsArray[$language];
-        }
-
-        $languageSpecific = [
-            'de' => [
-                ['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü'],
-                ['ae', 'oe', 'ue', 'AE', 'OE', 'UE'],
-            ],
-            'bg' => [
-                ['х', 'Х', 'щ', 'Щ', 'ъ', 'Ъ', 'ь', 'Ь'],
-                ['h', 'H', 'sht', 'SHT', 'a', 'А', 'y', 'Y'],
-            ],
-        ];
-
-        $charsArray[$language] = $languageSpecific[$language] ?? [];
-
-        return $charsArray[$language];
     }
 }

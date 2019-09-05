@@ -774,7 +774,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['perevirka', 'перевірка'],
             ['lysaya gora', 'лысая гора'],
             ['user@host', 'user@host'],
-            ['shchuka', 'щука'],
+            ['shuka', 'щука'],
             ['', '漢字'],
             ['xin chao the gioi', 'xin chào thế giới'],
             ['XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'],
@@ -787,8 +787,8 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['', '𐍉'], // some uncommon, unsupported character (U+10349)
             ['𐍉', '𐍉', 'en', false],
             ['aouAOU', 'äöüÄÖÜ'],
-            ['aeoeueAEOEUE', 'äöüÄÖÜ', 'de'],
-            ['aeoeueAEOEUE', 'äöüÄÖÜ', 'de_DE'],
+            ['aeoeueAeOeUe', 'äöüÄÖÜ', 'de'],
+            ['aeoeueAeOeUe', 'äöüÄÖÜ', 'de_DE'],
         ];
     }
 
@@ -1333,14 +1333,23 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['using-strings-like-foo-bar', 'Using strings like fòô bàř'],
             ['numbers-1234', 'numbers 1234'],
             ['perevirka-ryadka', 'перевірка рядка'],
-            ['bukvar-s-bukvoy-y', 'букварь с буквой ы'],
-            ['podekhal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
+            ['bukvar-s-bukvoi-y', 'букварь с буквой ы'],
+            ['podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
             ['foo:bar:baz', 'Foo bar baz', ':'],
             ['a_string_with_underscores', 'A_string with_underscores', '_'],
             ['a_string_with_dashes', 'A string-with-dashes', '_'],
             ['a\string\with\dashes', 'A string-with-dashes', '\\'],
             ['an_odd_string', '--   An odd__   string-_', '_'],
         ];
+    }
+
+    public function testCharsArray()
+    {
+        $charsArray = self::getMethod('charsArray');
+        $obj = new S();
+        $array = $charsArray->invoke($obj);
+
+        static::assertSame(['य', 'Я'], $array['Ya']);
     }
 
     /**
@@ -3039,5 +3048,19 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['<', '&lt;'],
             ['>', '&gt;'],
         ];
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return ReflectionMethod
+     */
+    private static function getMethod(string $name): ReflectionMethod
+    {
+        $class = new ReflectionClass(S::class);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+
+        return $method;
     }
 }
