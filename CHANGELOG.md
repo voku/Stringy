@@ -1,3 +1,8 @@
+
+### 5.2.0 (2019-09-07)
+- update "slugify" -> use the Portable ASCII lib
+
+
 ### 5.1.1 (2019-08-21)
 - extend "titleize" -> allow to specify what a word is
 - extend "slugify" -> allow to specify replacements in the string
