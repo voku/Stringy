@@ -1326,10 +1326,10 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         return [
             ['foo-bar', ' foo  bar '],
             ['foo-bar', 'foo -.-"-...bar'],
-            ['another-foo-bar', 'another..& foo -.-"-...bar'],
+            ['another-and-foo-bar', 'another..& foo -.-"-...bar'],
             ['foo-dbar', " Foo d'Bar "],
             ['a-string-with-dashes', 'A string-with-dashes'],
-            ['user-host', 'user@host'],
+            ['user-at-host', 'user@host'],
             ['using-strings-like-foo-bar', 'Using strings like fòô bàř'],
             ['numbers-1234', 'numbers 1234'],
             ['perevirka-ryadka', 'перевірка рядка'],
