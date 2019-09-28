@@ -1,4 +1,9 @@
 
+### 6.0.0 (2019-09-28)
+- breaking-change: we always use language "en" instead of "de" as default
+- breaking-change: "urlify()" has changed parameter order ($strToLower was replaced with $replacements)
+
+
 ### 5.2.0 (2019-09-07)
 - update "slugify" -> use the Portable ASCII lib
 
