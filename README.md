@@ -1004,7 +1004,7 @@ random order.
 s('fòôbàř')->shuffle(); // 'àôřbòf'
 ```
 
-##### slugify([, string $replacement = '-' ])
+##### slugify(string $separator = '-', string $language = 'en', array $replacements = [])
 
 Converts the string into an URL slug. This includes replacing non-ASCII
 characters with their closest ASCII equivalents, removing remaining
@@ -1137,7 +1137,7 @@ s('i like to watch television')->titleize($ignore);
 // 'I Like to Watch Television'
 ```
 
-##### toAscii()
+##### toAscii(string $language = 'en', bool $removeUnsupported = true)
 
 Returns an ASCII version of the string. A set of non-ASCII characters are
 replaced with their closest ASCII counterparts, and the rest are removed
@@ -1279,6 +1279,18 @@ Converts the first character of the supplied string to upper case.
 
 ```php
 s('σ foo')->upperCaseFirst(); // 'Σ foo'
+```
+
+##### urlify(string $separator = '-', string $language = 'en', array $replacements = [], bool $strToLower = true)
+
+Converts the string into an URL slug. This includes replacing non-ASCII
+characters with their closest ASCII equivalents, removing remaining
+non-ASCII and non-alphanumeric characters, and replacing whitespace with
+$separator. The separator defaults to a single dash, and the string
+is also converted to lowercase.
+
+```php
+s('Using strings like fòô bàř - 1$')->urlify(); // 'using-strings-like-foo-bar-1-dollar'
 ```
 
 ##### utf8ify()

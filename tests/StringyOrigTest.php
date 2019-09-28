@@ -789,6 +789,8 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['aouAOU', 'äöüÄÖÜ'],
             ['aeoeueAeOeUe', 'äöüÄÖÜ', 'de'],
             ['aeoeueAeOeUe', 'äöüÄÖÜ', 'de_DE'],
+            ['h H sht Sht a A  ', 'х Х щ Щ ъ Ъ ь Ь', 'bg'],
+            ['h H sht Sht a A  ', 'х Х щ Щ ъ Ъ ь Ь', 'bg_BG'],
         ];
     }
 

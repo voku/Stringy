@@ -1549,9 +1549,10 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function slugifyProvider(): array
     {
         return [
+            ['bar', 'foooooo'],
             ['foo-bar', ' foo  bar '],
             ['foo-bar', 'foo -.-"-...bar'],
-            ['another-und-foo-bar', 'another..& foo -.-"-...bar'],
+            ['another-and-foo-bar', 'another..& foo -.-"-...bar'],
             ['foo-dbar', " Foo d'Bar "],
             ['a-string-with-dashes', 'A string-with-dashes'],
             ['using-strings-like-foo-bar', 'Using strings like fòô bàř'],
@@ -3527,7 +3528,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testSlugify($expected, $str, $replacement = '-')
     {
         $stringy = S::create($str);
-        $result = $stringy->urlify($replacement);
+        $result = $stringy->urlify($replacement, 'en', ['foooooo' => 'bar']);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());
@@ -4339,6 +4340,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['foo bar', 'fòô bàř'],
             [' TEST ', ' ŤÉŚŢ '],
             ['ph = z = 3', 'φ = ź = 3'],
+            ['kh Kh shch Shch   \' \'', 'х Х щ Щ ъ Ъ ь Ь'],
             ['perevirka', 'перевірка'],
             ['lysaia gora', 'лысая гора'],
             ['shchuka', 'щука'],

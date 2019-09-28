@@ -399,8 +399,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns an array consisting of the characters in the string.
      *
-     * @return array
-     *               <p>An array of string chars.</p>
+     * @return string[]
+     *                  <p>An array of string chars.</p>
      */
     public function chars(): array
     {
@@ -1879,9 +1879,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
      *
-     * @param string   $separator    [optional] <p>The string used to replace whitespace.</p>
-     * @param string   $language     [optional] <p>Language of the source string.</p>
-     * @param string[] $replacements [optional] <p>A map of replaceable strings.</p>
+     * @param string                $separator    [optional] <p>The string used to replace whitespace.</p>
+     * @param string                $language     [optional] <p>Language of the source string.</p>
+     * @param array<string, string> $replacements [optional] <p>A map of replaceable strings.</p>
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
@@ -1906,24 +1906,33 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Converts the string into an URL slug. This includes replacing non-ASCII
      * characters with their closest ASCII equivalents, removing remaining
      * non-ASCII and non-alphanumeric characters, and replacing whitespace with
-     * $replacement. The replacement defaults to a single dash, and the string
+     * $separator. The separator defaults to a single dash, and the string
      * is also converted to lowercase.
      *
-     * @param string $separator  [optional] <p>The string used to replace whitespace. Default: '-'</p>
-     * @param string $language   [optional] <p>The language for the url. Default: 'de'</p>
-     * @param bool   $strToLower [optional] <p>string to lower. Default: true</p>
+     * @param string                $separator    [optional] <p>The string used to replace whitespace. Default: '-'</p>
+     * @param string                $language     [optional] <p>The language for the url. Default: 'en'</p>
+     * @param array<string, string> $replacements [optional] <p>A map of replaceable strings.</p>
+     * @param bool                  $strToLower   [optional] <p>string to lower. Default: true</p>
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
      */
     public function urlify(
         string $separator = '-',
-        string $language = 'de',
+        string $language = 'en',
+        array $replacements = [],
         bool $strToLower = true
     ): self {
+        // init
+        $str = $this->str;
+
+        foreach ($replacements as $from => $to) {
+            $str = \str_replace($from, $to, $str);
+        }
+
         return static::create(
             URLify::slug(
-                $this->str,
+                $str,
                 $language,
                 $separator,
                 $strToLower
@@ -2536,8 +2545,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @noinspection PhpUnused
      *
-     * @return array
-     *               <p>An array of replacements.</p>
+     * @return array<string, array<int, string>>
+     *                                           <p>An array of replacements.</p>
      *
      * @deprecated this is only here for backward-compatibly reasons
      */
