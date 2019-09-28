@@ -1032,7 +1032,7 @@ Remove empty html-tag. e.g.: <tag></tag>
 s('foo<h1></h1>bar')->stripeEmptyHtmlTags(); // 'foobar'
 ```
 
-##### strip_whitespace()
+##### stripWhitespace()
 
 Strip all whitespace characters. This includes tabs and newline characters, 
 as well as multibyte whitespace such as the thin space and ideographic space.
