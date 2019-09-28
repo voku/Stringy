@@ -2546,7 +2546,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @noinspection PhpUnused
      *
      * @return array<string, array<int, string>>
-     *                                           <p>An array of replacements.</p>
+     *                       <p>An array of replacements.</p>
      *
      * @deprecated this is only here for backward-compatibly reasons
      */
