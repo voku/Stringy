@@ -1,3 +1,6 @@
+### 6.0.1 (2019-10-14)
+- update "Portable ASCII" from v1.2 -> v1.3
+
 
 ### 6.0.0 (2019-09-28)
 - breaking-change: we always use language "en" instead of "de" as default
