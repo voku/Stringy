@@ -524,12 +524,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
      * @param string $encoding [optional] <p>The character encoding. Fallback: 'UTF-8'</p>
      *
+     * @return static
+     *                <p>A Stringy object.</p>
      * @throws \InvalidArgumentException
      *                                   <p>if an array or object without a
      *                                   __toString method is passed as the first argument</p>
      *
-     * @return static
-     *                <p>A Stringy object.</p>
      */
     public static function create($str = '', string $encoding = null): self
     {
@@ -1383,11 +1383,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param int $offset <p>The <strong>index</strong> from which to retrieve the char.</p>
      *
-     *@throws \OutOfBoundsException
-     *                               <p>If the positive or negative offset does not exist.</p>
-     *
      * @return string
      *                <p>The character at the specified index.</p>
+     * @throws \OutOfBoundsException
+     *                               <p>If the positive or negative offset does not exist.</p>
+     *
      */
     public function offsetGet($offset): string
     {
@@ -1438,11 +1438,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $padStr  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $padType [optional] <p>One of 'left', 'right', 'both'. Default: 'right'</p>
      *
+     * @return static
+     *                <p>Object with a padded $str.</p>
      * @throws \InvalidArgumentException
      *                                   <p>If $padType isn't one of 'right', 'left' or 'both'.</p>
      *
-     * @return static
-     *                <p>Object with a padded $str.</p>
      */
     public function pad(int $length, string $padStr = ' ', string $padType = 'right'): self
     {
@@ -1802,8 +1802,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * string is further truncated so that the substring may be appended without
      * exceeding the desired length.
      *
-     * @param int    $length                          <p>Desired length of the truncated string.</p>
-     * @param string $substring                       [optional] <p>The substring to append if it can fit. Default: ''</p>
+     * @param int    $length    <p>Desired length of the truncated string.</p>
+     * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
      * @param bool   $ignoreDoNotSplitWordsForOneWord
      *
      * @return static
@@ -1879,9 +1879,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
      *
-     * @param string                $separator    [optional] <p>The string used to replace whitespace.</p>
-     * @param string                $language     [optional] <p>Language of the source string.</p>
-     * @param array<string, string> $replacements [optional] <p>A map of replaceable strings.</p>
+     * @param string                $separator             [optional] <p>The string used to replace whitespace.</p>
+     * @param string                $language              [optional] <p>Language of the source string.</p>
+     * @param array<string, string> $replacements          [optional] <p>A map of replaceable strings.</p>
+     * @param bool                  $replace_extra_symbols [optional]  <p>Add some more replacements e.g. "£" with "
+     *                                                     pound ".</p>
+     * @param bool                  $use_str_to_lower      [optional] <p>Use "string to lower" for the input.</p>
+     * @param bool                  $use_transliterate     [optional]  <p>Use ASCII::to_transliterate() for unknown
+     *                                                     chars.</p>
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
@@ -1889,14 +1894,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function slugify(
         string $separator = '-',
         string $language = 'en',
-        array $replacements = []
-    ): self {
+        array $replacements = [],
+        bool $replace_extra_symbols = true,
+        bool $use_str_to_lower = true,
+        bool $use_transliterate = false
+    ): self
+    {
         return static::create(
             $this->ascii::to_slugify(
                 $this->str,
                 $separator,
                 $language,
-                $replacements
+                $replacements,
+                $replace_extra_symbols,
+                $use_str_to_lower,
+                $use_transliterate
             ),
             $this->encoding
         );
@@ -1922,7 +1934,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         string $language = 'en',
         array $replacements = [],
         bool $strToLower = true
-    ): self {
+    ): self
+    {
         // init
         $str = $this->str;
 
@@ -2181,8 +2194,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Also accepts an array, $ignore, allowing you to list words not to be
      * capitalized.
      *
-     * @param array|string[]|null $ignore            [optional] <p>An array of words not to capitalize or null. Default: null</p>
-     * @param string|null         $word_define_chars [optional] <p>An string of chars that will be used as whitespace separator === words.</p>
+     * @param array|string[]|null $ignore            [optional] <p>An array of words not to capitalize or null.
+     *                                               Default: null</p>
+     * @param string|null         $word_define_chars [optional] <p>An string of chars that will be used as whitespace
+     *                                               separator === words.</p>
      * @param string|null         $language          [optional] <p>Language of the source string.</p>
      *
      * @return static
@@ -2192,7 +2207,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         array $ignore = null,
         string $word_define_chars = null,
         string $language = null
-    ): self {
+    ): self
+    {
         return static::create(
             $this->utf8::str_titleize(
                 $this->str,
@@ -2240,8 +2256,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * replaced with their closest ASCII counterparts, and the rest are removed
      * unless instructed otherwise.
      *
-     * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance |
-     *                        Default: false</p>
+     * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
+     *                        performance | Default: false</p>
      * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
      *
      * @return static
@@ -2548,7 +2564,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return array<string, array<int, string>>
      *                       <p>An array of replacements.</p>
      *
-     * @deprecated this is only here for backward-compatibly reasons
+     * @deprecated   this is only here for backward-compatibly reasons
      */
     protected function charsArray(): array
     {

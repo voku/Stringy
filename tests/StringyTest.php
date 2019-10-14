@@ -1559,7 +1559,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['numbers-1234', 'numbers 1234'],
             ['perevirka-ryadka', 'перевірка рядка'],
             ['bukvar-s-bukvoi-y', 'букварь с буквой ы'],
-            ['podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
+            ['podexal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
             ['foo:bar:baz', 'Foo bar baz', ':'],
             ['a_string_with_underscores', 'A_string with_underscores', '_'],
             ['a_string_with_dashes', 'A string-with-dashes', '_'],
