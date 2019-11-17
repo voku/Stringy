@@ -1225,7 +1225,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
                 '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
             ],
             ['<XSS >', '<XSS STYLE="behavior: url(xss.htc);">'],
-            ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
+            ['&lt;∂∆ &gt; ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
             ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'],
         ];
     }

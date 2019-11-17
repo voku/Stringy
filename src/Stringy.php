@@ -1570,10 +1570,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      */
-    public function removeHtml(string $allowableTags = null): self
+    public function removeHtml(string $allowableTags = ''): self
     {
         return static::create(
-            $this->utf8::remove_html($this->str, $allowableTags . ''),
+            $this->utf8::remove_html($this->str, $allowableTags),
             $this->encoding
         );
     }
