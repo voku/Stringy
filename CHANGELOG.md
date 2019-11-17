@@ -1,3 +1,8 @@
+### 6.0.2 (2019-11-17)
+- update "Arrayy" (collection lib)
+- fix errors reported by psalm
+
+
 ### 6.0.1 (2019-10-14)
 - update "Portable ASCII" from v1.2 -> v1.3
 
