@@ -291,7 +291,7 @@ If you need a collection of Stringy objects you can use the S::collection()
 method. 
 
 ```php
-$stringyCollection = S::collection(['fòôbàř', 'lall', 'öäü']);
+$stringyCollection = \Stringy\collection::collection(['fòôbàř', 'lall', 'öäü']);
 ```
 
 ## Instance Methods

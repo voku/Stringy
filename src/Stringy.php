@@ -524,12 +524,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
      * @param string $encoding [optional] <p>The character encoding. Fallback: 'UTF-8'</p>
      *
-     * @return static
-     *                <p>A Stringy object.</p>
      * @throws \InvalidArgumentException
      *                                   <p>if an array or object without a
      *                                   __toString method is passed as the first argument</p>
      *
+     * @return static
+     *                <p>A Stringy object.</p>
      */
     public static function create($str = '', string $encoding = null): self
     {
@@ -1383,11 +1383,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param int $offset <p>The <strong>index</strong> from which to retrieve the char.</p>
      *
-     * @return string
-     *                <p>The character at the specified index.</p>
      * @throws \OutOfBoundsException
      *                               <p>If the positive or negative offset does not exist.</p>
      *
+     * @return string
+     *                <p>The character at the specified index.</p>
      */
     public function offsetGet($offset): string
     {
@@ -1438,11 +1438,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $padStr  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $padType [optional] <p>One of 'left', 'right', 'both'. Default: 'right'</p>
      *
-     * @return static
-     *                <p>Object with a padded $str.</p>
      * @throws \InvalidArgumentException
      *                                   <p>If $padType isn't one of 'right', 'left' or 'both'.</p>
      *
+     * @return static
+     *                <p>Object with a padded $str.</p>
      */
     public function pad(int $length, string $padStr = ' ', string $padType = 'right'): self
     {
@@ -1802,8 +1802,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * string is further truncated so that the substring may be appended without
      * exceeding the desired length.
      *
-     * @param int    $length    <p>Desired length of the truncated string.</p>
-     * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
+     * @param int    $length                          <p>Desired length of the truncated string.</p>
+     * @param string $substring                       [optional] <p>The substring to append if it can fit. Default: ''</p>
      * @param bool   $ignoreDoNotSplitWordsForOneWord
      *
      * @return static
@@ -1898,8 +1898,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         bool $replace_extra_symbols = true,
         bool $use_str_to_lower = true,
         bool $use_transliterate = false
-    ): self
-    {
+    ): self {
         return static::create(
             $this->ascii::to_slugify(
                 $this->str,
@@ -1934,8 +1933,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         string $language = 'en',
         array $replacements = [],
         bool $strToLower = true
-    ): self
-    {
+    ): self {
         // init
         $str = $this->str;
 
@@ -2207,8 +2205,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         array $ignore = null,
         string $word_define_chars = null,
         string $language = null
-    ): self
-    {
+    ): self {
         return static::create(
             $this->utf8::str_titleize(
                 $this->str,
