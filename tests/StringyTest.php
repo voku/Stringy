@@ -1211,6 +1211,8 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
+     *
+     * @noinspection CssUnknownTarget
      */
     public function removeXssProvider(): array
     {
@@ -1233,10 +1235,50 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function equalsProvider(): array
+    {
+        return [
+            [
+                true,
+                'fòô bàř',
+            ],
+            [
+                false,
+                'Fòô bàř',
+            ],
+            [
+                false,
+                0,
+            ],
+            [
+                false,
+                1,
+            ],
+            [
+                false,
+                1.1,
+            ],
+            [
+                false,
+                'null',
+            ],
+            [
+                false,
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function emptyProvider(): array
     {
         return [
-            [true, ''],
+            [
+                true,
+                '',
+            ],
             [
                 false,
                 'Hello',
@@ -1619,6 +1661,48 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             [['fòô', 'bàř'], 'fòô,bàř,baz', ',', 2, 'UTF-8'],
             [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 3, 'UTF-8'],
             [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 10, 'UTF-8'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function chunkProvider(): array
+    {
+        return [
+            [
+                [
+                    0 => 'f',
+                    1 => 'ò',
+                    2 => 'ô',
+                    3 => ',',
+                    4 => 'b',
+                    5 => 'à',
+                    6 => 'ř',
+                ],
+                'fòô,bàř',
+                1,
+            ],
+            [
+                [
+                    0 => 'fò',
+                    1 => 'ô,',
+                    2 => 'bà',
+                    3 => 'ř',
+                ],
+                'fòô,bàř',
+                2,
+            ],
+            [
+                [
+                    0 => 'fòô',
+                    1 => ',bà',
+                    2 => 'ř',
+                ],
+                'fòô,bàř',
+                3,
+            ],
+            [['fòô,bàř'], 'fòô,bàř', 10],
         ];
     }
 
@@ -3196,6 +3280,19 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider equalsProvider()
+     *
+     * @param      $expected
+     * @param      $str
+     * @param null $encoding
+     */
+    public function testEquals($expected, $str, $encoding = null)
+    {
+        $result = S::create('fòô bàř', $encoding)->isEquals($str);
+        static::assertSame($expected, $result);
+    }
+
+    /**
      * @dataProvider emptyProvider()
      *
      * @param      $expected
@@ -3206,6 +3303,19 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = S::create($str, $encoding)->isEmpty();
         static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider emptyProvider()
+     *
+     * @param      $expected
+     * @param      $str
+     * @param null $encoding
+     */
+    public function testNotEmpty($expected, $str, $encoding = null)
+    {
+        $result = S::create($str, $encoding)->isNotEmpty();
+        static::assertSame(!$expected, $result);
     }
 
     /**
@@ -3537,9 +3647,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider snakeizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param null $encoding
+     * @param string      $expected
+     * @param string      $str
+     * @param string|null $encoding
      */
     public function testSnakeize($expected, $str, $encoding = null)
     {
@@ -3551,13 +3661,38 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider chunkProvider()
+     *
+     * @param string[] $expected
+     * @param string   $str
+     * @param int      $length
+     * @param null     $encoding
+     */
+    public function testChunk($expected, $str, $length = 1, $encoding = null)
+    {
+        $stringy = S::create($str, $encoding);
+        $result = $stringy->chunk($length);
+
+        static::assertInternalType('array', $result);
+        foreach ($result as $string) {
+            $this->assertStringy($string);
+        }
+
+        foreach ($result as $key => $strTmp) {
+            $result[$key] = $strTmp->toString();
+        }
+
+        static::assertSame($expected, $result);
+    }
+
+    /**
      * @dataProvider splitProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $pattern
-     * @param int  $limit
-     * @param null $encoding
+     * @param string[]    $expected
+     * @param string      $str
+     * @param string      $pattern
+     * @param int         $limit
+     * @param string|null $encoding
      */
     public function testSplit($expected, $str, $pattern, $limit = -1, $encoding = null)
     {
@@ -3570,7 +3705,6 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
 
         $counter = \count($expected);
-        /** @noinspection ForeachInvariantsInspection */
         for ($i = 0; $i < $counter; ++$i) {
             static::assertSame($expected[$i], $result[$i]->toString());
         }
@@ -4144,6 +4278,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     public function testUtf8ify()
     {
+        /** @noinspection CheckDtdRefs */
         $examples = [
             '' => [''],
             // Valid UTF-8 + UTF-8 NO-BREAK SPACE

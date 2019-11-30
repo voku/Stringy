@@ -36,6 +36,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
+        /** @noinspection PhpExpressionResultUnusedInspection */
         (string) new S([]);
         static::fail('Expecting exception when the constructor is passed an array');
     }
@@ -44,6 +45,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
+        /** @noinspection PhpExpressionResultUnusedInspection */
         (string) new S(new stdClass());
         static::fail(
             'Expecting exception when the constructor is passed an ' .
@@ -155,6 +157,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\OutOfBoundsException::class);
 
         $stringy = S::create('fòô', 'UTF-8');
+        /** @noinspection PhpUnusedLocalVariableInspection */
         $test = $stringy[3];
     }
 
@@ -324,7 +327,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             $this->assertStringy($line);
         }
 
-        for ($i = 0; $i < \count($expected); ++$i) {
+        for ($i = 0, $iMax = \count($expected); $i < $iMax; ++$i) {
             static::assertEquals($expected[$i], $result[$i]);
         }
     }
@@ -849,7 +852,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $stringy = S::create('foo');
-        $result = $stringy->pad(5, 'foo', 'bar');
+        $stringy->pad(5, 'foo', 'bar');
     }
 
     /**
@@ -1824,7 +1827,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         );
 
         // We'll make sure that the chars are present after shuffle
-        for ($i = 0; $i < \mb_strlen($str, $encoding); ++$i) {
+        for ($i = 0, $iMax = \mb_strlen($str, $encoding); $i < $iMax; ++$i) {
             $char = \mb_substr($str, $i, 1, $encoding);
             $countBefore = \mb_substr_count($str, $char, $encoding);
             $countAfter = \mb_substr_count($result, $char, $encoding);
@@ -2162,7 +2165,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             $this->assertStringy($string);
         }
 
-        for ($i = 0; $i < \count($expected); ++$i) {
+        for ($i = 0, $iMax = \count($expected); $i < $iMax; ++$i) {
             static::assertEquals($expected[$i], $result[$i]);
         }
     }

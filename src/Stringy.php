@@ -192,14 +192,24 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a new string with $string appended.
      *
-     * @param string $string <p>The string to append.</p>
+     * @param string ...$suffix <p>The string to append.</p>
      *
      * @return static
      *                <p>Object with appended $string.</p>
+     *
+     * @noinspection PhpDocSignatureInspection
      */
-    public function append(string $string): self
+    public function append(string ...$suffix): self
     {
-        return static::create($this->str . $string, $this->encoding);
+        if (\count($suffix) <= 1) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $suffix = $suffix[0];
+        } else {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $suffix = \implode('', $suffix);
+        }
+
+        return static::create($this->str . $suffix, $this->encoding);
     }
 
     /**
@@ -1093,7 +1103,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Determine whether the string is considered to be empty.
      *
      * A variable is considered empty if it does not exist or if its value equals FALSE.
-     * empty() does not generate a warning if the variable does not exist.
      *
      * @return bool
      *              <p>Whether or not $str is empty().</p>
@@ -1101,6 +1110,40 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isEmpty(): bool
     {
         return $this->utf8::is_empty($this->str);
+    }
+
+    /**
+     * Determine whether the string is considered to be NOT empty.
+     *
+     * A variable is considered NOT empty if it does exist or if its value equals TRUE.
+     *
+     * @return bool
+     *              <p>Whether or not $str is empty().</p>
+     */
+    public function isNotEmpty(): bool
+    {
+        return !$this->utf8::is_empty($this->str);
+    }
+
+    /**
+     * Determine whether the string is equals to $str.
+     *
+     * @param string ...$str <p>The string to compare.</p>
+     *
+     * @return bool
+     *              <p>Whether or not $str is equals.</p>
+     *
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function isEquals(string ...$str): bool
+    {
+        foreach ($str as $strTmp) {
+            if ($this->str !== $strTmp) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -1526,14 +1569,24 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a new string starting with $string.
      *
-     * @param string $string <p>The string to append.</p>
+     * @param string ...$prefix <p>The string to append.</p>
      *
      * @return static
      *                <p>Object with appended $string.</p>
+     *
+     * @noinspection PhpDocSignatureInspection
      */
-    public function prepend(string $string): self
+    public function prepend(string ...$prefix): self
     {
-        return static::create($string . $this->str, $this->encoding);
+        if (\count($prefix) <= 1) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $prefix = $prefix[0];
+        } else {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $prefix = \implode('', ...$prefix);
+        }
+
+        return static::create($prefix . $this->str, $this->encoding);
     }
 
     /**
@@ -1964,6 +2017,32 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $this->utf8::str_snakeize($this->str, $this->encoding),
             $this->encoding
         );
+    }
+
+    /**
+     * Splits the string into chunks of Stringy objects.
+     *
+     * @param int $length
+     *
+     * @return static[]
+     *                  <p>An array of Stringy objects.</p>
+     */
+    public function chunk(int $length = 1): array
+    {
+        if ($length < 1) {
+            throw new \InvalidArgumentException('The chunk length must be greater than zero.');
+        }
+
+        if ($this->str === '') {
+            return [];
+        }
+
+        $chunks = $this->utf8::str_split($this->str, $length);
+        foreach ($chunks as $i => &$value) {
+            $value = static::create($value, $this->encoding);
+        }
+
+        return $chunks;
     }
 
     /**

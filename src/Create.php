@@ -9,11 +9,10 @@ if (!\function_exists('Stringy\create')) {
      * @param mixed  $str      Value to modify, after being cast to string
      * @param string $encoding The character encoding
      *
-     * @return Stringy A Stringy object
-     *
      * @throws \InvalidArgumentException if an array or object without a
      *                                   __toString method is passed as the first argument
      *
+     * @return Stringy A Stringy object
      */
     function create($str, string $encoding = null)
     {
@@ -25,9 +24,9 @@ if (!\function_exists('Stringy\collection')) {
     /**
      * @param string[]|Stringy[]|null $input
      *
-     * @return CollectionStringy
-     *
      * @throws \TypeError
+     *
+     * @return CollectionStringy
      */
     function collection($input = null)
     {

@@ -453,6 +453,16 @@ Returns an array consisting of the characters in the string.
 s('fòôbàř')->chars(); // ['f', 'ò', 'ô', 'b', 'à', 'ř']
 ```
 
+##### chunk(int $length = 1)
+
+Splits the string into chunks of Stringy objects.
+
+You can also take a look at "split" if you need to split the string by some chars into chunks.
+
+```php
+s('foobar')->chunk(3); // ['foo', 'bar']
+```
+
 ##### collapseWhitespace()
 
 Trims the string and replaces consecutive whitespace characters with a
@@ -715,8 +725,32 @@ s("\n\t  \v\f")->isBlank(); // true
 
 Returns true if the string contains a valid E-Mail address, false otherwise.
 
+##### isEmpty() : 
+
+Determine whether the string is considered to be empty.
+
+A variable is considered empty if it does not exist or if its value equals FALSE.
+
 ```php
-s('lars@moelleken.org')->isEmail(); // true
+s('')->isEmpty(); // true
+```
+
+##### isNotEmpty() : 
+
+Determine whether the string is considered to be NOT empty.
+
+A variable is considered NOT empty if it does exist or if its value equals TRUE.
+
+```php
+s('')->isNotEmpty(); // false
+```
+
+##### isEquals(string ...$str) : bool
+
+Determine whether the string is equals to $str.
+
+```php
+s('foo')->isEquals('foo'); // true
 ```
 
 ##### isHexadecimal() : bool
