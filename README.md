@@ -24,7 +24,6 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 * [OO and Chaining](#oo-and-chaining)
 * [Implemented Interfaces](#implemented-interfaces)
 * [PHP Class Call Creation](#php-class-call-creation)
-* [StaticStringy](#staticstringy)
 * [Class methods](#class-methods)
     * [create](#createmixed-str--encoding-)
 * [Instance methods](#instance-methods)
@@ -258,21 +257,6 @@ use function Stringy\create as s;
 s('fòô     bàř')->collapseWhitespace()->swapCase();
 ```
 
-## StaticStringy
-
-All methods listed under "Instance methods" are available as part of a static
-wrapper. For StaticStringy methods, the optional encoding is expected to be the
-last argument. The return value is not cast, and may thus be of type Stringy,
-integer, boolean, etc.
-
-```php
-use Stringy\StaticStringy as S;
-
-// Translates to Stringy::create('fòôbàř', 'UTF-8')->slice(0, 3);
-// Returns a Stringy object with the string "fòô"
-S::slice('fòôbàř', 0, 3, 'UTF-8');
-```
-
 ## Class methods
 
 ##### create(mixed $str [, $encoding ])
@@ -291,7 +275,7 @@ If you need a collection of Stringy objects you can use the S::collection()
 method. 
 
 ```php
-$stringyCollection = \Stringy\collection::collection(['fòôbàř', 'lall', 'öäü']);
+$stringyCollection = \Stringy\collection(['fòôbàř', 'lall', 'öäü']);
 ```
 
 ## Instance Methods
@@ -302,7 +286,7 @@ encoding returned by mb_internal_encoding() is UTF-8. For further details,
 see the documentation for the create method above, as well as the notes
 on PHP 5.6 creation.
 
-##### afterFirst(string $separator): Stringy
+##### afterFirst(string $separator) : static
 
 Gets the substring after the first occurrence of a separator.
 
@@ -310,7 +294,7 @@ Gets the substring after the first occurrence of a separator.
 s('</b></b>')->afterFirst('b'); // '></b>'
 ```
 
-##### afterFirstIgnoreCase(string $separator): Stringy
+##### afterFirstIgnoreCase(string $separator) : static
 
 Gets the substring after the first occurrence of a separator.
 
@@ -318,7 +302,7 @@ Gets the substring after the first occurrence of a separator.
 s('</B></B>')->afterFirstIgnoreCase('b'); // '></B>'
 ```
 
-##### afterLast(string $separator): Stringy
+##### afterLast(string $separator) : static
 
 Gets the substring after the last occurrence of a separator.
 
@@ -326,7 +310,7 @@ Gets the substring after the last occurrence of a separator.
 s('</b></b>')->afterLast('b'); // '>'
 ```
 
-##### afterLastIgnoreCase(string $separator): Stringy
+##### afterLastIgnoreCase(string $separator) : static
 
 Gets the substring after the last occurrence of a separator.
 
@@ -334,17 +318,15 @@ Gets the substring after the last occurrence of a separator.
 s('</B></B>')->afterLastIgnoreCase('b'); // '>'
 ```
 
-##### append(string $string)
+##### append(string $string) : static
 
 Returns a new string with $string appended.
 
 ```php
 s('fòô')->append('bàř'); // 'fòôbàř'
-// [OR]
-StaticStringy::append('fòô', 'bàř'); // e.g.: 'fòôbàř'
 ```
 
-##### appendPassword(int $length)
+##### appendPassword(int $length) : static
 
 Append an password (limited to chars that are good readable).
 
@@ -354,7 +336,7 @@ s('')->appendPassword(8); // e.g.: '89bcdfgh'
 StaticStringy::appendPassword(8); // e.g.: '89bcdfgh'
 ```
 
-##### appendUniqueIdentifier(string $extraPrefix)
+##### appendUniqueIdentifier(string $extraPrefix) : static
 
 Append an unique identifier.
 
@@ -364,7 +346,7 @@ s('')->appendUniqueIdentifier(); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
 StaticStringy::appendUniqueIdentifier(''); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
 ```
 
-##### appendRandomString(int $length, string $possibleChars)
+##### appendRandomString(int $length, string $possibleChars) : static
 
 Append an random string.
 
@@ -374,7 +356,7 @@ s('')->appendUniqueIdentifier(5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
 StaticStringy::appendUniqueIdentifier('', 5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
 ```
 
-##### at(int $index)
+##### at(int $index) : static
 
 Returns the character at $index, with indexes starting at 0.
 
@@ -384,7 +366,7 @@ s('fòôbàř')->at(3); // 'b'
 StaticStringy::at('fòôbàř', 3); // e.g.: 'b'
 ```
 
-##### beforeFirst(string $separator): Stringy
+##### beforeFirst(string $separator) : static
 
 Gets the substring before the first occurrence of a separator.
 
@@ -392,7 +374,7 @@ Gets the substring before the first occurrence of a separator.
 s('</b></b>')->beforeFirst('b'); // '</'
 ```
 
-##### beforeFirstIgnoreCase(string $separator): Stringy
+##### beforeFirstIgnoreCase(string $separator) : static
 
 Gets the substring before the first occurrence of a separator.
 
@@ -400,7 +382,7 @@ Gets the substring before the first occurrence of a separator.
 s('</B></B>')->beforeFirstIgnoreCase('b'); // '</'
 ```
 
-##### beforeLast(string $separator): Stringy
+##### beforeLast(string $separator) : static
 
 Gets the substring before the last occurrence of a separator.
 
@@ -408,7 +390,7 @@ Gets the substring before the last occurrence of a separator.
 s('</b></b>')->beforeLast('b'); // '</b></'
 ```
 
-##### beforeLastIgnoreCase(string $separator): Stringy
+##### beforeLastIgnoreCase(string $separator) : static
 
 Gets the substring before the last occurrence of a separator.
 
@@ -416,7 +398,7 @@ Gets the substring before the last occurrence of a separator.
 s('</B></B>')->beforeLastIgnoreCase('b'); // '</B></'
 ```
 
-##### between(string $start, string $end [, int $offset])
+##### between(string $start, string $end [, int $offset]) : static
 
 Returns the substring between $start and $end, if found, or an empty
 string. An optional offset may be supplied from which to begin the
@@ -426,7 +408,7 @@ search for the start string.
 s('{foo} and {bar}')->between('{', '}'); // 'foo'
 ```
 
-##### camelize()
+##### camelize() : static
 
 Returns a camelCase version of the string. Trims surrounding spaces,
 capitalizes letters following digits, spaces, dashes and underscores,
@@ -436,7 +418,7 @@ and removes spaces, dashes, as well as underscores.
 s('Camel-Case')->camelize(); // 'camelCase'
 ```
 
-##### capitalizePersonName()
+##### capitalizePersonName() : static
 
 Returns the string with the first letter of each word capitalized,
 except for when the word is a name which shouldn't be capitalized.
@@ -445,7 +427,7 @@ except for when the word is a name which shouldn't be capitalized.
 s('jaap de hoop scheffer')->capitalizePersonName(); // 'Jaap de Hoop Scheffer'
 ```
 
-##### chars()
+##### chars() : string[]
 
 Returns an array consisting of the characters in the string.
 
@@ -453,7 +435,7 @@ Returns an array consisting of the characters in the string.
 s('fòôbàř')->chars(); // ['f', 'ò', 'ô', 'b', 'à', 'ř']
 ```
 
-##### chunk(int $length = 1)
+##### chunk(int $length = 1) : static[]
 
 Splits the string into chunks of Stringy objects.
 
@@ -463,7 +445,7 @@ You can also take a look at "split" if you need to split the string by some char
 s('foobar')->chunk(3); // ['foo', 'bar']
 ```
 
-##### collapseWhitespace()
+##### collapseWhitespace() : static
 
 Trims the string and replaces consecutive whitespace characters with a
 single space. This includes tabs and newline characters, as well as
@@ -473,7 +455,7 @@ multibyte whitespace such as the thin space and ideographic space.
 s('   Ο     συγγραφέας  ')->collapseWhitespace(); // 'Ο συγγραφέας'
 ```
 
-##### contains(string $needle [, boolean $caseSensitive = true ])
+##### contains(string $needle [, bool $caseSensitive = true ]) : bool
 
 Returns true if the string contains $needle, false otherwise. By default,
 the comparison is case-sensitive, but can be made insensitive
@@ -483,7 +465,7 @@ by setting $caseSensitive to false.
 s('Ο συγγραφέας είπε')->contains('συγγραφέας'); // true
 ```
 
-##### containsAll(array $needles [, boolean $caseSensitive = true ])
+##### containsAll(array $needles [, bool $caseSensitive = true ]) : bool
 
 Returns true if the string contains all $needles, false otherwise. By
 default the comparison is case-sensitive, but can be made insensitive by
@@ -493,7 +475,7 @@ setting $caseSensitive to false.
 s('foo & bar')->containsAll(['foo', 'bar']); // true
 ```
 
-##### containsAny(array $needles [, boolean $caseSensitive = true ])
+##### containsAny(array $needles [, bool $caseSensitive = true ]) : bool
 
 Returns true if the string contains any $needles, false otherwise. By
 default the comparison is case-sensitive, but can be made insensitive by
@@ -503,7 +485,7 @@ setting $caseSensitive to false.
 s('str contains foo')->containsAny(['foo', 'bar']); // true
 ```
 
-##### countSubstr(string $substring [, boolean $caseSensitive = true ])
+##### countSubstr(string $substring [, bool $caseSensitive = true ]) : int
 
 Returns the number of occurrences of $substring in the given string.
 By default, the comparison is case-sensitive, but can be made insensitive
@@ -513,7 +495,7 @@ by setting $caseSensitive to false.
 s('Ο συγγραφέας είπε')->countSubstr('α'); // 2
 ```
 
-##### dasherize()
+##### dasherize() : static
 
 Returns a lowercase and trimmed string separated by dashes. Dashes are
 inserted before uppercase characters (with the exception of the first
@@ -523,7 +505,7 @@ character of the string), and in place of spaces as well as underscores.
 s('fooBar')->dasherize(); // 'foo-bar'
 ```
 
-##### delimit(int $delimiter)
+##### delimit(int $delimiter) : static
 
 Returns a lowercase and trimmed string separated by the given delimiter.
 Delimiters are inserted before uppercase characters (with the exception
@@ -534,7 +516,7 @@ and underscores. Alpha delimiters are not converted to lowercase.
 s('fooBar')->delimit('::'); // 'foo::bar'
 ```
 
-##### endsWith(string $substring [, boolean $caseSensitive = true ])
+##### endsWith(string $substring [, bool $caseSensitive = true ]): bool
 
 Returns true if the string ends with $substring, false otherwise. By
 default, the comparison is case-sensitive, but can be made insensitive by
@@ -544,7 +526,7 @@ setting $caseSensitive to false.
 s('fòôbàř')->endsWith('bàř', true); // true
 ```
 
-##### endsWithAny(string[] $substrings [, boolean $caseSensitive = true ])
+##### endsWithAny(string[] $substrings [, bool $caseSensitive = true ]) : bool
 
 Returns true if the string ends with any of $substrings, false otherwise. By 
 default, the comparison is case-sensitive, but can be made insensitive by 
@@ -554,7 +536,7 @@ setting $caseSensitive to false.
 s('fòôbàř')->endsWith(['bàř', 'baz'], true); // true
 ```
 
-##### ensureLeft(string $substring)
+##### ensureLeft(string $substring) : static
 
 Ensures that the string begins with $substring. If it doesn't, it's prepended.
 
@@ -562,7 +544,7 @@ Ensures that the string begins with $substring. If it doesn't, it's prepended.
 s('foobar')->ensureLeft('http://'); // 'http://foobar'
 ```
 
-##### ensureRight(string $substring)
+##### ensureRight(string $substring) : static
 
 Ensures that the string ends with $substring. If it doesn't, it's appended.
 
@@ -570,15 +552,15 @@ Ensures that the string ends with $substring. If it doesn't, it's appended.
 s('foobar')->ensureRight('.com'); // 'foobar.com'
 ```
 
-##### escape()
+##### escape() : static
 
-Escape html via UTF8::htmlspecialchars(), so we can use this data in our templates.
+Escape html via htmlspecialchars(), so we can use this data in our templates.
 
 ```php
 s('<∂∆ onerror="alert(xss)">')->escape(); // '&lt;∂∆ onerror=&quot;alert(xss)&quot;&gt;'
 ```
 
-##### extractText(string $search = '', int $length = null, string $ellipsis = '...')
+##### extractText(string $search = '', int $length = null, string $ellipsis = '...') : static
 
 Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
 
@@ -587,7 +569,16 @@ $sentence = 'This is only a Fork of Stringy, take a look at the new features.';
 s($sentence)->extractText('Stringy'); // '...Fork of Stringy...'
 ```
 
-##### first(int $n)
+##### format(...$args) : static
+
+Return a formatted string via sprintf + named parameters via array syntax.
+
+```php
+$input = 'one: %2$d, %1$s: 2, %:text_three: %3$d';
+s($input)->format(['text_three' => '%4$s'], 'two', 1, 3, 'three'); // 'One: 1, two: 2, three: 3'
+```
+
+##### first(int $n) : static
 
 Returns the first $n characters of the string.
 
@@ -595,7 +586,7 @@ Returns the first $n characters of the string.
 s('fòôbàř')->first(3); // 'fòô'
 ```
 
-##### getEncoding()
+##### getEncoding() : string
 
 Returns the encoding used by the Stringy object.
 
@@ -603,7 +594,7 @@ Returns the encoding used by the Stringy object.
 s('fòôbàř', 'UTF-8')->getEncoding(); // 'UTF-8'
 ```
 
-##### hasLowerCase()
+##### hasLowerCase() : bool
 
 Returns true if the string contains a lower case char, false otherwise.
 
@@ -611,7 +602,7 @@ Returns true if the string contains a lower case char, false otherwise.
 s('fòôbàř')->hasLowerCase(); // true
 ```
 
-##### hasUpperCase()
+##### hasUpperCase() : bool
 
 Returns true if the string contains an upper case char, false otherwise.
 
@@ -619,7 +610,7 @@ Returns true if the string contains an upper case char, false otherwise.
 s('fòôbàř')->hasUpperCase(); // false
 ```
 
-##### htmlDecode()
+##### htmlDecode() : static
 
 Convert all HTML entities to their applicable characters. An alias of
 html_entity_decode. For a list of flags, refer to
@@ -629,7 +620,7 @@ http://php.net/manual/en/function.html-entity-decode.php
 s('&amp;')->htmlDecode(); // '&'
 ```
 
-##### htmlEncode()
+##### htmlEncode() : static
 
 Convert all applicable characters to HTML entities. An alias of
 htmlentities. Refer to http://php.net/manual/en/function.htmlentities.php
@@ -639,7 +630,7 @@ for a list of flags.
 s('&')->htmlEncode(); // '&amp;'
 ```
 
-##### humanize()
+##### humanize() : static
 
 Capitalizes the first word of the string, replaces underscores with
 spaces, and strips '_id'.
@@ -648,7 +639,7 @@ spaces, and strips '_id'.
 s('author_id')->humanize(); // 'Author'
 ```
 
-##### indexOf(string $needle [, $offset = 0 ]);
+##### indexOf(string $needle [, $offset = 0 ]) : int|false
 
 Returns the index of the first occurrence of $needle in the string,
 and false if not found. Accepts an optional offset from which to begin
@@ -658,7 +649,17 @@ the search. A negative index searches from the end
 s('string')->indexOf('ing'); // 3
 ```
 
-##### indexOfLast(string $needle [, $offset = 0 ]);
+##### indexOfIgnoreCase(string $needle [, $offset = 0 ]) : int|false
+
+Returns the index of the first occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search. A negative index searches from the end
+
+```php
+s('string')->indexOfIgnoreCase('ING'); // 3
+```
+
+##### indexOfLast(string $needle [, $offset = 0 ]) : int|false
 
 Returns the index of the last occurrence of $needle in the string,
 and false if not found. Accepts an optional offset from which to begin
@@ -669,7 +670,18 @@ in the string.
 s('foobarfoo')->indexOfLast('foo'); // 10
 ```
 
-##### insert(int $index, string $substring)
+##### indexOfLastIgnoreCase(string $needle [, $offset = 0 ]) : int|false
+
+Returns the index of the last occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search. Offsets may be negative to count from the last character
+in the string.
+
+```php
+s('fooBarFoo')->indexOfLastIgnoreCase('foo'); // 10
+```
+
+##### insert(int $index, string $substring) : static
 
 Inserts $substring into the string at the $index provided.
 
@@ -725,7 +737,7 @@ s("\n\t  \v\f")->isBlank(); // true
 
 Returns true if the string contains a valid E-Mail address, false otherwise.
 
-##### isEmpty() : 
+##### isEmpty() : bool
 
 Determine whether the string is considered to be empty.
 
@@ -735,7 +747,7 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 s('')->isEmpty(); // true
 ```
 
-##### isNotEmpty() : 
+##### isNotEmpty() : bool
 
 Determine whether the string is considered to be NOT empty.
 
@@ -803,7 +815,7 @@ Returns true if the string contains only upper case chars, false otherwise.
 s('FÒÔBÀŘ')->isUpperCase(); // true
 ```
 
-##### last(int $n)
+##### last(int $n) : static
 
 Returns the last $n characters of the string.
 
@@ -811,7 +823,7 @@ Returns the last $n characters of the string.
 s('fòôbàř')->last(3); // 'bàř'
 ```
 
-##### length()
+##### length() : int
 
 Returns the length of the string.
 
@@ -819,7 +831,7 @@ Returns the length of the string.
 s('fòôbàř')->length(); // 6
 ```
 
-##### lines()
+##### lines() : static[]
 
 Splits on newlines and carriage returns, returning an array of Stringy
 objects corresponding to the lines in the string.
@@ -828,7 +840,7 @@ objects corresponding to the lines in the string.
 s("fòô\r\nbàř\n")->lines(); // ['fòô', 'bàř', '']
 ```
 
-##### longestCommonPrefix(string $otherStr)
+##### longestCommonPrefix(string $otherStr) : static
 
 Returns the longest common prefix between the string and $otherStr.
 
@@ -836,7 +848,7 @@ Returns the longest common prefix between the string and $otherStr.
 s('foobar')->longestCommonPrefix('foobaz'); // 'fooba'
 ```
 
-##### longestCommonSuffix(string $otherStr)
+##### longestCommonSuffix(string $otherStr) : static
 
 Returns the longest common suffix between the string and $otherStr.
 
@@ -844,7 +856,7 @@ Returns the longest common suffix between the string and $otherStr.
 s('fòôbàř')->longestCommonSuffix('fòrbàř'); // 'bàř'
 ```
 
-##### longestCommonSubstring(string $otherStr)
+##### longestCommonSubstring(string $otherStr) : static
 
 Returns the longest common substring between the string and $otherStr. In the
 case of ties, it returns that which occurs first.
@@ -853,7 +865,7 @@ case of ties, it returns that which occurs first.
 s('foobar')->longestCommonSubstring('boofar'); // 'oo'
 ```
 
-##### lowerCaseFirst()
+##### lowerCaseFirst() : static
 
 Converts the first character of the supplied string to lower case.
 
@@ -861,7 +873,7 @@ Converts the first character of the supplied string to lower case.
 s('Σ foo')->lowerCaseFirst(); // 'σ foo'
 ```
 
-##### pad(int $length [, string $padStr = ' ' [, string $padType = 'right' ]])
+##### pad(int $length [, string $padStr = ' ' [, string $padType = 'right' ]]) : static
 
 Pads the string to a given length with $padStr. If length is less than
 or equal to the length of the string, no padding takes places. The default
@@ -873,7 +885,7 @@ $padType isn't one of those 3 values.
 s('fòôbàř')->pad(9, '-/', 'left'); // '-/-fòôbàř'
 ```
 
-##### padBoth(int $length [, string $padStr = ' ' ])
+##### padBoth(int $length [, string $padStr = ' ' ]) : static
 
 Returns a new string of a given length such that both sides of the string
 string are padded. Alias for pad() with a $padType of 'both'.
@@ -882,7 +894,7 @@ string are padded. Alias for pad() with a $padType of 'both'.
 s('foo bar')->padBoth(9, ' '); // ' foo bar '
 ```
 
-##### padLeft(int $length [, string $padStr = ' ' ])
+##### padLeft(int $length [, string $padStr = ' ' ]) : static
 
 Returns a new string of a given length such that the beginning of the
 string is padded. Alias for pad() with a $padType of 'left'.
@@ -891,7 +903,7 @@ string is padded. Alias for pad() with a $padType of 'left'.
 s('foo bar')->padLeft(9, ' '); // '  foo bar'
 ```
 
-##### padRight(int $length [, string $padStr = ' ' ])
+##### padRight(int $length [, string $padStr = ' ' ]) : static
 
 Returns a new string of a given length such that the end of the string is
 padded. Alias for pad() with a $padType of 'right'.
@@ -900,7 +912,7 @@ padded. Alias for pad() with a $padType of 'right'.
 s('foo bar')->padRight(10, '_*'); // 'foo bar_*_'
 ```
 
-##### prepend(string $string)
+##### prepend(string $string) : static
 
 Returns a new string starting with $string.
 
@@ -908,7 +920,7 @@ Returns a new string starting with $string.
 s('bàř')->prepend('fòô'); // 'fòôbàř'
 ```
 
-##### regexReplace(string $pattern, string $replacement [, string $options = 'msr'])
+##### regexReplace(string $pattern, string $replacement [, string $options = 'msr']) : static
 
 Replaces all occurrences of $pattern in $str by $replacement. An alias
 for mb_ereg_replace(). Note that the 'i' option with multibyte patterns
@@ -921,7 +933,7 @@ s('fòô ')->regexReplace('f[òô]+\s', 'bàř'); // 'bàř'
 s('fò')->regexReplace('(ò)', '\\1ô'); // 'fòô'
 ```
 
-##### removeLeft(string $substring)
+##### removeLeft(string $substring) : static
 
 Returns a new string with the prefix $substring removed, if present.
 
@@ -929,7 +941,7 @@ Returns a new string with the prefix $substring removed, if present.
 s('fòôbàř')->removeLeft('fòô'); // 'bàř'
 ```
 
-##### removeRight(string $substring)
+##### removeRight(string $substring) : static
 
 Returns a new string with the suffix $substring removed, if present.
 
@@ -937,7 +949,7 @@ Returns a new string with the suffix $substring removed, if present.
 s('fòôbàř')->removeRight('bàř'); // 'fòô'
 ```
 
-##### removeHtmlBreak(string $replacement)
+##### removeHtmlBreak(string $replacement) : static
 
 Returns a new string without "breaks" (<br .*>, \n, \r\n, ...).
 
@@ -945,7 +957,7 @@ Returns a new string without "breaks" (<br .*>, \n, \r\n, ...).
 s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtml(' '); // 'řàb <ô>òf\', ô< foo <a href="#">lall</a>'
 ```
 
-##### removeHtml(string $allowableTags)
+##### removeHtml(string $allowableTags) : static
 
 Returns a new string without HTML-Tags.
 
@@ -953,7 +965,7 @@ Returns a new string without HTML-Tags.
 s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtml('<br><br/>'); // 'řàb òf\', ô<br/>foo lall'
 ```
 
-##### removeXss()
+##### removeXss() : static
 
 Returns a new string without XSS.
 
@@ -961,7 +973,7 @@ Returns a new string without XSS.
 s('<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>')->removeXss(); // '<IMG >'
 ```
 
-##### repeat(int $multiplier)
+##### repeat(int $multiplier) : static
 
 Returns a repeated string given a multiplier. An alias for str_repeat.
 
@@ -969,7 +981,7 @@ Returns a repeated string given a multiplier. An alias for str_repeat.
 s('α')->repeat(3); // 'ααα'
 ```
 
-##### shortenAfterWord(int $length, string $strAddOn)
+##### shortenAfterWord(int $length, string $strAddOn) : static
 
 shorten the string after $length, but also after the next word
 
@@ -977,7 +989,7 @@ shorten the string after $length, but also after the next word
 s('this is a test')->shorten(5, '...'); // 'this...'
 ```
 
-##### replace(string $search, string $replacement, bool(true) $caseSensitive)
+##### replace(string $search, string $replacement, bool(true) $caseSensitive) : static
 
 Replaces all occurrences of $search in $str by $replacement.
 
@@ -985,7 +997,7 @@ Replaces all occurrences of $search in $str by $replacement.
 s('fòô bàř fòô bàř')->replace('fòô ', ''); // 'bàř bàř'
 ```
 
-##### replaceAll(array $search, string|array $replacement, bool(true) $caseSensitive)
+##### replaceAll(array $search, string|array $replacement, bool(true) $caseSensitive) : static
 
 Replaces all occurrences of elements from $search in $str by $replacement.
 
@@ -993,7 +1005,7 @@ Replaces all occurrences of elements from $search in $str by $replacement.
 s('fòô bàř lall bàř')->replace(['fòÔ ', 'lall'], '', false); // 'bàř bàř'
 ```
 
-##### replaceBeginning(string $search, string $replacement)
+##### replaceBeginning(string $search, string $replacement) : static
 
 Replaces all occurrences of $search in $str by $replacement.
 
@@ -1001,7 +1013,7 @@ Replaces all occurrences of $search in $str by $replacement.
 s('fòô bàř fòô bàř')->replaceBeginning('fòô', ''); // ' bàř bàř'
 ```
 
-##### replaceEnding(string $search, string $replacement)
+##### replaceEnding(string $search, string $replacement) : static
 
 Replaces all occurrences of $search in $str by $replacement.
 
@@ -1009,7 +1021,7 @@ Replaces all occurrences of $search in $str by $replacement.
 s('fòô bàř fòô bàř')->replaceEnding('bàř', ''); // 'fòô bàř fòô '
 ```
 
-##### reverse()
+##### reverse() : static
 
 Returns a reversed string. A multibyte version of strrev().
 
@@ -1017,7 +1029,7 @@ Returns a reversed string. A multibyte version of strrev().
 s('fòôbàř')->reverse(); // 'řàbôòf'
 ```
 
-##### safeTruncate(int $length [, string $substring = '' ])
+##### safeTruncate(int $length [, string $substring = '' ]) : static
 
 Truncates the string to a given length, while ensuring that it does not
 split words. If $substring is provided, and truncating occurs, the
@@ -1025,11 +1037,10 @@ string is further truncated so that the substring may be appended without
 exceeding the desired length.
 
 ```php
-s('What are your plans today?')->safeTruncate(22, '...');
-// 'What are your plans...'
+s('What are your plans today?')->safeTruncate(22, '...'); // 'What are your plans...'
 ```
 
-##### shuffle()
+##### shuffle() : static
 
 A multibyte str_shuffle() function. It returns a string with its characters in
 random order.
@@ -1038,7 +1049,7 @@ random order.
 s('fòôbàř')->shuffle(); // 'àôřbòf'
 ```
 
-##### slugify(string $separator = '-', string $language = 'en', array $replacements = [])
+##### slugify(string $separator = '-', string $language = 'en', array $replacements = []) : static
 
 Converts the string into an URL slug. This includes replacing non-ASCII
 characters with their closest ASCII equivalents, removing remaining
@@ -1050,7 +1061,7 @@ is also converted to lowercase.
 s('Using strings like fòô bàř')->slugify(); // 'using-strings-like-foo-bar'
 ```
 
-##### stripeCssMediaQueries()
+##### stripeCssMediaQueries() : static
 
 Remove css media-queries.
 
@@ -1058,7 +1069,7 @@ Remove css media-queries.
 s('test @media (min-width:660px){ .des-cla #mv-tiles{width:480px} } test ')->stripeCssMediaQueries(); // 'test  test '
 ```
 
-##### stripeEmptyHtmlTags()
+##### stripeEmptyHtmlTags() : static
 
 Remove empty html-tag. e.g.: <tag></tag>
 
@@ -1066,7 +1077,7 @@ Remove empty html-tag. e.g.: <tag></tag>
 s('foo<h1></h1>bar')->stripeEmptyHtmlTags(); // 'foobar'
 ```
 
-##### stripWhitespace()
+##### stripWhitespace() : static
 
 Strip all whitespace characters. This includes tabs and newline characters, 
 as well as multibyte whitespace such as the thin space and ideographic space.
@@ -1075,7 +1086,7 @@ as well as multibyte whitespace such as the thin space and ideographic space.
 s('   Ο     συγγραφέας  ')->stripWhitespace(); // 'Οσυγγραφέας'
 ```
 
-##### startsWith(string $substring [, boolean $caseSensitive = true ])
+##### startsWith(string $substring [, bool $caseSensitive = true ])
 
 Returns true if the string begins with $substring, false otherwise.
 By default, the comparison is case-sensitive, but can be made insensitive
@@ -1085,7 +1096,7 @@ by setting $caseSensitive to false.
 s('FÒÔbàřbaz')->startsWith('fòôbàř', false); // true
 ```
 
-##### startsWithAny(string[] $substrings [, boolean $caseSensitive = true ])
+##### startsWithAny(string[] $substrings [, bool $caseSensitive = true ]) : bool
 
 Returns true if the string begins with any of $substrings, false
 otherwise. By default the comparison is case-sensitive, but can be made
@@ -1095,7 +1106,7 @@ insensitive by setting $caseSensitive to false.
 s('FÒÔbàřbaz')->startsWith(['fòô', 'bàř'], false); // true
 ```
 
-##### slice(int $start [, int $end ])
+##### slice(int $start [, int $end ]) : static
 
 Returns the substring beginning at $start, and up to, but not including
 the index specified by $end. If $end is omitted, the function extracts
@@ -1106,7 +1117,7 @@ of the string.
 s('fòôbàř')->slice(3, -1); // 'bà'
 ```
 
-##### snakeize()
+##### snakeize() : static
 
 Returns a lowercase string with underscore, the convention traditionally had no specific name: the Python style guide refers to it simply as "lower_case_with_underscores". The name "snake_case" comes from the Ruby community.
 
@@ -1114,7 +1125,7 @@ Returns a lowercase string with underscore, the convention traditionally had no 
 s('foo1 Bar')->snakeize(); // 'foo_1_bar'
 ```
 
-##### split(string $pattern [, int $limit ])
+##### split(string $pattern [, int $limit ]) : static[]
 
 Splits the string with the provided regular expression, returning an
 array of Stringy objects. An optional integer $limit will truncate the
@@ -1124,7 +1135,7 @@ results.
 s('foo,bar,baz')->split(',', 2); // ['foo', 'bar']
 ```
 
-##### substr(int $start [, int $length ])
+##### substr(int $start [, int $length ]) : static
 
 Returns the substring beginning at $start with the specified $length.
 It differs from the mb_substr() function in that providing a $length of
@@ -1134,7 +1145,7 @@ null will return the rest of the string, rather than an empty string.
 s('fòôbàř')->substr(2, 3); // 'ôbà'
 ```
 
-##### surround(string $substring)
+##### surround(string $substring) : static
 
 Surrounds a string with the given substring.
 
@@ -1142,7 +1153,7 @@ Surrounds a string with the given substring.
 s(' ͜ ')->surround('ʘ'); // 'ʘ ͜ ʘ'
 ```
 
-##### swapCase()
+##### swapCase() : static
 
 Returns a case swapped version of the string.
 
@@ -1150,7 +1161,7 @@ Returns a case swapped version of the string.
 s('Ντανιλ')->swapCase(); // 'νΤΑΝΙΛ'
 ```
 
-##### tidy()
+##### tidy() : static
 
 Returns a string with smart quotes, ellipsis characters, and dashes from
 Windows-1252 (commonly used in Word documents) replaced by their ASCII equivalents.
@@ -1159,7 +1170,7 @@ Windows-1252 (commonly used in Word documents) replaced by their ASCII equivalen
 s('“I see…”')->tidy(); // '"I see..."'
 ```
 
-##### titleize([, array $ignore])
+##### titleize([, array $ignore]) : static
 
 Returns a trimmed string with the first letter of each word capitalized.
 Also accepts an array, $ignore, allowing you to list words not to be
@@ -1171,7 +1182,7 @@ s('i like to watch television')->titleize($ignore);
 // 'I Like to Watch Television'
 ```
 
-##### toAscii(string $language = 'en', bool $removeUnsupported = true)
+##### toAscii(string $language = 'en', bool $removeUnsupported = true) : static
 
 Returns an ASCII version of the string. A set of non-ASCII characters are
 replaced with their closest ASCII counterparts, and the rest are removed
@@ -1181,7 +1192,7 @@ unless instructed otherwise.
 s('fòôbàř')->toAscii(); // 'foobar'
 ```
 
-##### toBoolean()
+##### toBoolean() : bool
 
 Returns a boolean representation of the given logical string value.
 For example, 'true', '1', 'on' and 'yes' will return true. 'false', '0',
@@ -1195,7 +1206,7 @@ boolean cast.
 s('OFF')->toBoolean(); // false
 ```
 
-##### toString()
+##### toString() : string
 
 Return Stringy object as string, but you can also use (string) for automatically casting the object into a string.
 
@@ -1203,7 +1214,7 @@ Return Stringy object as string, but you can also use (string) for automatically
 s('fòôbàř')->toString(); // 'fòôbàř'
 ```
 
-##### toLowerCase()
+##### toLowerCase() : static
 
 Converts all characters in the string to lowercase.
 
@@ -1211,7 +1222,7 @@ Converts all characters in the string to lowercase.
 s('FÒÔBÀŘ')->toLowerCase(); // 'fòôbàř'
 ```
 
-##### toSpaces([, tabLength = 4 ])
+##### toSpaces([, tabLength = 4 ]) : static
 
 Converts each tab in the string to some number of spaces, as defined by
 $tabLength. By default, each tab is converted to 4 consecutive spaces.
@@ -1220,7 +1231,7 @@ $tabLength. By default, each tab is converted to 4 consecutive spaces.
 s(' String speech = "Hi"')->toSpaces(); // '    String speech = "Hi"'
 ```
 
-##### toTabs([, tabLength = 4 ])
+##### toTabs([, tabLength = 4 ]) : static
 
 Converts each occurrence of some consecutive number of spaces, as defined
 by $tabLength, to a tab. By default, each 4 consecutive spaces are
@@ -1231,7 +1242,7 @@ s('    fòô    bàř')->toTabs();
 // '   fòô bàř'
 ```
 
-##### toTitleCase()
+##### toTitleCase() : static
 
 Converts the first character of each word in the string to uppercase.
 
@@ -1239,7 +1250,7 @@ Converts the first character of each word in the string to uppercase.
 s('fòô bàř')->toTitleCase(); // 'Fòô Bàř'
 ```
 
-##### toUpperCase()
+##### toUpperCase() : static
 
 Converts all characters in the string to uppercase.
 
@@ -1247,7 +1258,7 @@ Converts all characters in the string to uppercase.
 s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
 ```
 
-##### trim([, string $chars])
+##### trim([, string $chars]) : static
 
 Returns a string with whitespace removed from the start and end of the
 string. Supports the removal of unicode whitespace. Accepts an optional
@@ -1257,7 +1268,7 @@ string of characters to strip instead of the defaults.
 s('  fòôbàř  ')->trim(); // 'fòôbàř'
 ```
 
-##### trimLeft([, string $chars])
+##### trimLeft([, string $chars]) : static
 
 Returns a string with whitespace removed from the start of the string.
 Supports the removal of unicode whitespace. Accepts an optional
@@ -1267,7 +1278,7 @@ string of characters to strip instead of the defaults.
 s('  fòôbàř  ')->trimLeft(); // 'fòôbàř  '
 ```
 
-##### trimRight([, string $chars])
+##### trimRight([, string $chars]) : static
 
 Returns a string with whitespace removed from the end of the string.
 Supports the removal of unicode whitespace. Accepts an optional
@@ -1277,7 +1288,7 @@ string of characters to strip instead of the defaults.
 s('  fòôbàř  ')->trimRight(); // '  fòôbàř'
 ```
 
-##### truncate(int $length [, string $substring = '' ])
+##### truncate(int $length [, string $substring = '' ]) : static
 
 Truncates the string to a given length. If $substring is provided, and
 truncating occurs, the string is further truncated so that the substring
@@ -1287,7 +1298,7 @@ may be appended without exceeding the desired length.
 s('What are your plans today?')->truncate(19, '...'); // 'What are your pl...'
 ```
 
-##### underscored()
+##### underscored() : static
 
 Returns a lowercase and trimmed string separated by underscores.
 Underscores are inserted before uppercase characters (with the exception
@@ -1297,7 +1308,7 @@ of the first character of the string), and in place of spaces as well as dashes.
 s('TestUCase')->underscored(); // 'test_u_case'
 ```
 
-##### upperCamelize()
+##### upperCamelize() : static
 
 Returns an UpperCamelCase version of the supplied string. It trims
 surrounding spaces, capitalizes letters following digits, spaces, dashes
@@ -1307,7 +1318,7 @@ and underscores, and removes spaces, dashes, underscores.
 s('Upper Camel-Case')->upperCamelize(); // 'UpperCamelCase'
 ```
 
-##### upperCaseFirst()
+##### upperCaseFirst() : static
 
 Converts the first character of the supplied string to upper case.
 
@@ -1315,7 +1326,7 @@ Converts the first character of the supplied string to upper case.
 s('σ foo')->upperCaseFirst(); // 'Σ foo'
 ```
 
-##### urlify(string $separator = '-', string $language = 'en', array $replacements = [], bool $strToLower = true)
+##### urlify(string $separator = '-', string $language = 'en', array $replacements = [], bool $strToLower = true) : static
 
 Converts the string into an URL slug. This includes replacing non-ASCII
 characters with their closest ASCII equivalents, removing remaining
@@ -1327,22 +1338,13 @@ is also converted to lowercase.
 s('Using strings like fòô bàř - 1$')->urlify(); // 'using-strings-like-foo-bar-1-dollar'
 ```
 
-##### utf8ify()
+##### utf8ify() : static
 
 Converts the string into an valid UTF-8 string.
 
 ```php
 s('DÃ¼sseldorf')->utf8ify(); // 'Düsseldorf'
 ```
-
-## Extensions
-
-The following is a list of libraries that extend Stringy:
-
- * [SliceableStringy](https://github.com/danielstjules/SliceableStringy):
-Python-like string slices in PHP
- * [SubStringy](https://github.com/TCB13/SubStringy):
-Advanced substring methods
 
 ## Tests
 
