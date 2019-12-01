@@ -3021,7 +3021,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = S::create($str, $encoding)->lines();
 
-        static::assertInternalType('array', $result);
+        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $line) {
             $this->assertStringy($line);
         }
@@ -3673,16 +3673,17 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $stringy = S::create($str, $encoding);
         $result = $stringy->chunk($length);
 
-        static::assertInternalType('array', $result);
+        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {
             $this->assertStringy($string);
         }
 
+        $resultNew = [];
         foreach ($result as $key => $strTmp) {
-            $result[$key] = $strTmp->toString();
+            $resultNew[$key] = $strTmp->toString();
         }
 
-        static::assertSame($expected, $result);
+        static::assertSame($expected, $resultNew);
     }
 
     /**
@@ -3699,7 +3700,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $stringy = S::create($str, $encoding);
         $result = $stringy->split($pattern, $limit);
 
-        static::assertInternalType('array', $result);
+        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {
             $this->assertStringy($string);
         }
@@ -4910,6 +4911,48 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             $expected,
             S::create($haystack, $encodingParameter)->endsWith($needle, false)
         );
+    }
+
+    public function testFormatPassthrough()
+    {
+        $result = \Stringy\create('One: %d, %s: 2, %s: %d')->format(1, 'two', 'three', 3);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+
+        $result = \Stringy\create('One: %2$d, %1$s: 2, %3$s: %4$d')->format('two', 1, 'three', 3);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+    }
+
+    public function testFormatNamedAndUnnamed()
+    {
+        $result = \Stringy\create('One: %d, %:text_two: 2, %s: %d')->format(1, 'three', 3, ['text_two' => 'two']);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+    }
+
+    public function testFormatOnlyNamed()
+    {
+        $result = \Stringy\create('One: %:1, %:text_two: 2, %:text_three: %:3')->format(['1' => '1'], ['text_two' => 'two', 'text_three' => 'three', '3' => 3]);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+    }
+
+    public function testFormatInvalidNamed()
+    {
+        $result = \Stringy\create('One: %:1, %:text_two: 2, %:text_three: %:3')->format(['text_three' => 'three', '1' => 1]);
+        static::assertEquals('One: %:1, %:text_two: 2, three: %:3', (string) $result);
+    }
+
+    public function testFormatComplexNamed()
+    {
+        $result = \Stringy\create('One: %:1, %:text_two: 2, %:text_three: %:3')->format(['text_three' => '%s', '1' => 1], 'three');
+        static::assertEquals('One: %:1, %:text_two: 2, three: %:3', (string) $result);
+
+        $result = \Stringy\create('One: %2$d, %1$s: 2, %:text_three: %3$d')->format('two', 1, 3, ['text_three' => 'three']);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+
+        $result = \Stringy\create('One: %2$d, %1$s: 2, %:text_three: %3$d')->format('two', 1, 3, 'three', ['text_three' => '%4$s']);
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+
+        $result = \Stringy\create('One: %2$d, %1$s: 2, %:text_three: %3$d')->format(['text_three' => '%4$s'], 'two', 1, 3, 'three');
+        static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
     }
 
     /**

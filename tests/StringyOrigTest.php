@@ -195,6 +195,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     public function indexOfProvider()
     {
         return [
+            [3, 'string', 'ing'],
             [6, 'foo & bar', 'bar'],
             [6, 'foo & bar', 'bar', 0],
             [false, 'foo & bar', 'baz'],
@@ -226,6 +227,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     public function indexOfLastProvider()
     {
         return [
+            [false, 'foo & Bar', 'bar'],
             [6, 'foo & bar', 'bar'],
             [6, 'foo & bar', 'bar', 0],
             [false, 'foo & bar', 'baz'],
@@ -322,7 +324,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $result = S::create($str, $encoding)->lines();
 
-        static::assertInternalType('array', $result);
+        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $line) {
             $this->assertStringy($line);
         }
@@ -2160,7 +2162,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $stringy = S::create($str, $encoding);
         $result = $stringy->split($pattern, $limit);
 
-        static::assertInternalType('array', $result);
+        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {
             $this->assertStringy($string);
         }

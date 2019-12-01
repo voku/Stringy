@@ -655,7 +655,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Create a escape html version of the string via "$this->utf8::htmlspecialchars()".
+     * Create a escape html version of the string via "htmlspecialchars()".
      *
      * @return static
      */
@@ -1311,17 +1311,17 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits on newlines and carriage returns, returning an array of Stringy
      * objects corresponding to the lines in the string.
      *
-     * @return static[]
-     *                  <p>An array of Stringy objects.</p>
+     * @return CollectionStringy&static[]
+     *                                    <p>An collection of Stringy objects.</p>
      */
-    public function lines(): array
+    public function lines(): CollectionStringy
     {
         $array = $this->utf8::str_to_lines($this->str);
         foreach ($array as $i => &$value) {
             $value = static::create($value, $this->encoding);
         }
 
-        return $array;
+        return CollectionStringy::create($array);
     }
 
     /**
@@ -2020,14 +2020,86 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Return a formatted string via sprintf + named parameters via array syntax.
+     *
+     * <p>
+     * <br>
+     * It will use "sprintf()" so you can use e.g.:
+     * <br>
+     * <br><pre>s('There are %d monkeys in the %s')->format(5, 'tree');</pre>
+     * <br>
+     * <br><pre>s('There are %2$d monkeys in the %1$s')->format('tree', 5);</pre>
+     * <br>
+     * <br>
+     * But you can also use named parameter via array syntax e.g.:
+     * <br>
+     * <br><pre>s('There are %:count monkeys in the %:location')->format(['count' => 5, 'location' => 'tree');</pre>
+     * </p>
+     *
+     * @param mixed ...$args [optional]
+     *
+     * @return static
+     *                <p>A Stringy object produced according to the formatting string
+     *                format.</p>
+     */
+    public function format(...$args): self
+    {
+        // init
+        $str = $this->str;
+
+        if (\strpos($this->str, '%:') !== false) {
+            $offset = null;
+            $replacement = null;
+            /** @noinspection AlterInForeachInspection */
+            foreach ($args as $key => &$arg) {
+                if (!\is_array($arg)) {
+                    continue;
+                }
+
+                foreach ($arg as $name => $param) {
+                    $name = (string) $name;
+
+                    if (\strpos($name, '%:') !== 0) {
+                        $nameTmp = '%:' . $name;
+                    } else {
+                        $nameTmp = $name;
+                    }
+
+                    if ($offset === null) {
+                        $offset = \strpos($str, $nameTmp);
+                    } else {
+                        $offset = \strpos($str, $nameTmp, $offset + \strlen((string) $replacement));
+                    }
+                    if ($offset === false) {
+                        continue;
+                    }
+
+                    unset($arg[$name]);
+
+                    $str = \substr_replace($str, $param, $offset, \strlen($nameTmp));
+                }
+
+                unset($args[$key]);
+            }
+        }
+
+        $str = \str_replace('%:', '%%:', $str);
+
+        return static::create(
+            \sprintf($str, ...$args),
+            $this->encoding
+        );
+    }
+
+    /**
      * Splits the string into chunks of Stringy objects.
      *
      * @param int $length
      *
-     * @return static[]
-     *                  <p>An array of Stringy objects.</p>
+     * @return CollectionStringy&static[]
+     *                                    <p>An collection of Stringy objects.</p>
      */
-    public function chunk(int $length = 1): array
+    public function chunk(int $length = 1): CollectionStringy
     {
         if ($length < 1) {
             throw new \InvalidArgumentException('The chunk length must be greater than zero.');
@@ -2042,7 +2114,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $value = static::create($value, $this->encoding);
         }
 
-        return $chunks;
+        return CollectionStringy::create($chunks);
     }
 
     /**
@@ -2053,10 +2125,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
      *
-     * @return static[]
-     *                  <p>An array of Stringy objects.</p>
+     * @return CollectionStringy&static[]
+     *                                    <p>An collection of Stringy objects.</p>
      */
-    public function split(string $pattern, int $limit = null): array
+    public function split(string $pattern, int $limit = null): CollectionStringy
     {
         if ($limit === null) {
             $limit = -1;
@@ -2067,7 +2139,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $value = static::create($value, $this->encoding);
         }
 
-        return $array;
+        return CollectionStringy::create($array);
     }
 
     /**
