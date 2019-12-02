@@ -749,7 +749,7 @@ A variable is considered NOT empty if it does exist or if its value equals TRUE.
 s('')->isNotEmpty(); // false
 ```
 
-##### isEquals(string ...$str) : bool
+##### isEquals(string|Stringy ...$str) : bool
 
 Determine whether the string is equals to $str.
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../src/Stringy.php';
 
 use Stringy\Stringy as S;
@@ -10,7 +12,7 @@ use voku\helper\UTF8;
  *
  * @internal
  */
-final class StringyTest extends \PHPUnit\Framework\TestCase
+final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return array
@@ -1247,6 +1249,14 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
                 'Fòô bàř',
             ],
             [
+                true,
+                S::create('fòô bàř'),
+            ],
+            [
+                false,
+                S::create('Fòô bàř'),
+            ],
+            [
                 false,
                 0,
             ],
@@ -1833,7 +1843,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         // check for allowed chars
         $errors = [];
         foreach ($passwords as $password) {
-            foreach (\str_split($password) as $char) {
+            foreach (\str_split($password->toString()) as $char) {
                 if (\strpos($allowedChars, $char) === false) {
                     $errors[] = $char;
                 }
@@ -1854,7 +1864,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
         // check the string length
         foreach ($passwords as $password) {
-            static::assertSame(16, \strlen($password));
+            static::assertSame(16, \strlen($password->toString()));
         }
     }
 
@@ -2240,7 +2250,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testContains($expected, $haystack, $needle, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
-        $result = $stringy->contains($needle, $caseSensitive);
+        $result = $stringy->contains($needle, (bool) $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());
@@ -2258,7 +2268,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
-        $result = $stringy->containsAll($needles, $caseSensitive);
+        $result = $stringy->containsAll($needles, (bool) $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result, 'tested: ' . $haystack);
         static::assertSame($haystack, $stringy->toString());
@@ -2283,7 +2293,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testCountSubstr($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->countSubstr($substring, $caseSensitive);
+        $result = $stringy->countSubstr($substring, (bool) $caseSensitive);
         static::assertSame($expected, $result, 'tested:' . $str);
         static::assertSame($str, $stringy->toString(), 'tested:' . $str);
     }
@@ -2348,7 +2358,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testEndsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->endsWith($substring, $caseSensitive);
+        $result = $stringy->endsWith($substring, (bool) $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
@@ -2366,7 +2376,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testEndsWithAny($expected, $str, $substrings, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->endsWithAny($substrings, $caseSensitive);
+        $result = $stringy->endsWithAny($substrings, (bool) $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
@@ -3387,7 +3397,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testRemoveLeft($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->removeLeft($substring);
+        $result = $stringy->removeLeft((string) $substring);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());
@@ -3404,7 +3414,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testRemoveRight($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->removeRight($substring);
+        $result = $stringy->removeRight((string) $substring);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());
@@ -3456,7 +3466,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testReplace($expected, $str, $search, $replacement, $encoding = null, $caseSensitive = true)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->replace($search, $replacement, $caseSensitive);
+        $result = $stringy->replace($search, $replacement, (bool) $caseSensitive);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());
@@ -3621,7 +3631,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($str, $stringy->toString());
         static::assertSame(
             \mb_strlen($str, $encoding),
-            \mb_strlen($result, $encoding)
+            \mb_strlen((string) $result, $encoding)
         );
 
         // We'll make sure that the chars are present after shuffle
@@ -3629,7 +3639,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         for ($i = 0; $i < $length; ++$i) {
             $char = \mb_substr($str, $i, 1, $encoding);
             $countBefore = \mb_substr_count($str, $char, $encoding);
-            $countAfter = \mb_substr_count($result, $char, $encoding);
+            $countAfter = \mb_substr_count((string) $result, $char, $encoding);
             static::assertSame($countBefore, $countAfter);
         }
     }
@@ -4450,7 +4460,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         foreach ($examples as $testString => $testResults) {
             $stringy = S::create($testString);
             foreach ($testResults as $before => $after) {
-                static::assertSame($after, $stringy->utf8ify()->toString(), $counter);
+                static::assertSame($after, $stringy->utf8ify()->toString(), 'counter: ' . $counter);
             }
             ++$counter;
         }
@@ -4468,7 +4478,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testTestcontainsAny($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
-        $result = $stringy->containsAny($needles, $caseSensitive);
+        $result = $stringy->containsAny($needles, (bool) $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());

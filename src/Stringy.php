@@ -1201,17 +1201,23 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine whether the string is equals to $str.
      *
-     * @param string ...$str <p>The string to compare.</p>
+     * @param string|Stringy ...$str <p>The string to compare.</p>
      *
      * @return bool
      *              <p>Whether or not $str is equals.</p>
-     *
-     * @noinspection PhpDocSignatureInspection
      */
-    public function isEquals(string ...$str): bool
+    public function isEquals(...$str): bool
     {
         foreach ($str as $strTmp) {
-            if ($this->str !== $strTmp) {
+            if ($strTmp instanceof self) {
+                if ($this->str !== $strTmp->str) {
+                    return false;
+                }
+            } elseif (\is_string($strTmp)) {
+                if ($this->str !== $strTmp) {
+                    return false;
+                }
+            } else {
                 return false;
             }
         }
@@ -1312,6 +1318,33 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isWhitespace(): bool
     {
         return $this->isBlank();
+    }
+
+    /**
+     * Calculate the similarity between two strings.
+     *
+     * @param string $str
+     *
+     * @return float
+     */
+    public function similarity(string $str): float
+    {
+        \similar_text($this->str, $str, $percent);
+
+        return $percent;
+    }
+
+    /**
+     * Check if two strings are similar.
+     *
+     * @param string $str
+     * @param float  $minPercentForSimilarity
+     *
+     * @return bool
+     */
+    public function isSimilar(string $str, float $minPercentForSimilarity = 80.0): bool
+    {
+        return $this->similarity($str) >= $minPercentForSimilarity;
     }
 
     /**
