@@ -30,19 +30,20 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
     /**
      * @return string[]
      */
-    public function toStrings(): array {
+    public function toStrings(): array
+    {
         // init
         $result = [];
 
         foreach ($this->getArray() as $key => $value) {
-            /** @var $value Stringy */
+            \assert($value instanceof Stringy);
             $result[$key] = $value->toString();
         }
 
         return $result;
     }
 
-    public function addString(string $string): CollectionStringy
+    public function addString(string $string): self
     {
         $this->add(Stringy::create($string));
 
@@ -54,7 +55,8 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
      *
      * @return static
      */
-    public static function createFromStrings($strings = []): self {
+    public static function createFromStrings($strings = []): self
+    {
         foreach ($strings as &$string) {
             $string = Stringy::create($string);
         }

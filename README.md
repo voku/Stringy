@@ -1170,8 +1170,7 @@ capitalized.
 
 ```php
 $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
-s('i like to watch television')->titleize($ignore);
-// 'I Like to Watch Television'
+s('i like to watch television')->titleize($ignore); // 'I Like to Watch Television'
 ```
 
 ##### toAscii(string $language = 'en', bool $removeUnsupported = true) : static
@@ -1230,8 +1229,7 @@ by $tabLength, to a tab. By default, each 4 consecutive spaces are
 converted to a tab.
 
 ```php
-s('    fòô    bàř')->toTabs();
-// '   fòô bàř'
+s('    fòô    bàř')->toTabs(); // '   fòô bàř'
 ```
 
 ##### toTitleCase() : static

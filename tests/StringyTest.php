@@ -3691,10 +3691,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $resultNew);
     }
 
-    public function testWords() {
+    public function testWords()
+    {
         static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->words('', true)->toStrings());
         static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->words('', false, 1)->toStrings());
-        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words( '#')->toStrings());
+        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words('#')->toStrings());
         static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->words('')->toStrings());
         static::assertSame([''], S::create('')->words()->toStrings());
 
@@ -3913,6 +3914,14 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str);
         $result = $stringy->surround($substring);
+        $this->assertStringy($result);
+        static::assertSame($expected, $result->toString());
+        static::assertSame($str, $stringy->toString());
+
+        // --
+
+        $stringy = S::create($str);
+        $result = $stringy->wrap($substring);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
         static::assertSame($str, $stringy->toString());

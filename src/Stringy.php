@@ -102,18 +102,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns value which can be serialized by json_encode().
-     *
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     *
-     * @return string The current value of the $str property
-     */
-    public function jsonSerialize()
-    {
-        return (string) $this;
-    }
-
-    /**
      * Gets the substring after the first occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
@@ -418,28 +406,29 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Convert a string into an array of words.
+     * Splits the string into chunks of Stringy objects.
      *
-     * @param string   $char_list           <p>Additional chars for the definition of "words".</p>
-     * @param bool     $remove_empty_values <p>Remove empty values.</p>
-     * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
+     * @param int $length
      *
      * @return CollectionStringy|static[]
+     *                                    <p>An collection of Stringy objects.</p>
      */
-    public function words(
-        string $char_list = '',
-        bool $remove_empty_values = false,
-        int $remove_short_values = null
-    ): CollectionStringy
+    public function chunk(int $length = 1): CollectionStringy
     {
-        return CollectionStringy::createFromStrings(
-            $this->utf8::str_to_words(
-                $this->str,
-                $char_list,
-                $remove_empty_values,
-                $remove_short_values
-            )
-        );
+        if ($length < 1) {
+            throw new \InvalidArgumentException('The chunk length must be greater than zero.');
+        }
+
+        if ($this->str === '') {
+            return CollectionStringy::create();
+        }
+
+        $chunks = $this->utf8::str_split($this->str, $length);
+        foreach ($chunks as $i => &$value) {
+            $value = static::create($value, $this->encoding);
+        }
+
+        return CollectionStringy::create($chunks);
     }
 
     /**
@@ -731,6 +720,78 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             $this->utf8::first_char($this->str, $n, $this->encoding),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Return a formatted string via sprintf + named parameters via array syntax.
+     *
+     * <p>
+     * <br>
+     * It will use "sprintf()" so you can use e.g.:
+     * <br>
+     * <br><pre>s('There are %d monkeys in the %s')->format(5, 'tree');</pre>
+     * <br>
+     * <br><pre>s('There are %2$d monkeys in the %1$s')->format('tree', 5);</pre>
+     * <br>
+     * <br>
+     * But you can also use named parameter via array syntax e.g.:
+     * <br>
+     * <br><pre>s('There are %:count monkeys in the %:location')->format(['count' => 5, 'location' => 'tree');</pre>
+     * </p>
+     *
+     * @param mixed ...$args [optional]
+     *
+     * @return static
+     *                <p>A Stringy object produced according to the formatting string
+     *                format.</p>
+     */
+    public function format(...$args): self
+    {
+        // init
+        $str = $this->str;
+
+        if (\strpos($this->str, '%:') !== false) {
+            $offset = null;
+            $replacement = null;
+            /** @noinspection AlterInForeachInspection */
+            foreach ($args as $key => &$arg) {
+                if (!\is_array($arg)) {
+                    continue;
+                }
+
+                foreach ($arg as $name => $param) {
+                    $name = (string) $name;
+
+                    if (\strpos($name, '%:') !== 0) {
+                        $nameTmp = '%:' . $name;
+                    } else {
+                        $nameTmp = $name;
+                    }
+
+                    if ($offset === null) {
+                        $offset = \strpos($str, $nameTmp);
+                    } else {
+                        $offset = \strpos($str, $nameTmp, $offset + \strlen((string) $replacement));
+                    }
+                    if ($offset === false) {
+                        continue;
+                    }
+
+                    unset($arg[$name]);
+
+                    $str = \substr_replace($str, $param, $offset, \strlen($nameTmp));
+                }
+
+                unset($args[$key]);
+            }
+        }
+
+        $str = \str_replace('%:', '%%:', $str);
+
+        return static::create(
+            \sprintf($str, ...$args),
             $this->encoding
         );
     }
@@ -1138,19 +1199,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Determine whether the string is considered to be NOT empty.
-     *
-     * A variable is considered NOT empty if it does exist or if its value equals TRUE.
-     *
-     * @return bool
-     *              <p>Whether or not $str is empty().</p>
-     */
-    public function isNotEmpty(): bool
-    {
-        return !$this->utf8::is_empty($this->str);
-    }
-
-    /**
      * Determine whether the string is equals to $str.
      *
      * @param string ...$str <p>The string to compare.</p>
@@ -1220,6 +1268,19 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Determine whether the string is considered to be NOT empty.
+     *
+     * A variable is considered NOT empty if it does exist or if its value equals TRUE.
+     *
+     * @return bool
+     *              <p>Whether or not $str is empty().</p>
+     */
+    public function isNotEmpty(): bool
+    {
+        return !$this->utf8::is_empty($this->str);
+    }
+
+    /**
      * Returns true if the string is serialized, false otherwise.
      *
      * @return bool
@@ -1240,6 +1301,18 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isUpperCase(): bool
     {
         return $this->utf8::is_uppercase($this->str);
+    }
+
+    /**
+     * Returns value which can be serialized by json_encode().
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     *
+     * @return string The current value of the $str property
+     */
+    public function jsonSerialize()
+    {
+        return (string) $this;
     }
 
     /**
@@ -1796,40 +1869,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Replaces first occurrences of $search from the beginning of string with $replacement.
-     *
-     * @param string $search      <p>The string to search for.</p>
-     * @param string $replacement <p>The replacement.</p>
-     *
-     * @return static
-     *                <p>Object with the resulting $str after the replacements.</p>
-     */
-    public function replaceFirst(string $search, string $replacement): self
-    {
-        return static::create(
-            $this->utf8::str_replace_first($search, $replacement, $this->str),
-            $this->encoding
-        );
-    }
-
-    /**
-     * Replaces last occurrences of $search from the ending of string with $replacement.
-     *
-     * @param string $search      <p>The string to search for.</p>
-     * @param string $replacement <p>The replacement.</p>
-     *
-     * @return static
-     *                <p>Object with the resulting $str after the replacements.</p>
-     */
-    public function replaceLast(string $search, string $replacement): self
-    {
-        return static::create(
-            $this->utf8::str_replace_last($search, $replacement, $this->str),
-            $this->encoding
-        );
-    }
-
-    /**
      * Replaces all occurrences of $search from the beginning of string with $replacement.
      *
      * @param string $search      <p>The string to search for.</p>
@@ -1859,6 +1898,40 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             $this->utf8::str_replace_ending($this->str, $search, $replacement),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Replaces first occurrences of $search from the beginning of string with $replacement.
+     *
+     * @param string $search      <p>The string to search for.</p>
+     * @param string $replacement <p>The replacement.</p>
+     *
+     * @return static
+     *                <p>Object with the resulting $str after the replacements.</p>
+     */
+    public function replaceFirst(string $search, string $replacement): self
+    {
+        return static::create(
+            $this->utf8::str_replace_first($search, $replacement, $this->str),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Replaces last occurrences of $search from the ending of string with $replacement.
+     *
+     * @param string $search      <p>The string to search for.</p>
+     * @param string $replacement <p>The replacement.</p>
+     *
+     * @return static
+     *                <p>Object with the resulting $str after the replacements.</p>
+     */
+    public function replaceLast(string $search, string $replacement): self
+    {
+        return static::create(
+            $this->utf8::str_replace_last($search, $replacement, $this->str),
             $this->encoding
         );
     }
@@ -1992,45 +2065,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Converts the string into an URL slug. This includes replacing non-ASCII
-     * characters with their closest ASCII equivalents, removing remaining
-     * non-ASCII and non-alphanumeric characters, and replacing whitespace with
-     * $separator. The separator defaults to a single dash, and the string
-     * is also converted to lowercase.
-     *
-     * @param string                $separator    [optional] <p>The string used to replace whitespace. Default: '-'</p>
-     * @param string                $language     [optional] <p>The language for the url. Default: 'en'</p>
-     * @param array<string, string> $replacements [optional] <p>A map of replaceable strings.</p>
-     * @param bool                  $strToLower   [optional] <p>string to lower. Default: true</p>
-     *
-     * @return static
-     *                <p>Object whose $str has been converted to an URL slug.</p>
-     */
-    public function urlify(
-        string $separator = '-',
-        string $language = 'en',
-        array $replacements = [],
-        bool $strToLower = true
-    ): self {
-        // init
-        $str = $this->str;
-
-        foreach ($replacements as $from => $to) {
-            $str = \str_replace($from, $to, $str);
-        }
-
-        return static::create(
-            URLify::slug(
-                $str,
-                $language,
-                $separator,
-                $strToLower
-            ),
-            $this->encoding
-        );
-    }
-
-    /**
      * Convert a string to e.g.: "snake_case"
      *
      * @return static
@@ -2042,104 +2076,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $this->utf8::str_snakeize($this->str, $this->encoding),
             $this->encoding
         );
-    }
-
-    /**
-     * Return a formatted string via sprintf + named parameters via array syntax.
-     *
-     * <p>
-     * <br>
-     * It will use "sprintf()" so you can use e.g.:
-     * <br>
-     * <br><pre>s('There are %d monkeys in the %s')->format(5, 'tree');</pre>
-     * <br>
-     * <br><pre>s('There are %2$d monkeys in the %1$s')->format('tree', 5);</pre>
-     * <br>
-     * <br>
-     * But you can also use named parameter via array syntax e.g.:
-     * <br>
-     * <br><pre>s('There are %:count monkeys in the %:location')->format(['count' => 5, 'location' => 'tree');</pre>
-     * </p>
-     *
-     * @param mixed ...$args [optional]
-     *
-     * @return static
-     *                <p>A Stringy object produced according to the formatting string
-     *                format.</p>
-     */
-    public function format(...$args): self
-    {
-        // init
-        $str = $this->str;
-
-        if (\strpos($this->str, '%:') !== false) {
-            $offset = null;
-            $replacement = null;
-            /** @noinspection AlterInForeachInspection */
-            foreach ($args as $key => &$arg) {
-                if (!\is_array($arg)) {
-                    continue;
-                }
-
-                foreach ($arg as $name => $param) {
-                    $name = (string) $name;
-
-                    if (\strpos($name, '%:') !== 0) {
-                        $nameTmp = '%:' . $name;
-                    } else {
-                        $nameTmp = $name;
-                    }
-
-                    if ($offset === null) {
-                        $offset = \strpos($str, $nameTmp);
-                    } else {
-                        $offset = \strpos($str, $nameTmp, $offset + \strlen((string) $replacement));
-                    }
-                    if ($offset === false) {
-                        continue;
-                    }
-
-                    unset($arg[$name]);
-
-                    $str = \substr_replace($str, $param, $offset, \strlen($nameTmp));
-                }
-
-                unset($args[$key]);
-            }
-        }
-
-        $str = \str_replace('%:', '%%:', $str);
-
-        return static::create(
-            \sprintf($str, ...$args),
-            $this->encoding
-        );
-    }
-
-    /**
-     * Splits the string into chunks of Stringy objects.
-     *
-     * @param int $length
-     *
-     * @return CollectionStringy|static[]
-     *                                    <p>An collection of Stringy objects.</p>
-     */
-    public function chunk(int $length = 1): CollectionStringy
-    {
-        if ($length < 1) {
-            throw new \InvalidArgumentException('The chunk length must be greater than zero.');
-        }
-
-        if ($this->str === '') {
-            return CollectionStringy::create();
-        }
-
-        $chunks = $this->utf8::str_split($this->str, $length);
-        foreach ($chunks as $i => &$value) {
-            $value = static::create($value, $this->encoding);
-        }
-
-        return CollectionStringy::create($chunks);
     }
 
     /**
@@ -2427,26 +2363,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns an ASCII version of the string. A set of non-ASCII characters are
      * replaced with their closest ASCII counterparts, and the rest are removed
-     * unless instructed otherwise.
-     *
-     * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
-     *                        performance | Default: false</p>
-     * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
-     *
-     * @return static
-     *                <p>Object whose $str contains only ASCII characters.</p>
-     */
-    public function toTransliterate(bool $strict = false, string $unknown = '?'): self
-    {
-        return static::create(
-            $this->ascii::to_transliterate($this->str, $unknown, $strict),
-            $this->encoding
-        );
-    }
-
-    /**
-     * Returns an ASCII version of the string. A set of non-ASCII characters are
-     * replaced with their closest ASCII counterparts, and the rest are removed
      * by default. The language or locale of the source string can be supplied
      * for language-specific transliteration in any of the following formats:
      * en, en_GB, or en-GB. For example, passing "de" results in "äöü" mapping
@@ -2589,6 +2505,26 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Returns an ASCII version of the string. A set of non-ASCII characters are
+     * replaced with their closest ASCII counterparts, and the rest are removed
+     * unless instructed otherwise.
+     *
+     * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
+     *                        performance | Default: false</p>
+     * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
+     *
+     * @return static
+     *                <p>Object whose $str contains only ASCII characters.</p>
+     */
+    public function toTransliterate(bool $strict = false, string $unknown = '?'): self
+    {
+        return static::create(
+            $this->ascii::to_transliterate($this->str, $unknown, $strict),
+            $this->encoding
+        );
+    }
+
+    /**
      * Converts all characters in the string to uppercase.
      *
      * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
@@ -2720,6 +2656,45 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Converts the string into an URL slug. This includes replacing non-ASCII
+     * characters with their closest ASCII equivalents, removing remaining
+     * non-ASCII and non-alphanumeric characters, and replacing whitespace with
+     * $separator. The separator defaults to a single dash, and the string
+     * is also converted to lowercase.
+     *
+     * @param string                $separator    [optional] <p>The string used to replace whitespace. Default: '-'</p>
+     * @param string                $language     [optional] <p>The language for the url. Default: 'en'</p>
+     * @param array<string, string> $replacements [optional] <p>A map of replaceable strings.</p>
+     * @param bool                  $strToLower   [optional] <p>string to lower. Default: true</p>
+     *
+     * @return static
+     *                <p>Object whose $str has been converted to an URL slug.</p>
+     */
+    public function urlify(
+        string $separator = '-',
+        string $language = 'en',
+        array $replacements = [],
+        bool $strToLower = true
+    ): self {
+        // init
+        $str = $this->str;
+
+        foreach ($replacements as $from => $to) {
+            $str = \str_replace($from, $to, $str);
+        }
+
+        return static::create(
+            URLify::slug(
+                $str,
+                $language,
+                $separator,
+                $strToLower
+            ),
+            $this->encoding
+        );
+    }
+
+    /**
      * Converts the string into an valid UTF-8 string.
      *
      * @return static
@@ -2727,6 +2702,43 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function utf8ify(): self
     {
         return static::create($this->utf8::cleanup($this->str), $this->encoding);
+    }
+
+    /**
+     * Convert a string into an array of words.
+     *
+     * @param string   $char_list           <p>Additional chars for the definition of "words".</p>
+     * @param bool     $remove_empty_values <p>Remove empty values.</p>
+     * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
+     *
+     * @return CollectionStringy|static[]
+     */
+    public function words(
+        string $char_list = '',
+        bool $remove_empty_values = false,
+        int $remove_short_values = null
+    ): CollectionStringy {
+        return CollectionStringy::createFromStrings(
+            $this->utf8::str_to_words(
+                $this->str,
+                $char_list,
+                $remove_empty_values,
+                $remove_short_values
+            )
+        );
+    }
+
+    /**
+     * Surrounds $str with the given substring.
+     *
+     * @param string $substring <p>The substring to add to both sides.</P>
+     *
+     * @return static
+     *                <p>Object whose $str had the substring both prepended and appended.</p>
+     */
+    public function wrap(string $substring): self
+    {
+        return $this->surround($substring);
     }
 
     /**
