@@ -418,6 +418,31 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Convert a string into an array of words.
+     *
+     * @param string   $char_list           <p>Additional chars for the definition of "words".</p>
+     * @param bool     $remove_empty_values <p>Remove empty values.</p>
+     * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
+     *
+     * @return CollectionStringy|static[]
+     */
+    public function words(
+        string $char_list = '',
+        bool $remove_empty_values = false,
+        int $remove_short_values = null
+    ): CollectionStringy
+    {
+        return CollectionStringy::createFromStrings(
+            $this->utf8::str_to_words(
+                $this->str,
+                $char_list,
+                $remove_empty_values,
+                $remove_short_values
+            )
+        );
+    }
+
+    /**
      * Trims the string and replaces consecutive whitespace characters with a
      * single space. This includes tabs and newline characters, as well as
      * multibyte whitespace such as the thin space and ideographic space.
@@ -1311,7 +1336,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits on newlines and carriage returns, returning an array of Stringy
      * objects corresponding to the lines in the string.
      *
-     * @return CollectionStringy&static[]
+     * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      */
     public function lines(): CollectionStringy
@@ -2096,7 +2121,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param int $length
      *
-     * @return CollectionStringy&static[]
+     * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      */
     public function chunk(int $length = 1): CollectionStringy
@@ -2106,7 +2131,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         }
 
         if ($this->str === '') {
-            return [];
+            return CollectionStringy::create();
         }
 
         $chunks = $this->utf8::str_split($this->str, $length);
@@ -2125,7 +2150,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
      *
-     * @return CollectionStringy&static[]
+     * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      */
     public function split(string $pattern, int $limit = null): CollectionStringy

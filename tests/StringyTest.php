@@ -1694,6 +1694,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
                 2,
             ],
             [
+                [],
+                '',
+                2,
+            ],
+            [
                 [
                     0 => 'fòô',
                     1 => ',bà',
@@ -3684,6 +3689,37 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
 
         static::assertSame($expected, $resultNew);
+    }
+
+    public function testWords() {
+        static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->words('', true)->toStrings());
+        static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->words('', false, 1)->toStrings());
+        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words( '#')->toStrings());
+        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->words('')->toStrings());
+        static::assertSame([''], S::create('')->words()->toStrings());
+
+        $testArray = [
+            'Düsseldorf'                                                                                => 'Düsseldorf',
+            'Ã'                                                                                         => 'Ã',
+            'foobar  || 😃'                                                                              => 'foobar  || 😃',
+            ' '                                                                                         => ' ',
+            ''                                                                                          => '',
+            "\n"                                                                                        => "\n",
+            'test'                                                                                      => 'test',
+            'Here&#39;s some quoted text.'                                                              => 'Here&#39;s some quoted text.',
+            '&#39;'                                                                                     => '&#39;',
+            "\u0063\u0061\u0074"                                                                        => 'cat',
+            "\u0039&#39;\u0039"                                                                         => '9&#39;9',
+            '&#35;&#8419;'                                                                              => '&#35;&#8419;',
+            "\xcf\x80"                                                                                  => 'π',
+            'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
+            '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
+            'éæ'                                                                                        => 'éæ',
+        ];
+
+        foreach ($testArray as $test => $unused) {
+            static::assertSame($test, S::create($test)->words()->implode(''));
+        }
     }
 
     /**
