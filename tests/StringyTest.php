@@ -2786,6 +2786,14 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
+
+        // ---
+
+        $stringy = S::create($str, $encoding);
+        $result = $stringy->isWhitespace();
+        static::assertInternalType('boolean', $result);
+        static::assertSame($expected, $result);
+        static::assertSame($str, $stringy->toString());
     }
 
     public function testIsEmail()

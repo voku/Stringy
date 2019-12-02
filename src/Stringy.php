@@ -1304,6 +1304,17 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Returns true if the string contains only whitespace chars, false otherwise.
+     *
+     * @return bool
+     *              <p>Whether or not $str contains only whitespace characters.</p>
+     */
+    public function isWhitespace(): bool
+    {
+        return $this->isBlank();
+    }
+
+    /**
      * Returns value which can be serialized by json_encode().
      *
      * @noinspection ReturnTypeCanBeDeclaredInspection
