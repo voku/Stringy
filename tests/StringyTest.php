@@ -5048,4 +5048,35 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             // ['Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ', 'ἙΛΛΗΝΙΚῊ', true, 'UTF-8', null], // php 7.3 thingy
         ];
     }
+
+    public function testItCanGetEveryNthCharacter()
+    {
+        $string = \Stringy\create('john pinkerton');
+        $nth = $string->nth(3);
+        static::assertInstanceOf(\Stringy\Stringy::class, $nth);
+        static::assertEquals('jnieo', $nth);
+    }
+
+    public function testItCanGetEveryNthCharacterStartingAtAnOffset()
+    {
+        $string = \Stringy\create('john pinkerton');
+        $nth = $string->nth(3, 2);
+        static::assertInstanceOf(\Stringy\Stringy::class, $nth);
+        static::assertEquals('hpkt', $nth);
+    }
+
+    public function testItCanGetEveryNthCharacterOfAMultibyteString()
+    {
+        $string = \Stringy\create('宮本 任天堂 茂');
+        $nth = $string->nth(3);
+        static::assertInstanceOf(\Stringy\Stringy::class, $nth);
+        static::assertEquals('宮任 ', $nth);
+    }
+
+    public function testItPreservesEncoding()
+    {
+        $string = \Stringy\create('john pinkerton', 'ASCII');
+        $nth = $string->nth(3);
+        static::assertAttributeEquals('ASCII', 'encoding', $nth);
+    }
 }

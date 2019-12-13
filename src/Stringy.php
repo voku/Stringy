@@ -488,6 +488,32 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Get every nth character of the string.
+     *
+     * @param int $step   The number of characters to step
+     * @param int $offset The string offset to start at
+     *
+     * @return static
+     */
+    public function nth(int $step, int $offset = 0): self
+    {
+        $length = $step - 1;
+        $substring = $this->substr($offset)->toString();
+
+        if ($substring === '') {
+            return new static('', $this->encoding);
+        }
+
+        \preg_match_all(
+            "/(?:^|(?:.|\p{L}|\w){" . $length . "})(.|\p{L}|\w)/u",
+            $substring,
+            $matches
+        );
+
+        return new static(\implode('', $matches[1] ?? []), $this->encoding);
+    }
+
+    /**
      * Returns true if the string contains any $needles, false otherwise. By
      * default the comparison is case-sensitive, but can be made insensitive by
      * setting $caseSensitive to false.
