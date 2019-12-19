@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Stringy;
 
-class CollectionStringy extends \Arrayy\Collection\AbstractCollection
+/**
+ * @template TKey of array-key
+ * @template T
+ * @extends \Arrayy\Collection\Collection<TKey,T|Stringy>
+ */
+class CollectionStringy extends \Arrayy\Collection\Collection
 {
     public function getType(): string
     {
@@ -13,6 +18,8 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
 
     /**
      * @return Stringy[]
+     *
+     * @psalm-return array<array-key,Stringy>
      */
     public function getAll(): array
     {
@@ -21,6 +28,8 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
 
     /**
      * @return \Generator|Stringy[]
+     *
+     * @psalm-return \Generator<Stringy>
      */
     public function getGenerator(): \Generator
     {
@@ -43,6 +52,11 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
         return $result;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return $this
+     */
     public function addString(string $string): self
     {
         $this->add(Stringy::create($string));
@@ -51,7 +65,21 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
     }
 
     /**
+     * @param Stringy $stringy
+     *
+     * @return $this
+     */
+    public function addStringy(Stringy $stringy): self
+    {
+        $this->add($stringy);
+
+        return $this;
+    }
+
+    /**
      * @param string[] $strings
+     *
+     * @psalm-pure
      *
      * @return static
      */
@@ -61,6 +89,9 @@ class CollectionStringy extends \Arrayy\Collection\AbstractCollection
             $string = Stringy::create($string);
         }
 
+        /**
+         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+         */
         return new static($strings);
     }
 }

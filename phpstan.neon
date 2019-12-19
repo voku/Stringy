@@ -2,8 +2,12 @@ parameters:
     level: max
     paths:
         - %currentWorkingDirectory%/src/
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true
     ignoreErrors:
-        - '/Parameter #1 \$function of function call_user_func_array expects callable\(\): mixed, array\(Stringy\\Stringy, string\) given\./'
-        - '/Method Stringy\\Stringy::(lines|split)\(\) should return array<static\(Stringy\\Stringy\)> but returns array<string>\./'
-        - '/Call to function is_array\(\) with \(iterable\<string\|Stringy\\Stringy\>&Stringy\\Stringy\)\|string will always evaluate to false\./'
+        # false-postive?
+        - '#Stringy::.*\(\) should return Stringy\\CollectionStringy#'
+        # not supported
+        - '#bound type \(int\|string\) is not supported#'
+        - '# callable\(\): mixed, array#'
+        # ignore
+        - '#Unsafe usage of new static\(\)\.#'

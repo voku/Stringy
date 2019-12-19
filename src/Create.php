@@ -26,7 +26,7 @@ if (!\function_exists('Stringy\collection')) {
      *
      * @throws \TypeError
      *
-     * @return CollectionStringy
+     * @return CollectionStringy<int,Stringy>
      */
     function collection($input = null)
     {
@@ -37,6 +37,9 @@ if (!\function_exists('Stringy\collection')) {
             return $newCollection;
         }
 
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         */
         if (!\is_array($input)) {
             $input = [$input];
         }

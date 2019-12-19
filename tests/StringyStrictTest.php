@@ -2015,6 +2015,13 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result->toString());
     }
 
+    public function testAppendMulti()
+    {
+        $result = S::create('lall')->append('foo', 'bar', '123');
+        $this->assertStringy($result);
+        static::assertSame('lallfoobar123', $result->toString());
+    }
+
     /**
      * @dataProvider atProvider()
      *
@@ -3311,6 +3318,13 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $result = S::create($str, $encoding)->prepend($string);
         $this->assertStringy($result);
         static::assertSame($expected, $result->toString());
+    }
+
+    public function testPrependMulti()
+    {
+        $result = S::create('lall')->prepend('foo', 'bar', '123');
+        $this->assertStringy($result);
+        static::assertSame('foobar123lall', $result->toString());
     }
 
     /**

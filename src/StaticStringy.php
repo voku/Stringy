@@ -115,7 +115,7 @@ class StaticStringy
      * should be two more than the equivalent Stringy method. Necessary as
      * static methods place the optional $encoding as the last parameter.
      *
-     * @var array
+     * @var array<mixed>|null
      */
     protected static $methodArgs = null;
 
@@ -168,7 +168,9 @@ class StaticStringy
     /**
      * @param string|string[]|Stringy|Stringy[]|null $input
      *
-     * @return CollectionStringy
+     * @return CollectionStringy|Stringy[]
+     *
+     * @psalm-return CollectionStringy<array-key, Stringy>
      */
     public static function collection($input = null): CollectionStringy
     {
