@@ -39,7 +39,7 @@ before_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
   - travis_retry composer require satooshi/php-coveralls
-  - if [ "${TRAVIS_PHP_VERSION:0:3}" != 7.0 ]; then travis_retry composer require phpstan/phpstan-shim; fi
+  - if [ "${TRAVIS_PHP_VERSION:0:3}" != 7.0 ]; then travis_retry composer require phpstan/phpstan; fi
   - travis_retry composer install --no-interaction --prefer-source
   - composer dump-autoload -o
 

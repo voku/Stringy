@@ -1,3 +1,22 @@
+# Changelog
+
+### 7.0.0 (2019-12-19)
+- use "@psalm-mutation-free"
+- update vendor (ASCII)
+- update vendor (Arrayy)
+- use CollectionStringy()
+- add "nth()"
+- add "isSimilar()"
+- add "similarity()"
+- add "isWhitespace()"
+- add "wrap()"
+- add "words()"
+- add "format()"
+- add "chunk()"
+- add "isNotEmpty()"
+- add "isEquals()"
+
+
 ### 6.0.2 (2019-11-17)
 - update "Arrayy" (collection lib)
 - fix errors reported by psalm
