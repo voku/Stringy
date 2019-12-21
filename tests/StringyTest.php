@@ -3060,6 +3060,23 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testLinewrap()
     {
         $testArray = [
+            ''                      => "\n",
+            ' '                     => ' ' . "\n",
+            'http:// moelleken.org' => 'http://' . "\n" . 'moelleken.' . "\n" . 'org' . "\n",
+            'http://test.de'        => 'http://tes' . "\n" . 't.de' . "\n",
+            'http://öäü.de'         => 'http://öäü' . "\n" . '.de' . "\n",
+            'http://menadwork.com'  => 'http://men' . "\n" . 'adwork.com' . "\n",
+        ];
+
+        foreach ($testArray as $testString => $testResult) {
+            $stringy = S::create($testString);
+            static::assertSame($testResult, $stringy->lineWrap(10)->toString());
+        }
+    }
+
+    public function testLinewrapAfterWord()
+    {
+        $testArray = [
             ''                                                                                                      => "\n",
             ' '                                                                                                     => ' ' . "\n",
             'http:// moelleken.org'                                                                                 => 'http://' . "\n" . 'moelleken.org' . "\n",
@@ -5073,7 +5090,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertEquals('宮任 ', $nth);
     }
 
-    public function testItPreservesEncoding()
+    public function testItPreservesEncodingNth()
     {
         $string = \Stringy\create('john pinkerton', 'ASCII');
         $nth = $string->nth(3);
@@ -5085,14 +5102,14 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $content = 'john pinkerton';
         $string = new \Stringy\Stringy($content);
         $crc32 = $string->crc32();
-        static::assertEquals(crc32($content), $crc32);
+        static::assertEquals(\crc32($content), $crc32);
 
         // ---
 
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $crc32 = $string->crc32();
-        static::assertEquals(crc32($content), $crc32);
+        static::assertEquals(\crc32($content), $crc32);
     }
 
     public function testSha1()
@@ -5100,7 +5117,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha1();
-        static::assertEquals(sha1($content), $hash);
+        static::assertEquals(\sha1($content), $hash);
     }
 
     public function testSha256()
@@ -5108,7 +5125,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha256();
-        static::assertEquals(hash('sha256', $content), $hash);
+        static::assertEquals(\hash('sha256', $content), $hash);
     }
 
     public function testSha512()
@@ -5116,7 +5133,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha512();
-        static::assertEquals(hash('sha512', $content), $hash);
+        static::assertEquals(\hash('sha512', $content), $hash);
     }
 
     public function testMd5()
@@ -5124,13 +5141,245 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->md5();
-        static::assertEquals(hash('md5', $content), $hash);
+        static::assertEquals(\hash('md5', $content), $hash);
 
         // ---
 
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->hash('md5');
-        static::assertEquals(hash('md5', $content), $hash);
+        static::assertEquals(\hash('md5', $content), $hash);
+    }
+
+    public function testItCanDetermineIfItDoesNotExistInAnotherString()
+    {
+        $string = new \Stringy\Stringy('purple');
+        $notIn = $string->in('john pinkerton');
+        static::assertFalse($notIn);
+    }
+
+    public function testItCanDetermineIfItExistsInAnotherStringCaseInsensitive()
+    {
+        $string = new \Stringy\Stringy('Pink');
+        $in = $string->in('john pinkerton', false);
+        static::assertTrue($in);
+    }
+
+    public function testItCanDetermineIfAMultibyteStringExistsInAnotherString()
+    {
+        $string = new \Stringy\Stringy('任天堂');
+        $in = $string->in('宮本 任天堂 茂 ');
+        static::assertTrue($in);
+    }
+
+    public function testItCanBeSensitivelyMatched()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $matches = $string->matchCaseSensitive('JoHN PiNKeRToN');
+        $differs = $string->matchCaseSensitive('BoB BeLCHeR');
+        static::assertFalse($matches);
+        static::assertFalse($differs);
+
+        // ---
+
+        $string = new \Stringy\Stringy('john pinkerton');
+        $matches = $string->matchCaseInsensitive('john pinkerton');
+        $differs = $string->matchCaseInsensitive('BoB BeLCHeR');
+        static::assertTrue($matches);
+        static::assertFalse($differs);
+    }
+
+    public function testItCanBeInsensitivelyMatched()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $matches = $string->matchCaseInsensitive('JoHN PiNKeRToN');
+        $differs = $string->matchCaseInsensitive('BoB BeLCHeR');
+        static::assertTrue($matches);
+        static::assertFalse($differs);
+    }
+
+    public function testAMultibyteStringCanBeInsensitivelyMatched()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $matches = $string->matchCaseInsensitive('宮本 茂');
+        $differs = $string->matchCaseInsensitive('任天堂');
+        static::assertTrue($matches);
+        static::assertFalse($differs);
+    }
+
+    public function testItCanBeStripped()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $striped = $string->strip('pink');
+        static::assertInstanceOf(\Stringy\Stringy::class, $striped);
+        static::assertEquals('john erton', $striped);
+    }
+
+    public function testItCanStripMultipleStringsFromTheString()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $striped = $string->strip(['a', 'e', 'i', 'o', 'u']);
+        static::assertInstanceOf(\Stringy\Stringy::class, $striped);
+        static::assertEquals('jhn pnkrtn', $striped);
+    }
+
+    public function testItIsMultibyteCompatible()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $stripped = $string->strip('本');
+        static::assertInstanceOf(\Stringy\Stringy::class, $stripped);
+        static::assertEquals('宮 茂', $stripped);
+    }
+
+    public function testItCanBeSoftWrapped()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $wrappedSoft = $string->softWrap(5);
+        static::assertInstanceOf(\Stringy\Stringy::class, $wrappedSoft);
+        static::assertEquals("john\npinkerton", $wrappedSoft);
+    }
+
+    public function testItPreservesEncodingSoftWrap()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $wrappedSoft = $string->softWrap(5);
+        static::assertAttributeEquals('ASCII', 'encoding', $wrappedSoft);
+    }
+
+    public function testItCanBeHardWrapped()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $wrappedHard = $string->hardWrap(5);
+        static::assertInstanceOf(\Stringy\Stringy::class, $wrappedHard);
+        static::assertEquals("john\npinke\nrton", $wrappedHard);
+    }
+
+    public function testItPreservesEncodingHardWrap()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $wrappedHard = $string->hardWrap(5);
+        static::assertAttributeEquals('ASCII', 'encoding', $wrappedHard);
+    }
+
+    public function testItCanBeHexEncoded()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $hex = $string->hexEncode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $hex);
+        static::assertEquals('U+006aU+006fU+0068U+006eU+0020U+0070U+0069U+006eU+006bU+0065U+0072U+0074U+006fU+006e', $hex->toString());
+    }
+
+    public function testAMultibyteStringCanBeHexEncoded()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $hex = $string->hexEncode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $hex);
+        static::assertEquals('U+5baeU+672cU+0020U+8302', $hex);
+    }
+
+    public function testItCanBeHexDecoded()
+    {
+        $string = new \Stringy\Stringy('\x6a\x6f\x68\x6e\x20\x70\x69\x6e\x6b\x65\x72\x74\x6f\x6e');
+        $plaintext = $string->hexDecode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $plaintext);
+        static::assertEquals('john pinkerton', $plaintext);
+    }
+
+    public function testAMultibyteStringCanBeHexDecoded()
+    {
+        $string = new \Stringy\Stringy('\x5bae\x672c\x20\x8302');
+        $plaintext = $string->hexDecode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $plaintext);
+        static::assertEquals('宮本 茂', $plaintext);
+    }
+
+    public function testItCanBeBase64Decoded()
+    {
+        $string = new \Stringy\Stringy('am9obiBwaW5rZXJ0b24=');
+        $plaintext = $string->base64Decode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $plaintext);
+        static::assertEquals('john pinkerton', $plaintext);
+    }
+
+    public function testAMultibyteStringCanBeBase64Decoded()
+    {
+        $string = new \Stringy\Stringy('5a6u5pysIOiMgg==');
+        $plaintext = $string->base64Decode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $plaintext);
+        static::assertEquals('宮本 茂', $plaintext);
+    }
+
+    public function testItHasCanBeBase64Encoded()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $base64 = $string->base64Encode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $base64);
+        static::assertEquals('am9obiBwaW5rZXJ0b24=', $base64);
+    }
+
+    public function testAMultibyteStringCanBeBase64Encoded()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $base64 = $string->base64Encode();
+        static::assertInstanceOf(\Stringy\Stringy::class, $base64);
+        static::assertEquals('5a6u5pysIOiMgg==', $base64);
+    }
+
+    public function testItCanBeSplitIntoChunks()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $chunks = $string->chunk(3);
+        static::assertEquals(['joh', 'n p', 'ink', 'ert', 'on'], $chunks->getArray());
+        foreach ($chunks as $chunk) {
+            static::assertInstanceOf(\Stringy\Stringy::class, $chunk);
+        }
+    }
+
+    public function testAMultibyteStringCanBeChunked()
+    {
+        $string = new \Stringy\Stringy('宮本 任天堂 茂');
+        $chunks = $string->chunk(3);
+        static::assertEquals(['宮本 ', '任天堂', ' 茂'], $chunks->getArray());
+        foreach ($chunks as $chunk) {
+            static::assertInstanceOf(\Stringy\Stringy::class, $chunk);
+        }
+    }
+
+    public function testItPreservesEncodingChunk()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $chunks = $string->chunk(3);
+        foreach ($chunks as $chunk) {
+            static::assertAttributeEquals('ASCII', 'encoding', $chunk);
+        }
+    }
+
+    public function testItCanBeExploded()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $exploded = $string->explode(' ');
+        static::assertEquals(['john', 'pinkerton'], $exploded->toArray());
+        foreach ($exploded as $substring) {
+            static::assertInstanceOf(\Stringy\Stringy::class, $substring);
+        }
+    }
+
+    public function testItCanBeExplodedWithALimit()
+    {
+        $string = new \Stringy\Stringy('john maurice mcclean pinkerton');
+        $exploded = $string->explode(' ', 3);
+        static::assertEquals(['john', 'maurice', 'mcclean pinkerton'], $exploded->toArray());
+        foreach ($exploded as $substring) {
+            static::assertInstanceOf(\Stringy\Stringy::class, $substring);
+        }
+    }
+
+    public function testItPreservesEncoding()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $exploded = $string->explode(' ');
+        foreach ($exploded as $string) {
+            static::assertAttributeEquals('ASCII', 'encoding', $string);
+        }
     }
 }

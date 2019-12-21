@@ -1258,18 +1258,6 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 false,
-                0,
-            ],
-            [
-                false,
-                1,
-            ],
-            [
-                false,
-                1.1,
-            ],
-            [
-                false,
                 'null',
             ],
             [
@@ -3338,6 +3326,16 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $result = S::create('fòô bàř', $encoding)->isEquals($str);
         static::assertSame($expected, $result);
+
+        // --
+
+        $result = S::create('fòô bàř', $encoding)->isEqualsCaseSensitive($str);
+        static::assertSame($expected, $result);
+
+        // --
+
+        $result = S::create('fòô bàř', $encoding)->matchCaseSensitive($str);
+        static::assertSame($expected, $result);
     }
 
     /**
@@ -5078,14 +5076,14 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $content = 'john pinkerton';
         $string = new \Stringy\Stringy($content);
         $crc32 = $string->crc32();
-        static::assertEquals(crc32($content), $crc32);
+        static::assertEquals(\crc32($content), $crc32);
 
         // ---
 
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $crc32 = $string->crc32();
-        static::assertEquals(crc32($content), $crc32);
+        static::assertEquals(\crc32($content), $crc32);
     }
 
     public function testSha1()
@@ -5093,7 +5091,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha1();
-        static::assertEquals(sha1($content), $hash);
+        static::assertEquals(\sha1($content), $hash);
     }
 
     public function testSha256()
@@ -5101,7 +5099,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha256();
-        static::assertEquals(hash('sha256', $content), $hash);
+        static::assertEquals(\hash('sha256', $content), $hash);
     }
 
     public function testSha512()
@@ -5109,7 +5107,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->sha512();
-        static::assertEquals(hash('sha512', $content), $hash);
+        static::assertEquals(\hash('sha512', $content), $hash);
     }
 
     public function testMd5()
@@ -5117,13 +5115,13 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->md5();
-        static::assertEquals(hash('md5', $content), $hash);
+        static::assertEquals(\hash('md5', $content), $hash);
 
         // ---
 
         $content = '宮本 茂';
         $string = new \Stringy\Stringy($content);
         $hash = $string->hash('md5');
-        static::assertEquals(hash('md5', $content), $hash);
+        static::assertEquals(\hash('md5', $content), $hash);
     }
 }

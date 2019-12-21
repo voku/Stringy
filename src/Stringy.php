@@ -194,14 +194,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns a new string with $string appended.
+     * Returns a new string with $suffix appended.
      *
      * @param string ...$suffix <p>The string to append.</p>
      *
      * @psalm-mutation-free
      *
      * @return static
-     *                <p>Object with appended $string.</p>
+     *                <p>Object with appended $suffix.</p>
      *
      * @noinspection PhpDocSignatureInspection
      */
@@ -267,67 +267,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function md5(): self {
-        return static::create($this->hash('md5'), $this->encoding);
-    }
-
-    /**
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function sha1(): self {
-        return static::create($this->hash('sha1'), $this->encoding);
-    }
-
-    /**
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function sha256(): self {
-        return static::create($this->hash('sha256'), $this->encoding);
-    }
-
-    /**
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function sha512(): self {
-        return static::create($this->hash('sha512'), $this->encoding);
-    }
-
-    /**
-     * @psalm-mutation-free
-     *
-     * @return int
-     */
-    public function crc32(): int {
-        return crc32($this->str);
-    }
-
-    /**
-     * Generate a hash value (message digest)
-     *
-     * @link https://php.net/manual/en/function.hash.php
-     *
-     * @param string $algorithm
-     *                          <p>Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)</p>
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function hash($algorithm): self {
-        return static::create(hash($algorithm, $this->str), $this->encoding);
-    }
-
-    /**
      * Returns the character at $index, with indexes starting at 0.
      *
      * @param int $index <p>Position of the character.</p>
@@ -340,6 +279,36 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function at(int $index): self
     {
         return static::create($this->utf8::char_at($this->str, $index), $this->encoding);
+    }
+
+    /**
+     * Decode the base64 encoded string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return self
+     */
+    public function base64Decode(): self
+    {
+        return static::create(
+            \base64_decode($this->str, true),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Encode the string to base64.
+     *
+     * @psalm-mutation-free
+     *
+     * @return self
+     */
+    public function base64Encode(): self
+    {
+        return static::create(
+            \base64_encode($this->str),
+            $this->encoding
+        );
     }
 
     /**
@@ -507,6 +476,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param int $length
      *
+     * @psalm-mutation-free
+     *
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
@@ -562,6 +533,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $needle        <p>Substring to look for.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
+     * @psalm-mutation-free
+     *
      * @return bool
      *              <p>Whether or not $str contains $needle.</p>
      */
@@ -582,6 +555,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string[] $needles       <p>SubStrings to look for.</p>
      * @param bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
+     * @psalm-mutation-free
+     *
      * @return bool
      *              <p>Whether or not $str contains $needle.</p>
      */
@@ -592,34 +567,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $needles,
             $caseSensitive
         );
-    }
-
-    /**
-     * Get every nth character of the string.
-     *
-     * @param int $step   The number of characters to step
-     * @param int $offset The string offset to start at
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function nth(int $step, int $offset = 0): self
-    {
-        $length = $step - 1;
-        $substring = $this->substr($offset)->toString();
-
-        if ($substring === '') {
-            return new static('', $this->encoding);
-        }
-
-        \preg_match_all(
-            "/(?:^|(?:.|\p{L}|\w){" . $length . "})(.|\p{L}|\w)/u",
-            $substring,
-            $matches
-        );
-
-        return new static(\implode('', $matches[1] ?? []), $this->encoding);
     }
 
     /**
@@ -680,6 +627,18 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Calculates the crc32 polynomial of a string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return int
+     */
+    public function crc32(): int
+    {
+        return \crc32($this->str);
+    }
+
+    /**
      * Creates a Stringy object and assigns both str and encoding properties
      * the supplied values. $str is cast to a string prior to assignment, and if
      * $encoding is not specified, it defaults to mb_internal_encoding(). It
@@ -692,11 +651,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @throws \InvalidArgumentException
      *                                   <p>if an array or object without a
      *                                   __toString method is passed as the first argument</p>
+     * @psalm-pure
      *
      * @return static
      *                <p>A Stringy object.</p>
-     *
-     * @psalm-pure
      */
     public static function create($str = '', string $encoding = null): self
     {
@@ -840,6 +798,41 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             ),
             $this->encoding
         );
+    }
+
+    /**
+     * Split a string by a string.
+     *
+     * @param string $delimiter The boundary string
+     * @param int    $limit     the maximum number of elements in the exploded collection.
+     *
+     *   - If limit is set and positive, the returned collection will contain a maximum of limit elements with the last
+     *   element containing the rest of string.
+     *   - If the limit parameter is negative, all components except the last -limit are returned.
+     *   - If the limit parameter is zero, then this is treated as 1
+     *
+     * @psalm-mutation-free
+     *
+     * @return CollectionStringy<int,static>
+     */
+    public function explode(string $delimiter, int $limit = \PHP_INT_MAX): CollectionStringy
+    {
+        $data = \explode($delimiter, $this->str, $limit);
+        if ($data === false) {
+            $data = [];
+        }
+
+        $data = \array_map(
+            function ($str) {
+                return new static($str, $this->encoding);
+            },
+            $data
+        );
+
+        /**
+         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+         */
+        return CollectionStringy::create($data);
     }
 
     /**
@@ -991,6 +984,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Wrap the string after an exact number of characters.
+     *
+     * @param int    $width Number of characters at which to wrap
+     * @param string $break Character used to break the string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function hardWrap($width, $break = "\n"): self
+    {
+        return $this->lineWrap($width, $break, false);
+    }
+
+    /**
      * Returns true if the string contains a lower case char, false otherwise.
      *
      * @psalm-mutation-free
@@ -1014,6 +1022,69 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function hasUpperCase(): bool
     {
         return $this->utf8::has_uppercase($this->str);
+    }
+
+    /**
+     * Generate a hash value (message digest)
+     *
+     * @see https://php.net/manual/en/function.hash.php
+     *
+     * @param string $algorithm
+     *                          <p>Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function hash($algorithm): self
+    {
+        return static::create(\hash($algorithm, $this->str), $this->encoding);
+    }
+
+    /**
+     * Decode the string from hex.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function hexDecode(): self
+    {
+        $string = \preg_replace_callback(
+            '/\\\\x([0-9A-Fa-f]+)/',
+            function (array $matched) {
+                return (string) $this->utf8::hex_to_chr($matched[1]);
+            },
+            $this->str
+        );
+
+        return static::create(
+            $string,
+            $this->encoding
+        );
+    }
+
+    /**
+     * Encode string to hex.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function hexEncode(): self
+    {
+        $string = \array_reduce(
+            $this->chars(),
+            function (string $str, string $char) {
+                return $str . $this->utf8::chr_to_hex($char);
+            },
+            ''
+        );
+
+        return static::create(
+            $string,
+            $this->encoding
+        );
     }
 
     /**
@@ -1167,6 +1238,27 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $this->utf8::str_humanize($this->str),
             $this->encoding
         );
+    }
+
+    /**
+     * Determine if the current string exists in another string. By
+     * default, the comparison is case-sensitive, but can be made insensitive
+     * by setting $caseSensitive to false.
+     *
+     * @param string $str           <p>The string to compare against.</p>
+     * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function in(string $str, bool $caseSensitive = true): bool
+    {
+        if ($caseSensitive) {
+            return \strpos($str, $this->str) !== false;
+        }
+
+        return \stripos($str, $this->str) !== false;
     }
 
     /**
@@ -1381,8 +1473,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return bool
      *              <p>Whether or not $str contains a valid E-Mail address.</p>
      */
-    public function isEmail(bool $useExampleDomainCheck = false, bool $useTypoInDomainCheck = false, bool $useTemporaryDomainCheck = false, bool $useDnsCheck = false): bool
-    {
+    public function isEmail(
+        bool $useExampleDomainCheck = false,
+        bool $useTypoInDomainCheck = false,
+        bool $useTemporaryDomainCheck = false,
+        bool $useDnsCheck = false
+    ): bool {
         /**
          * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the email-check class
          */
@@ -1406,15 +1502,64 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Determine whether the string is equals to $str.
+     * Alias for isEqualsCaseSensitive()
      *
-     * @param string|Stringy ...$str <p>The string to compare.</p>
+     * @param string|Stringy ...$str
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isEquals(...$str): bool
+    {
+        return $this->isEqualsCaseSensitive(...$str);
+    }
+
+    /**
+     * Determine whether the string is equals to $str.
+     *
+     * @param float|int|string|Stringy ...$str <p>The string to compare.</p>
      *
      * @psalm-mutation-free
      *
      * @return bool
      *              <p>Whether or not $str is equals.</p>
      */
-    public function isEquals(...$str): bool
+    public function isEqualsCaseInsensitive(...$str): bool
+    {
+        $strUpper = $this->toUpperCase()->str;
+
+        foreach ($str as $strTmp) {
+            /**
+             * @psalm-suppress RedundantConditionGivenDocblockType - wait for union-types :)
+             */
+            if ($strTmp instanceof self) {
+                if ($strUpper !== $strTmp->toUpperCase()) {
+                    return false;
+                }
+            } elseif (\is_scalar($strTmp)) {
+                if ($strUpper !== $this->utf8::strtoupper((string) $strTmp, $this->encoding)) {
+                    return false;
+                }
+            } else {
+                throw new \InvalidArgumentException('expected: int|float|string|Stringy -> given: ' . \print_r($strTmp, true) . ' [' . \gettype($strTmp) . ']');
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine whether the string is equals to $str.
+     *
+     * @param float|int|string|Stringy ...$str <p>The string to compare.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     *              <p>Whether or not $str is equals.</p>
+     */
+    public function isEqualsCaseSensitive(...$str): bool
     {
         foreach ($str as $strTmp) {
             /**
@@ -1424,12 +1569,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                 if ($this->str !== $strTmp->str) {
                     return false;
                 }
-            } elseif (\is_string($strTmp)) {
-                if ($this->str !== $strTmp) {
+            } elseif (\is_scalar($strTmp)) {
+                if ($this->str !== (string) $strTmp) {
                     return false;
                 }
             } else {
-                return false;
+                throw new \InvalidArgumentException('expected: int|float|string|Stringy -> given: ' . \print_r($strTmp, true) . ' [' . \gettype($strTmp) . ']');
             }
         }
 
@@ -1522,6 +1667,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Check if two strings are similar.
+     *
+     * @param string $str
+     * @param float  $minPercentForSimilarity
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isSimilar(string $str, float $minPercentForSimilarity = 80.0): bool
+    {
+        return $this->similarity($str) >= $minPercentForSimilarity;
+    }
+
+    /**
      * Returns true if the string contains only lower case chars, false
      * otherwise.
      *
@@ -1546,37 +1706,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isWhitespace(): bool
     {
         return $this->isBlank();
-    }
-
-    /**
-     * Calculate the similarity between two strings.
-     *
-     * @param string $str
-     *
-     * @psalm-mutation-free
-     *
-     * @return float
-     */
-    public function similarity(string $str): float
-    {
-        \similar_text($this->str, $str, $percent);
-
-        return $percent;
-    }
-
-    /**
-     * Check if two strings are similar.
-     *
-     * @param string $str
-     * @param float  $minPercentForSimilarity
-     *
-     * @psalm-mutation-free
-     *
-     * @return bool
-     */
-    public function isSimilar(string $str, float $minPercentForSimilarity = 80.0): bool
-    {
-        return $this->similarity($str) >= $minPercentForSimilarity;
     }
 
     /**
@@ -1679,16 +1808,71 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Line-Wrap the string after $limit, but also after the next word.
      *
-     * @param int $limit
+     * @param int         $limit           [optional] <p>The column width.</p>
+     * @param string      $break           [optional] <p>The line is broken using the optional break parameter.</p>
+     * @param bool        $add_final_break [optional] <p>
+     *                                     If this flag is true, then the method will add a $break at the end
+     *                                     of the result string.
+     *                                     </p>
+     * @param string|null $delimiter       [optional] <p>
+     *                                     You can change the default behavior, where we split the string by newline.
+     *                                     </p>
      *
      * @psalm-mutation-free
      *
      * @return static
      */
-    public function lineWrapAfterWord(int $limit): self
-    {
+    public function lineWrap(
+        int $limit,
+        string $break = "\n",
+        bool $add_final_break = true,
+        string $delimiter = null
+    ): self {
         return static::create(
-            $this->utf8::wordwrap_per_line($this->str, $limit),
+            $this->utf8::wordwrap_per_line(
+                $this->str,
+                $limit,
+                $break,
+                true,
+                $add_final_break,
+                $delimiter
+            ),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Line-Wrap the string after $limit, but also after the next word.
+     *
+     * @param int         $limit           [optional] <p>The column width.</p>
+     * @param string      $break           [optional] <p>The line is broken using the optional break parameter.</p>
+     * @param bool        $add_final_break [optional] <p>
+     *                                     If this flag is true, then the method will add a $break at the end
+     *                                     of the result string.
+     *                                     </p>
+     * @param string|null $delimiter       [optional] <p>
+     *                                     You can change the default behavior, where we split the string by newline.
+     *                                     </p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function lineWrapAfterWord(
+        int $limit,
+        string $break = "\n",
+        bool $add_final_break = true,
+        string $delimiter = null
+    ): self {
+        return static::create(
+            $this->utf8::wordwrap_per_line(
+                $this->str,
+                $limit,
+                $break,
+                false,
+                $add_final_break,
+                $delimiter
+            ),
             $this->encoding
         );
     }
@@ -1806,6 +1990,82 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Determine if the string matches another string regardless of case.
+     * Alias for isEqualsCaseInsensitive()
+     *
+     * @psalm-mutation-free
+     *
+     * @param string|Stringy ...$str
+     *                               <p>The string to compare against.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function matchCaseInsensitive(...$str): bool
+    {
+        return $this->isEqualsCaseInsensitive(...$str);
+    }
+
+    /**
+     * Determine if the string matches another string.
+     * Alias for isEqualsCaseSensitive()
+     *
+     * @psalm-mutation-free
+     *
+     * @param string|Stringy ...$str
+     *                               <p>The string to compare against.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function matchCaseSensitive(...$str): bool
+    {
+        return $this->isEqualsCaseSensitive(...$str);
+    }
+
+    /**
+     * Create a md5 hash from the current string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function md5(): self
+    {
+        return static::create($this->hash('md5'), $this->encoding);
+    }
+
+    /**
+     * Get every nth character of the string.
+     *
+     * @param int $step   The number of characters to step
+     * @param int $offset The string offset to start at
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function nth(int $step, int $offset = 0): self
+    {
+        $length = $step - 1;
+        $substring = $this->substr($offset)->toString();
+
+        if ($substring === '') {
+            return new static('', $this->encoding);
+        }
+
+        \preg_match_all(
+            "/(?:^|(?:.|\p{L}|\w){" . $length . "})(.|\p{L}|\w)/u",
+            $substring,
+            $matches
+        );
+
+        return new static(\implode('', $matches[1] ?? []), $this->encoding);
+    }
+
+    /**
      * Returns whether or not a character exists at an index. Offsets may be
      * negative to count from the last character in the string. Implements
      * part of the ArrayAccess interface.
@@ -1902,8 +2162,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>Object with a padded $str.</p>
-     *
-     * @psalm-mutation-free
      */
     public function pad(int $length, string $padStr = ' ', string $padType = 'right'): self
     {
@@ -1991,14 +2249,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns a new string starting with $string.
+     * Returns a new string starting with $prefix.
      *
      * @param string ...$prefix <p>The string to append.</p>
      *
      * @psalm-mutation-free
      *
      * @return static
-     *                <p>Object with appended $string.</p>
+     *                <p>Object with appended $prefix.</p>
      *
      * @noinspection PhpDocSignatureInspection
      */
@@ -2344,6 +2602,42 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Create a sha1 hash from the current string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha1(): self
+    {
+        return static::create($this->hash('sha1'), $this->encoding);
+    }
+
+    /**
+     * Create a sha256 hash from the current string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha256(): self
+    {
+        return static::create($this->hash('sha256'), $this->encoding);
+    }
+
+    /**
+     * Create a sha512 hash from the current string.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha512(): self
+    {
+        return static::create($this->hash('sha512'), $this->encoding);
+    }
+
+    /**
      * Shorten the string after $length, but also after the next word.
      *
      * @param int    $length
@@ -2373,6 +2667,22 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function shuffle(): self
     {
         return static::create($this->utf8::str_shuffle($this->str), $this->encoding);
+    }
+
+    /**
+     * Calculate the similarity between two strings.
+     *
+     * @param string $str
+     *
+     * @psalm-mutation-free
+     *
+     * @return float
+     */
+    public function similarity(string $str): float
+    {
+        \similar_text($this->str, $str, $percent);
+
+        return $percent;
     }
 
     /**
@@ -2418,6 +2728,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     public function slugify(
         string $separator = '-',
@@ -2455,6 +2767,22 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $this->utf8::str_snakeize($this->str, $this->encoding),
             $this->encoding
         );
+    }
+
+    /**
+     * Wrap the string after the first whitespace character after a given number
+     * of characters.
+     *
+     * @param int    $width Number of characters at which to wrap
+     * @param string $break Character used to break the string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function softWrap(int $width, string $break = "\n"): self
+    {
+        return $this->lineWrapAfterWord($width, $break, false);
     }
 
     /**
@@ -2536,6 +2864,24 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         }
 
         return $this->utf8::str_istarts_with_any($this->str, $substrings);
+    }
+
+    /**
+     * Remove one or more strings from the string.
+     *
+     * @param string|string[] $search One or more strings to be removed
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function strip($search): self
+    {
+        if (\is_array($search)) {
+            return $this->replaceAll($search, '');
+        }
+
+        return $this->replace($search, '');
     }
 
     /**
