@@ -5079,4 +5079,58 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $nth = $string->nth(3);
         static::assertAttributeEquals('ASCII', 'encoding', $nth);
     }
+
+    public function testCrc32()
+    {
+        $content = 'john pinkerton';
+        $string = new \Stringy\Stringy($content);
+        $crc32 = $string->crc32();
+        static::assertEquals(crc32($content), $crc32);
+
+        // ---
+
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $crc32 = $string->crc32();
+        static::assertEquals(crc32($content), $crc32);
+    }
+
+    public function testSha1()
+    {
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $hash = $string->sha1();
+        static::assertEquals(sha1($content), $hash);
+    }
+
+    public function testSha256()
+    {
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $hash = $string->sha256();
+        static::assertEquals(hash('sha256', $content), $hash);
+    }
+
+    public function testSha512()
+    {
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $hash = $string->sha512();
+        static::assertEquals(hash('sha512', $content), $hash);
+    }
+
+    public function testMd5()
+    {
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $hash = $string->md5();
+        static::assertEquals(hash('md5', $content), $hash);
+
+        // ---
+
+        $content = '宮本 茂';
+        $string = new \Stringy\Stringy($content);
+        $hash = $string->hash('md5');
+        static::assertEquals(hash('md5', $content), $hash);
+    }
 }

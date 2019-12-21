@@ -267,6 +267,67 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function md5(): self {
+        return static::create($this->hash('md5'), $this->encoding);
+    }
+
+    /**
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha1(): self {
+        return static::create($this->hash('sha1'), $this->encoding);
+    }
+
+    /**
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha256(): self {
+        return static::create($this->hash('sha256'), $this->encoding);
+    }
+
+    /**
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function sha512(): self {
+        return static::create($this->hash('sha512'), $this->encoding);
+    }
+
+    /**
+     * @psalm-mutation-free
+     *
+     * @return int
+     */
+    public function crc32(): int {
+        return crc32($this->str);
+    }
+
+    /**
+     * Generate a hash value (message digest)
+     *
+     * @link https://php.net/manual/en/function.hash.php
+     *
+     * @param string $algorithm
+     *                          <p>Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function hash($algorithm): self {
+        return static::create(hash($algorithm, $this->str), $this->encoding);
+    }
+
+    /**
      * Returns the character at $index, with indexes starting at 0.
      *
      * @param int $index <p>Position of the character.</p>
