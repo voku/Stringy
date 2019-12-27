@@ -802,6 +802,20 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Set the internal character encoding.
+     *
+     * @param string $encoding The desired character encoding
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function encoding(string $encoding): self
+    {
+        return new static($this->str, $encoding);
+    }
+
+    /**
      * Encrypt the string.
      *
      * @param string $password The key for encrypting

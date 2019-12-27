@@ -1,6 +1,6 @@
 # Changelog
 
-### 7.0.0 (2019-12-19)
+### 6.1.0 (2019-12-19)
 - use "@psalm-mutation-free"
 - update vendor (ASCII)
 - update vendor (Arrayy)
@@ -19,9 +19,11 @@
 - add "hardWrap()"
 - add "before()"
 - add "after()"
+- add "crypt()"
 - add "bcrypt()"
 - add "encrypt()"
 - add "decrypt()"
+- add "encoding()"
 
 
 ### 6.0.2 (2019-11-17)

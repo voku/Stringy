@@ -5535,4 +5535,12 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $decrypted = $string->decrypt('secret');
         static::assertAttributeEquals('ASCII', 'encoding', $decrypted);
     }
+
+    public function testItCanSetTheInternalEncoding()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $ascii = $string->encoding('ASCII');
+        static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
+        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+    }
 }
