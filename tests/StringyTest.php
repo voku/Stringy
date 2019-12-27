@@ -5382,4 +5382,66 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             static::assertAttributeEquals('ASCII', 'encoding', $string);
         }
     }
+
+    public function testItCanGetPartOfAStringAfterACharacter()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $lastName = $string->after(' ');
+        static::assertInstanceOf(\Stringy\Stringy::class, $lastName);
+        static::assertEquals('pinkerton', $lastName->toString());
+    }
+
+    public function testItCanGetPartOfAStringAfterACharacterWithMultipleDelimiters()
+    {
+        $string = new \Stringy\Stringy('john pinkerton jr');
+        $lastNameAndSuffix = $string->after(' ');
+        static::assertInstanceOf(\Stringy\Stringy::class, $lastNameAndSuffix);
+        static::assertEquals('pinkerton jr', $lastNameAndSuffix->toString());
+    }
+
+    public function testItCanGetPartOfAMultibyteStringAfterAMultibyteString()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $after = $string->after('本');
+        static::assertInstanceOf(\Stringy\Stringy::class, $after);
+        static::assertEquals(' 茂', $after->toString());
+    }
+
+    public function testItPreservesEncodingAfter()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $lastName = $string->after(' ');
+        static::assertAttributeEquals('ASCII', 'encoding', $lastName);
+    }
+
+    public function testItCanGetPartOfAStringBeforeACharacter()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $firstName = $string->before(' ');
+        static::assertInstanceOf(\Stringy\Stringy::class, $firstName);
+        static::assertEquals('john', $firstName->toString());
+    }
+
+    public function testItCanGetPartOfAStringBeforeACharacterWithMultipleDelimiters()
+    {
+        $string = new \Stringy\Stringy('john pinkerton jr');
+        $firstName = $string->before(' ');
+        static::assertInstanceOf(\Stringy\Stringy::class, $firstName);
+        static::assertEquals('john', $firstName->toString());
+    }
+
+    public function testItCanGetPartOfAMultibyteStringBeforeAMltibyteString()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $firstName = $string->before('本');
+        static::assertInstanceOf(\Stringy\Stringy::class, $firstName);
+        static::assertEquals('宮', $firstName->toString());
+    }
+
+    public function testItPreservesEncodingBefore()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $firstName = $string->before(' ');
+        static::assertAttributeEquals('ASCII', 'encoding', $firstName);
+    }
 }

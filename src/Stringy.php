@@ -2066,6 +2066,53 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Return part of the string occurring before a specific string.
+     *
+     * @param string $string The delimiting string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function before(string $string): self
+    {
+        $strArray = UTF8::str_split_pattern(
+            $this->str,
+            $string,
+            1
+        );
+
+        return new static(
+            $strArray[0] ?? '',
+            $this->encoding
+        );
+    }
+
+    /**
+     * Return part of the string occurring after a specific string.
+     *
+     * @param string $string The delimiting string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function after(string $string): self
+    {
+        $strArray = UTF8::str_split_pattern(
+            $this->str,
+            $string
+        );
+
+        unset($strArray[0]);
+
+        return new static(
+            \implode(' ', $strArray),
+            $this->encoding
+        );
+    }
+
+    /**
      * Returns whether or not a character exists at an index. Offsets may be
      * negative to count from the last character in the string. Implements
      * part of the ArrayAccess interface.

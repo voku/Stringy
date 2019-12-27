@@ -15,6 +15,10 @@
 - add "chunk()"
 - add "isNotEmpty()"
 - add "isEquals()"
+- add "softWrap()"
+- add "hardWrap()"
+- add "before()"
+- add "after()"
 
 
 ### 6.0.2 (2019-11-17)
