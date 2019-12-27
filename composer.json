@@ -35,6 +35,7 @@
     "require": {
         "php": ">=7.0.0",
         "ext-json": "*",
+        "defuse/php-encryption": "~2.0",
         "voku/arrayy": "~7.0",
         "voku/urlify": "~5.0",
         "voku/anti-xss": "~4.1",

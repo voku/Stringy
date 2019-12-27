@@ -19,6 +19,9 @@
 - add "hardWrap()"
 - add "before()"
 - add "after()"
+- add "bcrypt()"
+- add "encrypt()"
+- add "decrypt()"
 
 
 ### 6.0.2 (2019-11-17)

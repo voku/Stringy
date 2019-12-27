@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stringy;
 
+use Defuse\Crypto\Crypto;
 use voku\helper\AntiXSS;
 use voku\helper\ASCII;
 use voku\helper\EmailCheck;
@@ -107,6 +108,30 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function __toString()
     {
         return (string) $this->str;
+    }
+
+    /**
+     * Return part of the string occurring after a specific string.
+     *
+     * @param string $string The delimiting string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function after(string $string): self
+    {
+        $strArray = UTF8::str_split_pattern(
+            $this->str,
+            $string
+        );
+
+        unset($strArray[0]);
+
+        return new static(
+            \implode(' ', $strArray),
+            $this->encoding
+        );
     }
 
     /**
@@ -307,6 +332,48 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             \base64_encode($this->str),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Creates a hash from the string using the CRYPT_BLOWFISH algorithm.
+     *
+     * @param array<array-key, int|string> $options An array of bcrypt hasing options
+     *
+     * @return static
+     */
+    public function bcrypt(array $options = []): self
+    {
+        return new static(
+            \password_hash(
+                $this->str,
+                \PASSWORD_BCRYPT,
+                $options
+            ),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Return part of the string occurring before a specific string.
+     *
+     * @param string $string The delimiting string
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function before(string $string): self
+    {
+        $strArray = UTF8::str_split_pattern(
+            $this->str,
+            $string,
+            1
+        );
+
+        return new static(
+            $strArray[0] ?? '',
             $this->encoding
         );
     }
@@ -651,14 +718,33 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @throws \InvalidArgumentException
      *                                   <p>if an array or object without a
      *                                   __toString method is passed as the first argument</p>
-     * @psalm-pure
      *
      * @return static
      *                <p>A Stringy object.</p>
+     * @psalm-pure
      */
     public static function create($str = '', string $encoding = null): self
     {
         return new static($str, $encoding);
+    }
+
+    /**
+     * Hash the string using the standard Unix DES-based algorithm or an
+     * alternative algorithm that may be available on the system.
+     *
+     * @param string $salt A salt string to base the hashing on
+     *
+     * @return static
+     */
+    public function crypt(string $salt): self
+    {
+        return new static(
+            \crypt(
+                $this->str,
+                $salt
+            ),
+            $this->encoding
+        );
     }
 
     /**
@@ -680,6 +766,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Decrypt the string.
+     *
+     * @param string $password The key for decrypting
+     *
+     * @return static
+     */
+    public function decrypt(string $password): self
+    {
+        return new static(
+            Crypto::decryptWithPassword($this->str, $password),
+            $this->encoding
+        );
+    }
+
+    /**
      * Returns a lowercase and trimmed string separated by the given delimiter.
      * Delimiters are inserted before uppercase characters (with the exception
      * of the first character of the string), and in place of spaces, dashes,
@@ -696,6 +797,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             $this->utf8::str_delimit($this->str, $delimiter),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Encrypt the string.
+     *
+     * @param string $password The key for encrypting
+     *
+     * @return static
+     */
+    public function encrypt(string $password): self
+    {
+        return new static(
+            Crypto::encryptWithPassword($this->str, $password),
             $this->encoding
         );
     }
@@ -2066,53 +2182,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Return part of the string occurring before a specific string.
-     *
-     * @param string $string The delimiting string
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function before(string $string): self
-    {
-        $strArray = UTF8::str_split_pattern(
-            $this->str,
-            $string,
-            1
-        );
-
-        return new static(
-            $strArray[0] ?? '',
-            $this->encoding
-        );
-    }
-
-    /**
-     * Return part of the string occurring after a specific string.
-     *
-     * @param string $string The delimiting string
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function after(string $string): self
-    {
-        $strArray = UTF8::str_split_pattern(
-            $this->str,
-            $string
-        );
-
-        unset($strArray[0]);
-
-        return new static(
-            \implode(' ', $strArray),
-            $this->encoding
-        );
-    }
-
-    /**
      * Returns whether or not a character exists at an index. Offsets may be
      * negative to count from the last character in the string. Implements
      * part of the ArrayAccess interface.
@@ -2144,10 +2213,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @throws \OutOfBoundsException
      *                               <p>If the positive or negative offset does not exist.</p>
      *
-     * @psalm-mutation-free
-     *
      * @return string
      *                <p>The character at the specified index.</p>
+     *
+     * @psalm-mutation-free
      */
     public function offsetGet($offset): string
     {
@@ -2205,10 +2274,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @throws \InvalidArgumentException
      *                                   <p>If $padType isn't one of 'right', 'left' or 'both'.</p>
      *
-     * @psalm-mutation-free
-     *
      * @return static
      *                <p>Object with a padded $str.</p>
+     *
+     * @psalm-mutation-free
      */
     public function pad(int $length, string $padStr = ' ', string $padType = 'right'): self
     {

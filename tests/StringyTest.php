@@ -5444,4 +5444,95 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $firstName = $string->before(' ');
         static::assertAttributeEquals('ASCII', 'encoding', $firstName);
     }
+
+    public function testItCanBeHashedWithBcrypt()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $bcrypt = $string->bcrypt();
+        static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
+        static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+    }
+
+    public function testAMultibyteStringCanBeHashedWithBcrypt()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $bcrypt = $string->bcrypt([\PASSWORD_BCRYPT_DEFAULT_COST]);
+        static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
+        static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+    }
+
+    public function testItPreservesEncodingBcrypt()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $bcrypt = $string->bcrypt();
+        static::assertAttributeEquals('ASCII', 'encoding', $bcrypt);
+    }
+
+    public function testItCanBeHashedWithCrypt()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $crypt = $string->crypt('NaCl');
+        static::assertInstanceOf(\Stringy\Stringy::class, $crypt);
+        static::assertEquals('Naq9mOMsN7Yac', $crypt);
+    }
+
+    public function testAMultibyteStringCanBeHashedWithCrypt()
+    {
+        $string = new \Stringy\Stringy('宮本 茂');
+        $crypt = $string->crypt('NaCl');
+        static::assertInstanceOf(\Stringy\Stringy::class, $crypt);
+        static::assertEquals('NaJqmdk5MYCgs', $crypt);
+    }
+
+    public function testItPreservesEncodingCrypt()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $crypt = $string->crypt('NaCL');
+        static::assertAttributeEquals('ASCII', 'encoding', $crypt);
+    }
+
+    public function testItCanBeDecrypted()
+    {
+        $encryptedString = (new \Stringy\Stringy('john pinkerton'))->encrypt('secret');
+
+        $string = new \Stringy\Stringy($encryptedString);
+        $decrypted = $string->decrypt('secret');
+        static::assertInstanceOf(\Stringy\Stringy::class, $decrypted);
+        static::assertEquals('john pinkerton', $decrypted);
+    }
+
+    public function testItThrowsAnExceptionWhenDecryptingAnInvalidString()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $this->expectException(\Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException::class);
+        $string->decrypt('secret');
+    }
+
+    public function testItThrowsAnExceptionWhenDecryptionFails()
+    {
+        $encryptedString = (new \Stringy\Stringy('john pinkerton'))->encrypt('secret');
+
+        $string = new \Stringy\Stringy($encryptedString);
+        $this->expectException(\Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException::class);
+        $string->decrypt('shmecret');
+    }
+
+    public function testAMultibyteStringCanBeDecrypted()
+    {
+        $encryptedString = (new \Stringy\Stringy('宮本 茂'))->encrypt('任天堂');
+
+        $string = new \Stringy\Stringy($encryptedString);
+        $decrypted = $string->decrypt('任天堂');
+        static::assertInstanceOf(\Stringy\Stringy::class, $decrypted);
+        static::assertEquals('宮本 茂', $decrypted);
+    }
+
+    public function testItPreservesEncodingDecrypt()
+    {
+        $encryptedString = (new \Stringy\Stringy('john pinkerton'))->encrypt('secret');
+
+        $string = new \Stringy\Stringy($encryptedString, 'ASCII');
+        $decrypted = $string->decrypt('secret');
+        static::assertAttributeEquals('ASCII', 'encoding', $decrypted);
+    }
 }
