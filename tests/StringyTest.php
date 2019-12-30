@@ -3043,15 +3043,13 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testLines($expected, $str, $encoding = null)
     {
-        $result = S::create($str, $encoding)->lines();
+        $result = S::create($str, $encoding)->lines(true);
 
-        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $line) {
             $this->assertStringy($line);
         }
 
         $counter = \count($expected);
-        /** @noinspection ForeachInvariantsInspection */
         for ($i = 0; $i < $counter; ++$i) {
             static::assertSame($expected[$i], $result[$i]->toString());
         }
@@ -3712,7 +3710,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testChunk($expected, $str, $length = 1, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->chunk($length);
+        $result = $stringy->chunk($length, true);
 
         static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {
@@ -3729,11 +3727,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     public function testWords()
     {
-        static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->words('', true)->toStrings());
-        static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->words('', false, 1)->toStrings());
-        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words('#')->toStrings());
-        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->words('')->toStrings());
-        static::assertSame([''], S::create('')->words()->toStrings());
+        static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->words('', true, null, true)->toStrings());
+        static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->words('', false, 1, true)->toStrings());
+        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words('#', false, null, true)->toStrings());
+        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->words('', false, null, true)->toStrings());
+        static::assertSame([''], S::create('')->words('', false, null, true)->toStrings());
 
         $testArray = [
             'Düsseldorf'                                                                                => 'Düsseldorf',
@@ -3755,7 +3753,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $test => $unused) {
-            static::assertSame($test, S::create($test)->words()->implode(''));
+            static::assertSame($test, S::create($test)->words('', false, null, true)->implode(''));
         }
     }
 
@@ -3773,7 +3771,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $stringy = S::create($str, $encoding);
         $result = $stringy->split($pattern, $limit);
 
-        static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
+        static::assertInternalType('array', $result);
         foreach ($result as $string) {
             $this->assertStringy($string);
         }
@@ -5328,7 +5326,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testItCanBeSplitIntoChunks()
     {
         $string = new \Stringy\Stringy('john pinkerton');
-        $chunks = $string->chunk(3);
+        $chunks = $string->chunk(3, true);
         static::assertEquals(['joh', 'n p', 'ink', 'ert', 'on'], $chunks->getArray());
         foreach ($chunks as $chunk) {
             static::assertInstanceOf(\Stringy\Stringy::class, $chunk);
@@ -5338,7 +5336,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testAMultibyteStringCanBeChunked()
     {
         $string = new \Stringy\Stringy('宮本 任天堂 茂');
-        $chunks = $string->chunk(3);
+        $chunks = $string->chunk(3, true);
         static::assertEquals(['宮本 ', '任天堂', ' 茂'], $chunks->getArray());
         foreach ($chunks as $chunk) {
             static::assertInstanceOf(\Stringy\Stringy::class, $chunk);
@@ -5357,7 +5355,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testItCanBeExploded()
     {
         $string = new \Stringy\Stringy('john pinkerton');
-        $exploded = $string->explode(' ');
+        $exploded = $string->explode(' ', \PHP_INT_MAX, true);
         static::assertEquals(['john', 'pinkerton'], $exploded->toArray());
         foreach ($exploded as $substring) {
             static::assertInstanceOf(\Stringy\Stringy::class, $substring);
@@ -5368,7 +5366,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john maurice mcclean pinkerton');
         $exploded = $string->explode(' ', 3);
-        static::assertEquals(['john', 'maurice', 'mcclean pinkerton'], $exploded->toArray());
+        static::assertEquals(['john', 'maurice', 'mcclean pinkerton'], $exploded);
         foreach ($exploded as $substring) {
             static::assertInstanceOf(\Stringy\Stringy::class, $substring);
         }

@@ -5,7 +5,8 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     ignoreErrors:
         # false-postive?
-        - '#Stringy::.*\(\) should return Stringy\\CollectionStringy#'
+        - '#Arrayy\\Collection\\AbstractCollection<mixed, mixed>#'
+        - '#\&\& is always false#'
         # not supported
         - '#bound type \(int\|string\) is not supported#'
         - '# callable\(\): mixed, array#'

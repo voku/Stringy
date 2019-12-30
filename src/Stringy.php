@@ -113,7 +113,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Return part of the string occurring after a specific string.
      *
-     * @param string $string The delimiting string
+     * @param string $string <p>The delimiting string.</p>
      *
      * @psalm-mutation-free
      *
@@ -339,7 +339,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Creates a hash from the string using the CRYPT_BLOWFISH algorithm.
      *
-     * @param array<array-key, int|string> $options An array of bcrypt hasing options
+     * WARNING: Using this algorithm, will result in the ```$this->str```
+     *          being truncated to a maximum length of 72 characters.
+     *
+     * @param array<array-key, int|string> $options [optional] <p>An array of bcrypt hasing options.</p>
      *
      * @return static
      */
@@ -358,7 +361,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Return part of the string occurring before a specific string.
      *
-     * @param string $string The delimiting string
+     * @param string $string <p>The delimiting string.</p>
      *
      * @psalm-mutation-free
      *
@@ -541,37 +544,47 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Splits the string into chunks of Stringy objects.
      *
-     * @param int $length
+     * @param int  $length                   [optional] <p>Max character length of each array element.</p>
+     * @param bool $return_stingy_collection [optional] <p>Return a collection object.</p>
      *
      * @psalm-mutation-free
      *
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @psalm-return CollectionStringy<int,static>|array<int,static>
      */
-    public function chunk(int $length = 1): CollectionStringy
+    public function chunk(int $length = 1, bool $return_stingy_collection = false)
     {
         if ($length < 1) {
             throw new \InvalidArgumentException('The chunk length must be greater than zero.');
         }
 
         if ($this->str === '') {
-            /**
-             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-             */
-            return CollectionStringy::create([]);
+            if ($return_stingy_collection) {
+                /**
+                 * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+                 */
+                return CollectionStringy::create([]);
+            }
+
+            return [];
         }
 
         $chunks = $this->utf8::str_split($this->str, $length);
+        /** @noinspection AlterInForeachInspection */
         foreach ($chunks as $i => &$value) {
             $value = static::create($value, $this->encoding);
         }
 
-        /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-         */
-        return CollectionStringy::create($chunks);
+        if ($return_stingy_collection) {
+            /**
+             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+             */
+            return CollectionStringy::create($chunks);
+        }
+
+        return $chunks;
     }
 
     /**
@@ -729,10 +742,15 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * One-way string encryption (hashing).
+     *
      * Hash the string using the standard Unix DES-based algorithm or an
      * alternative algorithm that may be available on the system.
      *
-     * @param string $salt A salt string to base the hashing on
+     * PS: if you need encrypt / decrypt, please use use ```static::encrypt($password)```
+     *     and ```static::decrypt($password)```
+     *
+     * @param string $salt <p>A salt string to base the hashing on.</p>
      *
      * @return static
      */
@@ -818,7 +836,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Encrypt the string.
      *
-     * @param string $password The key for encrypting
+     * @param string $password <p>The key for encrypting</p>
      *
      * @return static
      */
@@ -933,8 +951,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Split a string by a string.
      *
-     * @param string $delimiter The boundary string
-     * @param int    $limit     the maximum number of elements in the exploded collection.
+     * @param string $delimiter                <p>The boundary string</p>
+     * @param int    $limit                    [optional] <p>The maximum number of elements in the exploded
+     *                                         collection.</p>
+     * @param bool   $return_stingy_collection [optional] <p>Return a collection object.</p>
      *
      *   - If limit is set and positive, the returned collection will contain a maximum of limit elements with the last
      *   element containing the rest of string.
@@ -943,10 +963,24 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @psalm-mutation-free
      *
-     * @return CollectionStringy<int,static>
+     * @return array<int,static>|CollectionStringy<int,static>
      */
-    public function explode(string $delimiter, int $limit = \PHP_INT_MAX): CollectionStringy
-    {
+    public function explode(
+        string $delimiter,
+        int $limit = \PHP_INT_MAX,
+        bool $return_stingy_collection = false
+    ) {
+        if ($this->str === '') {
+            if ($return_stingy_collection) {
+                /**
+                 * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+                 */
+                return CollectionStringy::create([]);
+            }
+
+            return [];
+        }
+
         $data = \explode($delimiter, $this->str, $limit);
         if ($data === false) {
             $data = [];
@@ -959,10 +993,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $data
         );
 
-        /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-         */
-        return CollectionStringy::create($data);
+        if ($return_stingy_collection) {
+            /**
+             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+             */
+            return CollectionStringy::create($data);
+        }
+
+        return $data;
     }
 
     /**
@@ -1116,8 +1154,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Wrap the string after an exact number of characters.
      *
-     * @param int    $width Number of characters at which to wrap
-     * @param string $break Character used to break the string
+     * @param int    $width <p>Number of characters at which to wrap.</p>
+     * @param string $break [optional] <p>Character used to break the string. | Default: "\n"</p>
      *
      * @psalm-mutation-free
      *
@@ -1799,8 +1837,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Check if two strings are similar.
      *
-     * @param string $str
-     * @param float  $minPercentForSimilarity
+     * @param string $str                     <p>The string to compare against.</p>
+     * @param float  $minPercentForSimilarity [optional] <p>The percentage of needed similarity. | Default: 80%</p>
      *
      * @psalm-mutation-free
      *
@@ -2011,15 +2049,28 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits on newlines and carriage returns, returning an array of Stringy
      * objects corresponding to the lines in the string.
      *
+     * @param bool $return_stingy_collection [optional] <p>Return a collection object.</p>
+     *
      * @psalm-mutation-free
      *
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @psalm-return CollectionStringy<int,static>|array<int,static>
      */
-    public function lines(): CollectionStringy
+    public function lines(bool $return_stingy_collection = false)
     {
+        if ($this->str === '') {
+            if ($return_stingy_collection) {
+                /**
+                 * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+                 */
+                return CollectionStringy::create([static::create('')]);
+            }
+
+            return [static::create('')];
+        }
+
         $array = $this->utf8::str_to_lines($this->str);
         /** @noinspection AlterInForeachInspection */
         foreach ($array as $i => &$value) {
@@ -2030,10 +2081,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         /** @var static[] $array */
         $array = $array;
 
-        /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-         */
-        return CollectionStringy::create($array);
+        if ($return_stingy_collection) {
+            /**
+             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+             */
+            return CollectionStringy::create($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -2170,8 +2225,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Get every nth character of the string.
      *
-     * @param int $step   The number of characters to step
-     * @param int $offset The string offset to start at
+     * @param int $step   <p>The number of characters to step.</p>
+     * @param int $offset [optional] <p>The string offset to start at.</p>
      *
      * @psalm-mutation-free
      *
@@ -2770,7 +2825,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Shorten the string after $length, but also after the next word.
      *
-     * @param int    $length
+     * @param int    $length   <p>The given length.</p>
      * @param string $strAddOn [optional] <p>Default: '…'</p>
      *
      * @psalm-mutation-free
@@ -2802,7 +2857,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Calculate the similarity between two strings.
      *
-     * @param string $str
+     * @param string $str <p>The delimiting string.</p>
      *
      * @psalm-mutation-free
      *
@@ -2903,8 +2958,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Wrap the string after the first whitespace character after a given number
      * of characters.
      *
-     * @param int    $width Number of characters at which to wrap
-     * @param string $break Character used to break the string
+     * @param int    $width <p>Number of characters at which to wrap.</p>
+     * @param string $break [optional] <p>Character used to break the string. | Default "\n"</p>
      *
      * @psalm-mutation-free
      *
@@ -2920,18 +2975,34 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * array of Stringy objects. An optional integer $limit will truncate the
      * results.
      *
-     * @param string $pattern <p>The regex with which to split the string.</p>
-     * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
+     * @param string $pattern                  <p>The regex with which to split the string.</p>
+     * @param int    $limit                    [optional] <p>Maximum number of results to return. Default: -1 === no
+     *                                         limit</p>
+     * @param bool   $return_stingy_collection [optional] <p>Return a collection object.</p>
      *
      * @psalm-mutation-free
      *
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @psalm-return CollectionStringy<int,static>|array<int,static>
      */
-    public function split(string $pattern, int $limit = null): CollectionStringy
-    {
+    public function split(
+        string $pattern,
+        int $limit = null,
+        bool $return_stingy_collection = false
+    ) {
+        if ($this->str === '') {
+            if ($return_stingy_collection) {
+                /**
+                 * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+                 */
+                return CollectionStringy::create([]);
+            }
+
+            return [];
+        }
+
         if ($limit === null) {
             $limit = -1;
         }
@@ -2946,10 +3017,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         /** @var static[] $array */
         $array = $array;
 
-        /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-         */
-        return CollectionStringy::create($array);
+        if ($return_stingy_collection) {
+            /**
+             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+             */
+            return CollectionStringy::create($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -3638,32 +3713,64 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Convert a string into an array of words.
      *
-     * @param string   $char_list           <p>Additional chars for the definition of "words".</p>
-     * @param bool     $remove_empty_values <p>Remove empty values.</p>
-     * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
+     * @param string   $char_list                [optional] <p>Additional chars for the definition of "words".</p>
+     * @param bool     $remove_empty_values      [optional] <p>Remove empty values.</p>
+     * @param int|null $remove_short_values      [optional] <p>The min. string length or null to disable</p>
+     * @param bool     $return_stingy_collection [optional] <p>Return a collection object.</p>
      *
      * @psalm-mutation-free
      *
      * @return CollectionStringy|static[]
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @psalm-return CollectionStringy<int,static>|array<int,static>
      */
     public function words(
         string $char_list = '',
         bool $remove_empty_values = false,
-        int $remove_short_values = null
-    ): CollectionStringy {
+        $remove_short_values = null,
+        bool $return_stingy_collection = false
+    ) {
         /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+         * @psalm-suppress DocblockTypeContradiction
          */
-        return CollectionStringy::createFromStrings(
-            $this->utf8::str_to_words(
+        if ($remove_short_values !== null && !\is_int($remove_short_values)) {
+            throw new \InvalidArgumentException(
+                'Passed value must be a null or int'
+            );
+        }
+
+        if ($remove_short_values === null) {
+            $strings = $this->utf8::str_to_words(
+                $this->str,
+                $char_list,
+                $remove_empty_values
+            );
+        } else {
+            $strings = $this->utf8::str_to_words(
                 $this->str,
                 $char_list,
                 $remove_empty_values,
                 $remove_short_values
-            )
-        );
+            );
+        }
+
+        /** @noinspection AlterInForeachInspection */
+        foreach ($strings as &$string) {
+            $string = static::create($string);
+        }
+
+        /** @noinspection PhpSillyAssignmentInspection */
+        /** @var static[] $strings */
+        $strings = $strings;
+
+        if ($return_stingy_collection) {
+            /**
+             * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
+             */
+            return CollectionStringy::create($strings);
+        }
+
+        return $strings;
     }
 
     /**
