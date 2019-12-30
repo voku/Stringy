@@ -24,6 +24,7 @@
 - add "encrypt()"
 - add "decrypt()"
 - add "encoding()"
+- add "isNumeric()"
 
 
 ### 6.0.2 (2019-11-17)

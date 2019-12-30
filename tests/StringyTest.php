@@ -5541,4 +5541,32 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
         static::assertAttributeEquals('ASCII', 'encoding', $ascii);
     }
+
+    public function testItCanDetermineIfTheStringIsNumeric()
+    {
+        $string = new \Stringy\Stringy('1337');
+        $numeric = $string->isNumeric();
+        static::assertTrue($numeric);
+    }
+
+    public function testItCanDetermineIfTheNegativStringIsNumeric()
+    {
+        $string = new \Stringy\Stringy('-1337');
+        $numeric = $string->isNumeric();
+        static::assertTrue($numeric);
+    }
+
+    public function testItCanDetermineIfTheStringIsNotNumeric()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $notNumeric = $string->isNumeric();
+        static::assertFalse($notNumeric);
+    }
+
+    public function testItCanDetermineIfAMultibyteStringIsNumeric()
+    {
+        $string = new \Stringy\Stringy('任天堂');
+        $numeric = $string->isNumeric();
+        static::assertFalse($numeric);
+    }
 }

@@ -1794,6 +1794,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Determine if the string is composed of numeric characters.
+     *
+     * @return bool
+     */
+    public function isNumeric(): bool
+    {
+        return \is_numeric($this->str);
+    }
+
+    /**
      * Returns true if the string contains only lower case chars, false otherwise.
      *
      * @psalm-mutation-free
