@@ -858,20 +858,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Set the internal character encoding.
-     *
-     * @param string $new_encoding <p>The desired character encoding.</p>
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     */
-    public function setInternalEncoding(string $new_encoding): self
-    {
-        return new static($this->str, $new_encoding);
-    }
-
-    /**
      * Encrypt the string.
      *
      * @param string $password <p>The key for encrypting</p>
@@ -1644,30 +1630,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Determine if the string is composed of punctuation characters.
-     *
-     * @psalm-mutation-free
-     *
-     * @return bool
-     */
-    public function isPunctuation(): bool
-    {
-        return $this->utf8::is_punctuation($this->str);
-    }
-
-    /**
-     * Determine if the string is composed of printable (non-invisible) characters.
-     *
-     * @psalm-mutation-free
-     *
-     * @return bool
-     */
-    public function isPrintable(): bool
-    {
-        return $this->utf8::is_printable($this->str);
-    }
-
-    /**
      * Returns true if the string is base64 encoded, false otherwise.
      *
      * @param bool $emptyStringIsValid
@@ -1866,18 +1828,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Determine if the string is composed of numeric characters.
-     *
-     * @psalm-mutation-free
-     *
-     * @return bool
-     */
-    public function isNumeric(): bool
-    {
-        return \is_numeric($this->str);
-    }
-
-    /**
      * Returns true if the string contains only lower case chars, false otherwise.
      *
      * @psalm-mutation-free
@@ -1903,6 +1853,42 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isNotEmpty(): bool
     {
         return !$this->utf8::is_empty($this->str);
+    }
+
+    /**
+     * Determine if the string is composed of numeric characters.
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isNumeric(): bool
+    {
+        return \is_numeric($this->str);
+    }
+
+    /**
+     * Determine if the string is composed of printable (non-invisible) characters.
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isPrintable(): bool
+    {
+        return $this->utf8::is_printable($this->str);
+    }
+
+    /**
+     * Determine if the string is composed of punctuation characters.
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isPunctuation(): bool
+    {
+        return $this->utf8::is_punctuation($this->str);
     }
 
     /**
@@ -1972,6 +1958,25 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function jsonSerialize()
     {
         return (string) $this;
+    }
+
+    /**
+     * Convert the string to kebab-case.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function kebabCase(): self
+    {
+        $words = \array_map(
+            function ($word) {
+                return $this->utf8::strtolower($word, $this->encoding);
+            },
+            $this->words('', true)
+        );
+
+        return new static(\implode('-', $words), $this->encoding);
     }
 
     /**
@@ -2518,6 +2523,19 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Convert the string to PascalCase.
+     * Alias for studlyCase()
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function pascalCase(): self
+    {
+        return $this->studlyCase();
+    }
+
+    /**
      * Returns a new string starting with $prefix.
      *
      * @param string ...$prefix <p>The string to append.</p>
@@ -2871,6 +2889,20 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Set the internal character encoding.
+     *
+     * @param string $new_encoding <p>The desired character encoding.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function setInternalEncoding(string $new_encoding): self
+    {
+        return new static($this->str, $new_encoding);
+    }
+
+    /**
      * Create a sha1 hash from the current string.
      *
      * @psalm-mutation-free
@@ -3020,6 +3052,25 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             ),
             $this->encoding
         );
+    }
+
+    /**
+     * Convert the string to snake_case.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function snakeCase(): self
+    {
+        $words = \array_map(
+            function ($word) {
+                return $this->utf8::strtolower($word, $this->encoding);
+            },
+            $this->words('', true)
+        );
+
+        return new static(\implode('_', $words), $this->encoding);
     }
 
     /**
@@ -3219,6 +3270,28 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $this->utf8::html_stripe_empty_tags($this->str),
             $this->encoding
         );
+    }
+
+    /**
+     * Convert the string to StudlyCase.
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function studlyCase(): self
+    {
+        $words = \array_map(
+            function (self $word) {
+                return $this->utf8::strtoupper(
+                    $this->utf8::substr($word->toString(), 0, 1, $this->encoding),
+                    $this->encoding
+                ) . $this->utf8::substr($word->toString(), 1, null, $this->encoding);
+            },
+            $this->words('', true)
+        );
+
+        return new static(\implode('', $words), $this->encoding);
     }
 
     /**

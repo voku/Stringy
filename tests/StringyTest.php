@@ -5372,7 +5372,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testItPreservesEncoding()
+    public function testItPreservesEncodingExplode()
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $exploded = $string->explode(' ');
@@ -5558,7 +5558,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $ascii = $string->encode('HTML', true);
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
         static::assertSame('john pinkerton &#23470;&#26412;', $ascii->toString());
-        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+        static::assertAttributeEquals('HTML-ENTITIES', 'encoding', $ascii);
     }
 
     public function testItCanDetermineIfTheStringIsNumeric()
@@ -5629,5 +5629,97 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('任天堂');
         $punctuation = $string->isPunctuation();
         static::assertFalse($punctuation);
+    }
+
+    public function testItCanConvertToStudlyCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $studlyCase = $string->studlyCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $studlyCase);
+        static::assertEquals('JohnPinkerton', $studlyCase->toString());
+    }
+
+    public function testItAMultibyteStringCanBeConvertedToStudlyCase()
+    {
+        $string = new \Stringy\Stringy('джон пинкертон');
+        $studlyCase = $string->studlyCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $studlyCase);
+        static::assertEquals('ДжонПинкертон', $studlyCase);
+    }
+
+    public function testItPreservesEncodingStudlyCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $studlyCase = $string->studlyCase();
+        static::assertAttributeEquals('ASCII', 'encoding', $studlyCase);
+    }
+
+    public function testItCanConvertToPascalCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $pascalCase = $string->pascalCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $pascalCase);
+        static::assertEquals('JohnPinkerton', $pascalCase);
+    }
+
+    public function testItAMultibyteStringCanBeConvertedToPascalCase()
+    {
+        $string = new \Stringy\Stringy('джон пинкертон');
+        $pascalCase = $string->pascalCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $pascalCase);
+        static::assertEquals('ДжонПинкертон', $pascalCase);
+    }
+
+    public function testItPreservesEncodingPascalCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $pascalCase = $string->pascalCase();
+        static::assertAttributeEquals('ASCII', 'encoding', $pascalCase);
+    }
+
+    public function testItCanConvertToSnakeCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $snakeCase = $string->snakeCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $snakeCase);
+        static::assertEquals('john_pinkerton', $snakeCase);
+    }
+
+    public function testItAMultibyteStringCanBeConvertedToSnakeCase()
+    {
+        $string = new \Stringy\Stringy('джон пинкертон');
+        $snakeCase = $string->snakeCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $snakeCase);
+        static::assertEquals('джон_пинкертон', $snakeCase);
+    }
+
+    public function testItPreservesEncodingSnakeCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $snakeCase = $string->snakeCase();
+        static::assertAttributeEquals('ASCII', 'encoding', $snakeCase);
+    }
+
+    public function testItCanConvertToKebabCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $kebabCase = $string->kebabCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $kebabCase);
+        static::assertEquals('john-pinkerton', $kebabCase);
+    }
+
+    public function testItAMultibyteStringCanBeConvertedToKebabCase()
+    {
+        $string = new \Stringy\Stringy('джон пинкертон');
+        $kebabCase = $string->kebabCase();
+        static::assertInstanceOf(\Stringy\Stringy::class, $kebabCase);
+        static::assertEquals('джон-пинкертон', $kebabCase);
+    }
+
+    public function testItPreservesEncodingKebabCase()
+    {
+        $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
+        $kebabCase = $string->kebabCase();
+        static::assertAttributeEquals('ASCII', 'encoding', $kebabCase);
     }
 }

@@ -4,7 +4,7 @@
 - use "@psalm-mutation-free"
 - update vendor (ASCII)
 - update vendor (Arrayy)
-- use CollectionStringy()
+- use CollectionStringy() (optional)
 - add "nth()"
 - add "isSimilar()"
 - add "similarity()"
@@ -26,6 +26,9 @@
 - add "setInternalEncoding()"
 - add "encode()"
 - add "isNumeric()"
+- add "studlyCase()" (pascalCase)
+- add "snakeCase()"
+- add "kebabCase()"
 
 
 ### 6.0.2 (2019-11-17)
