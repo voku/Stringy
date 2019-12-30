@@ -322,7 +322,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      */
     public function testLines($expected, $str, $encoding = null)
     {
-        $result = S::create($str, $encoding)->lines(true);
+        $result = S::create($str, $encoding)->linesCollection();
 
         static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $line) {
@@ -2160,7 +2160,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->split($pattern, $limit, true);
+        $result = $stringy->splitCollection($pattern, $limit);
 
         static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {

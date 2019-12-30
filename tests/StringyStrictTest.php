@@ -3048,7 +3048,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      */
     public function testLines($expected, $str, $encoding = null)
     {
-        $result = S::create($str, $encoding)->lines(true);
+        $result = S::create($str, $encoding)->linesCollection();
 
         static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $line) {
@@ -3056,7 +3056,6 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         }
 
         $counter = \count($expected);
-        /** @noinspection ForeachInvariantsInspection */
         for ($i = 0; $i < $counter; ++$i) {
             static::assertSame($expected[$i], $result[$i]->toString());
         }
@@ -3733,11 +3732,11 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
     public function testWords()
     {
-        static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->words('', true, null, true)->toStrings());
-        static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->words('', false, 1, true)->toStrings());
-        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->words('#', false, null, true)->toStrings());
-        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->words('', false, null, true)->toStrings());
-        static::assertSame([''], S::create('')->words('', false, null, true)->toStrings());
+        static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->wordsCollection('', true, null)->toStrings());
+        static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->wordsCollection('', false, 1)->toStrings());
+        static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->wordsCollection('#', false, null)->toStrings());
+        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->wordsCollection('', false, null)->toStrings());
+        static::assertSame([''], S::create('')->wordsCollection('', false)->toStrings());
 
         $testArray = [
             'Düsseldorf'                                                                                => 'Düsseldorf',
@@ -3759,7 +3758,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $test => $unused) {
-            static::assertSame($test, S::create($test)->words('', false, null, true)->implode(''));
+            static::assertSame($test, S::create($test)->wordsCollection()->implode(''));
         }
     }
 
@@ -3775,7 +3774,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     public function testSplit($expected, $str, $pattern, $limit = -1, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
-        $result = $stringy->split($pattern, $limit, true);
+        $result = $stringy->splitCollection($pattern, $limit);
 
         static::assertInstanceOf(\Stringy\CollectionStringy::class, $result);
         foreach ($result as $string) {

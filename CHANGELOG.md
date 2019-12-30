@@ -29,6 +29,12 @@
 - add "studlyCase()" (pascalCase)
 - add "snakeCase()"
 - add "kebabCase()"
+- add "appendStringy()"
+- add "prependStringy()"
+- add "urlEncodeRaw()"
+- add "urlEncode()"
+- add "urlDecodeRaw()" / "urlDecodeRawMulti()"
+- add "urlDecode()" / "urlDecodeMulti()"
 
 
 ### 6.0.2 (2019-11-17)

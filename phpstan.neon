@@ -6,7 +6,6 @@ parameters:
     ignoreErrors:
         # false-postive?
         - '#Arrayy\\Collection\\AbstractCollection<mixed, mixed>#'
-        - '#\&\& is always false#'
         # not supported
         - '#bound type \(int\|string\) is not supported#'
         - '# callable\(\): mixed, array#'
