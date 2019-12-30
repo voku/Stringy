@@ -1,6 +1,6 @@
 # Changelog
 
-### 6.1.0 (2019-12-19)
+### 6.1.0 (2019-12-30)
 - use "@psalm-mutation-free"
 - update vendor (ASCII)
 - update vendor (Arrayy)
