@@ -344,6 +344,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param array<array-key, int|string> $options [optional] <p>An array of bcrypt hasing options.</p>
      *
+     * @psalm-mutation-free
+     *
      * @return static
      */
     public function bcrypt(array $options = []): self
@@ -752,6 +754,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param string $salt <p>A salt string to base the hashing on.</p>
      *
+     * @psalm-mutation-free
+     *
      * @return static
      */
     public function crypt(string $salt): self
@@ -788,10 +792,15 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param string $password The key for decrypting
      *
+     * @psalm-mutation-free
+     *
      * @return static
      */
     public function decrypt(string $password): self
     {
+        /**
+         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to vendor stuff
+         */
         return new static(
             Crypto::decryptWithPassword($this->str, $password),
             $this->encoding
@@ -820,17 +829,46 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Set the internal character encoding.
+     * Encode the given string into the given $encoding + set the internal character encoding
      *
-     * @param string $encoding The desired character encoding
+     * @param string $new_encoding         <p>The desired character encoding.</p>
+     * @param bool   $auto_detect_encoding [optional] <p>Auto-detect the current string-encoding</p>
      *
      * @psalm-mutation-free
      *
      * @return static
      */
-    public function encoding(string $encoding): self
+    public function encode(string $new_encoding, bool $auto_detect_encoding = false): self
     {
-        return new static($this->str, $encoding);
+        if ($auto_detect_encoding) {
+            $str = $this->utf8::encode(
+                $new_encoding,
+                $this->str
+            );
+        } else {
+            $str = $this->utf8::encode(
+                $new_encoding,
+                $this->str,
+                false,
+                $this->encoding
+            );
+        }
+
+        return new static($str, $new_encoding);
+    }
+
+    /**
+     * Set the internal character encoding.
+     *
+     * @param string $new_encoding <p>The desired character encoding.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     */
+    public function setInternalEncoding(string $new_encoding): self
+    {
+        return new static($this->str, $new_encoding);
     }
 
     /**
@@ -838,10 +876,15 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param string $password <p>The key for encrypting</p>
      *
+     * @psalm-mutation-free
+     *
      * @return static
      */
     public function encrypt(string $password): self
     {
+        /**
+         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to vendor stuff
+         */
         return new static(
             Crypto::encryptWithPassword($this->str, $password),
             $this->encoding
@@ -1601,6 +1644,30 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Determine if the string is composed of punctuation characters.
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isPunctuation(): bool
+    {
+        return $this->utf8::is_punctuation($this->str);
+    }
+
+    /**
+     * Determine if the string is composed of printable (non-invisible) characters.
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isPrintable(): bool
+    {
+        return $this->utf8::is_printable($this->str);
+    }
+
+    /**
      * Returns true if the string is base64 encoded, false otherwise.
      *
      * @param bool $emptyStringIsValid
@@ -1782,11 +1849,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param bool $onlyArrayOrObjectResultsAreValid
      *
+     * @psalm-mutation-free
+     *
      * @return bool
      *              <p>Whether or not $str is JSON.</p>
      */
     public function isJson($onlyArrayOrObjectResultsAreValid = false): bool
     {
+        /**
+         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to vendor stuff?
+         */
         return $this->utf8::is_json(
             $this->str,
             $onlyArrayOrObjectResultsAreValid
@@ -1795,6 +1867,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Determine if the string is composed of numeric characters.
+     *
+     * @psalm-mutation-free
      *
      * @return bool
      */

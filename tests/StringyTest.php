@@ -5536,9 +5536,28 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     public function testItCanSetTheInternalEncoding()
     {
-        $string = new \Stringy\Stringy('john pinkerton');
-        $ascii = $string->encoding('ASCII');
+        $string = new \Stringy\Stringy('john pinkerton 宮本');
+        $ascii = $string->setInternalEncoding('ASCII');
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
+        static::assertSame('john pinkerton 宮本', $ascii->toString());
+        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+    }
+
+    public function testItCanUseNewEncoding()
+    {
+        $string = new \Stringy\Stringy('john pinkerton 宮本');
+        $ascii = $string->encode('ASCII');
+        static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
+        static::assertSame('john pinkerton ??', $ascii->toString());
+        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+    }
+
+    public function testItCanUseNewEncodingv2()
+    {
+        $string = new \Stringy\Stringy('john pinkerton 宮本');
+        $ascii = $string->encode('HTML', true);
+        static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
+        static::assertSame('john pinkerton &#23470;&#26412;', $ascii->toString());
         static::assertAttributeEquals('ASCII', 'encoding', $ascii);
     }
 
@@ -5568,5 +5587,47 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('任天堂');
         $numeric = $string->isNumeric();
         static::assertFalse($numeric);
+    }
+
+    public function testItCanDetermineIfTheStringIsPrintable()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $printable = $string->isPrintable();
+        static::assertTrue($printable);
+    }
+
+    public function testItCanDetermineIfTheStringIsNotPrintable()
+    {
+        $string = new \Stringy\Stringy("john\0pinkerton");
+        $notPrintable = $string->isPrintable();
+        static::assertFalse($notPrintable);
+    }
+
+    public function testItCanDetermineIfAMultibyteStringIsPrintable()
+    {
+        $string = new \Stringy\Stringy('任天堂');
+        $printable = $string->isPrintable();
+        static::assertTrue($printable);
+    }
+
+    public function testItCanDetermineIfTheStringIsPunctuation()
+    {
+        $string = new \Stringy\Stringy('*&$();,.?');
+        $punctuation = $string->isPunctuation();
+        static::assertTrue($punctuation);
+    }
+
+    public function testItCanDetermineIfTheStringIsNotPunctuation()
+    {
+        $string = new \Stringy\Stringy('john pinkerton');
+        $notPunctuation = $string->isPunctuation();
+        static::assertFalse($notPunctuation);
+    }
+
+    public function testItCanDetermineIfAMultibyteStringIsPunctuation()
+    {
+        $string = new \Stringy\Stringy('任天堂');
+        $punctuation = $string->isPunctuation();
+        static::assertFalse($punctuation);
     }
 }

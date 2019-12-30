@@ -23,7 +23,8 @@
 - add "bcrypt()"
 - add "encrypt()"
 - add "decrypt()"
-- add "encoding()"
+- add "setInternalEncoding()"
+- add "encode()"
 - add "isNumeric()"
 
 
