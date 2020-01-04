@@ -20,6 +20,8 @@ class CollectionStringy extends \Arrayy\Collection\Collection
      * @return Stringy[]
      *
      * @psalm-return array<array-key,Stringy>
+     *
+     * @noinspection SenselessProxyMethodInspection - other phpdocs ;)
      */
     public function getAll(): array
     {
@@ -29,7 +31,11 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     /**
      * @return \Generator|Stringy[]
      *
-     * @psalm-return \Generator<Stringy>
+     * @psalm-return \Generator<mixed,Stringy>|\Generator<TKey,Stringy>
+     * @psalm-mutation-free
+     *
+     * @noinspection PhpInconsistentReturnPointsInspection
+     * @noinspection SenselessProxyMethodInspection - other phpdocs ;)
      */
     public function getGenerator(): \Generator
     {
@@ -53,25 +59,31 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     }
 
     /**
-     * @param string $string
+     * @param string ...$string
      *
      * @return $this
+     *
+     * @noinspection PhpDocSignatureInspection
      */
-    public function addString(string $string): self
+    public function addString(string ...$string): self
     {
-        $this->add(Stringy::create($string));
+        foreach ($string as $stringTmp) {
+            $this->add(Stringy::create($stringTmp));
+        }
 
         return $this;
     }
 
     /**
-     * @param Stringy $stringy
+     * @param Stringy ...$stringy
      *
      * @return $this
      */
-    public function addStringy(Stringy $stringy): self
+    public function addStringy(Stringy ...$stringy): self
     {
-        $this->add($stringy);
+        foreach ($stringy as $stringyTmp) {
+            $this->add($stringyTmp);
+        }
 
         return $this;
     }
@@ -79,19 +91,19 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     /**
      * @param string[] $strings
      *
-     * @psalm-pure
-     *
      * @return static
      */
     public static function createFromStrings($strings = []): self
     {
+        /** @noinspection AlterInForeachInspection */
         foreach ($strings as &$string) {
             $string = Stringy::create($string);
         }
 
-        /**
-         * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
-         */
+        /** @noinspection PhpSillyAssignmentInspection */
+        /** @var Stringy[] $strings */
+        $strings = $strings;
+
         return new static($strings);
     }
 }

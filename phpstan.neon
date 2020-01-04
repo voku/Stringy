@@ -5,7 +5,7 @@ parameters:
     reportUnmatchedIgnoredErrors: true
     ignoreErrors:
         # false-postive?
-        - '#Arrayy\\Collection\\AbstractCollection<mixed, mixed>#'
+        - '#Arrayy\\Collection\\AbstractCollection<int, Stringy\\Stringy>#'
         # not supported
         - '#bound type \(int\|string\) is not supported#'
         - '# callable\(\): mixed, array#'

@@ -3415,6 +3415,13 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($str, $stringy->toString());
     }
 
+    public function testNewLineToHtmlBreak()
+    {
+        $stringy = S::create('foo bar' . "\n" . 'lall<br />');
+
+        static::assertSame('foo bar<br>lall<br>', $stringy->newLineToHtmlBreak()->toString());
+    }
+
     /**
      * @dataProvider removeLeftProvider()
      *

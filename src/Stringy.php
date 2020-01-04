@@ -2367,6 +2367,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Replace all breaks [<br> | \r\n | \r | \n | ...] into "<br>".
+     *
+     * @return static
+     */
+    public function newLineToHtmlBreak(): self
+    {
+        return $this->removeHtmlBreak('<br>');
+    }
+
+    /**
      * Get every nth character of the string.
      *
      * @param int $step   <p>The number of characters to step.</p>

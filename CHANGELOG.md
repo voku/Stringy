@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.2.0 (2020-01-04)
+- add "newLineToHtmlBreak()"
+- update vendor lib "voku/arrayy" (support for generics via phpstan & psalm)
+
 ### 6.1.0 (2019-12-30)
 - use "@psalm-mutation-free"
 - update vendor (ASCII)

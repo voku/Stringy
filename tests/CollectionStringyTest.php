@@ -25,6 +25,12 @@ final class CollectionStringyTest extends \PHPUnit\Framework\TestCase
         }
 
         static::assertSame('noop.+fòôbàř.+lall.+öäü.+lall.', $collectionTmp->implode('+'));
+
+        $collection->addString('foo1', 'foo2');
+        static::assertSame('noop+fòôbàř+lall+öäü+lall+foo1+foo2', $collection->implode('+'));
+
+        $collection->addStringy(Stringy::create('foo_1'), Stringy::create('foo_2'));
+        static::assertSame('noop+fòôbàř+lall+öäü+lall+foo1+foo2+foo_1+foo_2', $collection->implode('+'));
     }
 
     public function testFail()
