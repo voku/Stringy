@@ -1,5 +1,8 @@
 # Changelog
 
+### 6.2.1 (2020-01-31)
+- update vendor lib "voku/arrayy" (fixes)
+
 ### 6.2.0 (2020-01-04)
 - add "newLineToHtmlBreak()"
 - update vendor lib "voku/arrayy" (support for generics via phpstan & psalm)
