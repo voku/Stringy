@@ -566,6 +566,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function chars(): array
     {
+        /** @var string[] */
         return $this->utf8::str_split($this->str);
     }
 
