@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.2.2 (20202-02-23)
+-fix "isEqualsCaseInsensitive()" -> thanks to psalm
+- update vendor lib "voku/arrayy" (fixes)
+
 ### 6.2.1 (2020-01-31)
 - update vendor lib "voku/arrayy" (fixes)
 
