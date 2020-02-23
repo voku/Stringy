@@ -36,7 +36,7 @@
         "php": ">=7.0.0",
         "ext-json": "*",
         "defuse/php-encryption": "~2.0",
-        "voku/arrayy": "~7.2",
+        "voku/arrayy": "~7.3",
         "voku/urlify": "~5.0",
         "voku/anti-xss": "~4.1",
         "voku/email-check": "~3.0",

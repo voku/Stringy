@@ -1782,7 +1782,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
              * @psalm-suppress RedundantConditionGivenDocblockType - wait for union-types :)
              */
             if ($strTmp instanceof self) {
-                if ($strUpper !== $strTmp->toUpperCase()) {
+                if ($strUpper !== $strTmp->toUpperCase()->str) {
                     return false;
                 }
             } elseif (\is_scalar($strTmp)) {
@@ -3051,8 +3051,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * A multibyte string shuffle function. It returns a string with its
      * characters in random order.
-     *
-     * @psalm-mutation-free
      *
      * @return static
      *                <p>Object with a shuffled $str.</p>
