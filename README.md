@@ -994,7 +994,7 @@ s('fòô bàř fòô bàř')->replace('fòô ', ''); // 'bàř bàř'
 Replaces all occurrences of elements from $search in $str by $replacement.
 
 ```php
-s('fòô bàř lall bàř')->replace(['fòÔ ', 'lall'], '', false); // 'bàř bàř'
+s('fòô bàř lall bàř')->replaceAll(['fòÔ ', 'lall'], '', false); // 'bàř bàř'
 ```
 
 ##### replaceBeginning(string $search, string $replacement) : static
