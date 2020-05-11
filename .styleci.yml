@@ -9,4 +9,7 @@ enabled:
 
 disabled:
   - indentation
-  - braces
+
+finder:
+  not-name:
+    - StringyTest.php

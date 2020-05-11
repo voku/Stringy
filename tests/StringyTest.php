@@ -5935,4 +5935,32 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             static::assertSame($before, S::create($before)->urlEncodeRaw()->urlDecodeRaw()->toString(), 'testing: ' . $before);
         }
     }
+
+    public function testCallUserFunctionTypeError()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed object must have a __toString method');
+
+        static::assertSame('FOO', S::create('foo')->callUserFunction(static function ($str) {
+            return new \stdClass();
+        })->toString());
+    }
+
+    public function testCallUserFunction()
+    {
+        static::assertSame('FOO', S::create('foo')->callUserFunction('strtoupper')->toString());
+
+        static::assertSame('FOO', S::create('foo')->callUserFunction([UTF8::class, 'strtoupper'])->toString());
+
+        static::assertSame('foo bar lall', S::create('foo bar lall')->callUserFunction([UTF8::class, 'str_limit'])->toString());
+        static::assertSame('foo b...', S::create('foo bar lall')->callUserFunction([UTF8::class, 'str_limit'], 8, '...')->toString());
+
+        static::assertSame('FOO', S::create('foo')->callUserFunction(static function ($str) {
+            return \strtoupper($str);
+        })->toString());
+
+        static::assertSame('foo bar…', S::create('foo bar lall')->callUserFunction(static function ($str) {
+            return UTF8::str_limit($str, 8);
+        })->toString());
+    }
 }

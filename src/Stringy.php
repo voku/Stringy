@@ -227,8 +227,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>Object with appended $suffix.</p>
-     *
-     * @noinspection PhpDocSignatureInspection
      */
     public function append(string ...$suffix): self
     {
@@ -509,7 +507,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function between(string $start, string $end, int $offset = null): self
     {
-        /** @noinspection UnnecessaryCastingInspection */
         $str = $this->utf8::between(
             $this->str,
             $start,
@@ -788,7 +785,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Hash the string using the standard Unix DES-based algorithm or an
      * alternative algorithm that may be available on the system.
      *
-     * PS: if you need encrypt / decrypt, please use use ```static::encrypt($password)```
+     * PS: if you need encrypt / decrypt, please use ```static::encrypt($password)```
      *     and ```static::decrypt($password)```
      *
      * @param string $salt <p>A salt string to base the hashing on.</p>
@@ -822,6 +819,33 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             $this->utf8::str_dasherize($this->str),
+            $this->encoding
+        );
+    }
+
+    /**
+     * Call a user function.
+     *
+     * EXAMPLE: <code>
+     * S::create('foo bar lall')->callUserFunction(static function ($str) {
+     *     return UTF8::str_limit($str, 8);
+     * })->toString(); // "foo bar…"
+     * </code>
+     *
+     * @param callable $function
+     * @param mixed    ...$parameter
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     *                <p>Object having a $str changed via $function.</p>
+     */
+    public function callUserFunction(callable $function, ...$parameter): self
+    {
+        $str = $function($this->str, ...$parameter);
+
+        return static::create(
+            $str,
             $this->encoding
         );
     }
@@ -1043,7 +1067,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $strings = [];
         }
 
-        $strings = \array_map(
+        return \array_map(
             function ($str) {
                 return new static($str, $this->encoding);
             },
@@ -1051,7 +1075,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         );
 
         /** @var static[] $strings */
-        return $strings;
     }
 
     /**
@@ -2610,8 +2633,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>Object with appended $prefix.</p>
-     *
-     * @noinspection PhpDocSignatureInspection
      */
     public function prepend(string ...$prefix): self
     {
