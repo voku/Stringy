@@ -1073,8 +1073,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             },
             $strings
         );
-
-        /** @var static[] $strings */
     }
 
     /**
@@ -2842,7 +2840,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         if ($caseSensitive) {
             return static::create(
-                $this->utf8::str_replace($search, $replacement, $this->str),
+                \str_replace($search, $replacement, $this->str),
                 $this->encoding
             );
         }
@@ -2869,7 +2867,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         if ($caseSensitive) {
             return static::create(
-                $this->utf8::str_replace($search, $replacement, $this->str),
+                \str_replace($search, $replacement, $this->str),
                 $this->encoding
             );
         }
@@ -3668,6 +3666,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function toBoolean(): bool
     {
+        /**
+         * @psalm-suppress ArgumentTypeCoercion -> maybe the string looks like an int ;)
+         */
         return $this->utf8::to_boolean($this->str);
     }
 
