@@ -100,6 +100,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the value in $str.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return string
@@ -112,6 +115,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Return part of the string occurring after a specific string.
+     *
+     * EXAMPLE: <code>
+     * s('宮本 茂')->after('本'); // ' 茂'
+     * </code>
      *
      * @param string $string <p>The delimiting string.</p>
      *
@@ -138,6 +145,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring after the first occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('</b></b>')->afterFirst('b'); // '></b>'
+     * </code>
+     *
      * @param string $separator
      *
      * @psalm-mutation-free
@@ -158,6 +169,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Gets the substring after the first occurrence of a separator.
      * If no match is found returns new empty Stringy object.
+     *
+     * EXAMPLE: <code>
+     * s('</B></B>')->afterFirstIgnoreCase('b'); // '></B>'
+     * </code>
      *
      * @param string $separator
      *
@@ -180,6 +195,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring after the last occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('</b></b>')->afterLast('b'); // '>'
+     * </code>
+     *
      * @param string $separator
      *
      * @psalm-mutation-free
@@ -201,6 +220,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring after the last occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('</B></B>')->afterLastIgnoreCase('b'); // '>'
+     * </code>
+     *
      * @param string $separator
      *
      * @psalm-mutation-free
@@ -220,6 +243,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a new string with $suffix appended.
+     *
+     * EXAMPLE: <code>
+     * s('fòô')->append('bàř'); // 'fòôbàř'
+     * </code>
      *
      * @param string ...$suffix <p>The string to append.</p>
      *
@@ -244,6 +271,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Append an password (limited to chars that are good readable).
      *
+     * EXAMPLE: <code>
+     * s('')->appendPassword(8); // e.g.: '89bcdfgh'
+     * </code>
+     *
      * @param int $length <p>Length of the random string.</p>
      *
      * @return static
@@ -260,6 +291,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Append an random string.
      *
+     * EXAMPLE: <code>
+     * s('')->appendUniqueIdentifier(5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
+     * </code>
+     *
      * @param int    $length        <p>Length of the random string.</p>
      * @param string $possibleChars [optional] <p>Characters string for the random selection.</p>
      *
@@ -275,6 +310,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a new string with $suffix appended.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param CollectionStringy|static ...$suffix <p>The Stringy objects to append.</p>
      *
@@ -302,6 +340,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Append an unique identifier.
      *
+     * EXAMPLE: <code>
+     * s('')->appendUniqueIdentifier(); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
+     * </code>
+     *
      * @param int|string $entropyExtra [optional] <p>Extra entropy via a string or int value.</p>
      * @param bool       $md5          [optional] <p>Return the unique identifier as md5-hash? Default: true</p>
      *
@@ -318,6 +360,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the character at $index, with indexes starting at 0.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->at(3); // 'b'
+     * </code>
+     *
      * @param int $index <p>Position of the character.</p>
      *
      * @psalm-mutation-free
@@ -333,6 +379,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Decode the base64 encoded string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return self
@@ -347,6 +396,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Encode the string to base64.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -365,6 +417,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * WARNING: Using this algorithm, will result in the ```$this->str```
      *          being truncated to a maximum length of 72 characters.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param array<array-key, int|string> $options [optional] <p>An array of bcrypt hasing options.</p>
      *
@@ -386,6 +441,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Return part of the string occurring before a specific string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $string <p>The delimiting string.</p>
      *
@@ -411,6 +469,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring before the first occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('</b></b>')->beforeFirst('b'); // '</'
+     * </code>
+     *
      * @param string $separator
      *
      * @psalm-mutation-free
@@ -431,6 +493,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Gets the substring before the first occurrence of a separator.
      * If no match is found returns new empty Stringy object.
+     *
+     * EXAMPLE: <code>
+     * s('</B></B>')->beforeFirstIgnoreCase('b'); // '</'
+     * </code>
      *
      * @param string $separator
      *
@@ -453,6 +519,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring before the last occurrence of a separator.
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('</b></b>')->beforeLast('b'); // '</b></'
+     * </code>
+     *
      * @param string $separator
      *
      * @psalm-mutation-free
@@ -473,6 +543,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Gets the substring before the last occurrence of a separator.
      * If no match is found returns new empty Stringy object.
+     *
+     * EXAMPLE: <code>
+     * s('</B></B>')->beforeLastIgnoreCase('b'); // '</B></'
+     * </code>
      *
      * @param string $separator
      *
@@ -495,6 +569,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the substring between $start and $end, if found, or an empty
      * string. An optional offset may be supplied from which to begin the
      * search for the start string.
+     *
+     * EXAMPLE: <code>
+     * s('{foo} and {bar}')->between('{', '}'); // 'foo'
+     * </code>
      *
      * @param string $start  <p>Delimiter marking the start of the substring.</p>
      * @param string $end    <p>Delimiter marking the end of the substring.</p>
@@ -523,6 +601,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * capitalizes letters following digits, spaces, dashes and underscores,
      * and removes spaces, dashes, as well as underscores.
      *
+     * EXAMPLE: <code>
+     * s('Camel-Case')->camelize(); // 'camelCase'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -540,6 +622,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the string with the first letter of each word capitalized,
      * except for when the word is a name which shouldn't be capitalized.
      *
+     * EXAMPLE: <code>
+     * s('jaap de hoop scheffer')->capitalizePersonName(); // 'Jaap de Hoop Scheffer'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -556,6 +642,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns an array consisting of the characters in the string.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->chars(); // ['f', 'ò', 'ô', 'b', 'à', 'ř']
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return string[]
@@ -569,6 +659,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Splits the string into chunks of Stringy objects.
+     *
+     * EXAMPLE: <code>
+     * s('foobar')->chunk(3); // ['foo', 'bar']
+     * </code>
      *
      * @param int $length [optional] <p>Max character length of each array element.</p>
      *
@@ -606,6 +700,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Splits the string into chunks of Stringy objects collection.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int $length [optional] <p>Max character length of each array element.</p>
      *
      * @psalm-mutation-free
@@ -630,6 +727,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * single space. This includes tabs and newline characters, as well as
      * multibyte whitespace such as the thin space and ideographic space.
      *
+     * EXAMPLE: <code>
+     * s('   Ο     συγγραφέας  ')->collapseWhitespace(); // 'Ο συγγραφέας'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -647,6 +748,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns true if the string contains $needle, false otherwise. By default
      * the comparison is case-sensitive, but can be made insensitive by setting
      * $caseSensitive to false.
+     *
+     * EXAMPLE: <code>
+     * s('Ο συγγραφέας είπε')->contains('συγγραφέας'); // true
+     * </code>
      *
      * @param string $needle        <p>Substring to look for.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
@@ -670,6 +775,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * default the comparison is case-sensitive, but can be made insensitive by
      * setting $caseSensitive to false.
      *
+     * EXAMPLE: <code>
+     * s('foo & bar')->containsAll(['foo', 'bar']); // true
+     * </code>
+     *
      * @param string[] $needles       <p>SubStrings to look for.</p>
      * @param bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
@@ -692,6 +801,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * default the comparison is case-sensitive, but can be made insensitive by
      * setting $caseSensitive to false.
      *
+     * EXAMPLE: <code>
+     * s('str contains foo')->containsAny(['foo', 'bar']); // true
+     * </code>
+     *
      * @param string[] $needles       <p>SubStrings to look for.</p>
      * @param bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
@@ -712,6 +825,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the length of the string, implementing the countable interface.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return int
@@ -726,6 +842,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the number of occurrences of $substring in the given string.
      * By default, the comparison is case-sensitive, but can be made insensitive
      * by setting $caseSensitive to false.
+     *
+     * EXAMPLE: <code>
+     * s('Ο συγγραφέας είπε')->countSubstr('α'); // 2
+     * </code>
      *
      * @param string $substring     <p>The substring to search for.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
@@ -746,6 +866,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Calculates the crc32 polynomial of a string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -788,6 +911,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * PS: if you need encrypt / decrypt, please use ```static::encrypt($password)```
      *     and ```static::decrypt($password)```
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $salt <p>A salt string to base the hashing on.</p>
      *
      * @psalm-mutation-free
@@ -809,6 +935,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns a lowercase and trimmed string separated by dashes. Dashes are
      * inserted before uppercase characters (with the exception of the first
      * character of the string), and in place of spaces as well as underscores.
+     *
+     * EXAMPLE: <code>
+     * s('fooBar')->dasherize(); // 'foo-bar'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -853,6 +983,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Decrypt the string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $password The key for decrypting
      *
      * @psalm-mutation-free
@@ -876,6 +1009,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * of the first character of the string), and in place of spaces, dashes,
      * and underscores. Alpha delimiters are not converted to lowercase.
      *
+     * EXAMPLE: <code>
+     * s('fooBar')->delimit('::'); // 'foo::bar'
+     * </code>
+     *
      * @param string $delimiter <p>Sequence used to separate parts of the string.</p>
      *
      * @psalm-mutation-free
@@ -892,7 +1029,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Encode the given string into the given $encoding + set the internal character encoding
+     * Encode the given string into the given $encoding + set the internal character encoding.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $new_encoding         <p>The desired character encoding.</p>
      * @param bool   $auto_detect_encoding [optional] <p>Auto-detect the current string-encoding</p>
@@ -923,6 +1063,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Encrypt the string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $password <p>The key for encrypting</p>
      *
      * @psalm-mutation-free
@@ -944,6 +1087,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns true if the string ends with $substring, false otherwise. By
      * default, the comparison is case-sensitive, but can be made insensitive
      * by setting $caseSensitive to false.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->endsWith('bàř', true); // true
+     * </code>
      *
      * @param string $substring     <p>The substring to look for.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
@@ -967,6 +1114,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * By default, the comparison is case-sensitive, but can be made insensitive
      * by setting $caseSensitive to false.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->endsWithAny(['bàř', 'baz'], true); // true
+     * </code>
+     *
      * @param string[] $substrings    <p>Substrings to look for.</p>
      * @param bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
@@ -988,6 +1139,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Ensures that the string begins with $substring. If it doesn't, it's
      * prepended.
      *
+     * EXAMPLE: <code>
+     * s('foobar')->ensureLeft('http://'); // 'http://foobar'
+     * </code>
+     *
      * @param string $substring <p>The substring to add if not present.</p>
      *
      * @psalm-mutation-free
@@ -1005,6 +1160,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Ensures that the string ends with $substring. If it doesn't, it's appended.
+     *
+     * EXAMPLE: <code>
+     * s('foobar')->ensureRight('.com'); // 'foobar.com'
+     * </code>
      *
      * @param string $substring <p>The substring to add if not present.</p>
      *
@@ -1024,6 +1183,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Create a escape html version of the string via "htmlspecialchars()".
      *
+     * EXAMPLE: <code>
+     * s('<∂∆ onerror="alert(xss)">')->escape(); // '&lt;∂∆ onerror=&quot;alert(xss)&quot;&gt;'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -1042,6 +1205,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Split a string by a string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $delimiter <p>The boundary string</p>
      * @param int    $limit     [optional] <p>The maximum number of elements in the exploded
@@ -1078,6 +1244,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Split a string by a string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $delimiter <p>The boundary string</p>
      * @param int    $limit     [optional] <p>The maximum number of elements in the exploded
      *                          collection.</p>
@@ -1107,6 +1276,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
      *
+     * EXAMPLE: <code>
+     * $sentence = 'This is only a Fork of Stringy, take a look at the new features.';
+     * s($sentence)->extractText('Stringy'); // '...Fork of Stringy...'
+     * </code>
+     *
      * @param string   $search
      * @param int|null $length                 [optional] <p>Default: null === text->length / 2</p>
      * @param string   $replacerForSkippedText [optional] <p>Default: …</p>
@@ -1131,6 +1305,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns the first $n characters of the string.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->first(3); // 'fòô'
+     * </code>
      *
      * @param int $n <p>Number of characters to retrieve from the start.</p>
      *
@@ -1163,6 +1341,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * <br>
      * <br><pre>s('There are %:count monkeys in the %:location')->format(['count' => 5, 'location' => 'tree');</pre>
      * </p>
+     *
+     * EXAMPLE: <code>
+     * $input = 'one: %2$d, %1$s: 2, %:text_three: %3$d';
+     * s($input)->format(['text_three' => '%4$s'], 'two', 1, 3, 'three'); // 'One: 1, two: 2, three: 3'
+     * </code>
      *
      * @param mixed ...$args [optional]
      *
@@ -1224,6 +1407,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the encoding used by the Stringy object.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř', 'UTF-8')->getEncoding(); // 'UTF-8'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return string
@@ -1240,6 +1427,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * in the multibyte string. This enables the use of foreach with instances
      * of Stringy\Stringy.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return \ArrayIterator
@@ -1255,6 +1445,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Wrap the string after an exact number of characters.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int    $width <p>Number of characters at which to wrap.</p>
      * @param string $break [optional] <p>Character used to break the string. | Default: "\n"</p>
      *
@@ -1268,7 +1461,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns true if the string contains a lower case char, false otherwise.
+     * Returns true if the string contains a lower case char, false otherwise
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->hasLowerCase(); // true
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -1283,6 +1480,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains an upper case char, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->hasUpperCase(); // false
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1294,7 +1495,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Generate a hash value (message digest)
+     * Generate a hash value (message digest).
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @see https://php.net/manual/en/function.hash.php
      *
@@ -1312,6 +1516,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Decode the string from hex.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -1336,6 +1543,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Encode string to hex.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -1358,6 +1568,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Convert all HTML entities to their applicable characters.
+     *
+     * EXAMPLE: <code>
+     * s('&amp;')->htmlDecode(); // '&'
+     * </code>
      *
      * @param int $flags [optional] <p>
      *                   A bitmask of one or more of the following flags, which specify how to handle quotes and
@@ -1426,6 +1640,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Convert all applicable characters to HTML entities.
+     *
+     * EXAMPLE: <code>
+     * s('&')->htmlEncode(); // '&amp;'
+     * </code>
      *
      * @param int $flags [optional] <p>
      *                   A bitmask of one or more of the following flags, which specify how to handle quotes and
@@ -1496,6 +1714,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Capitalizes the first word of the string, replaces underscores with
      * spaces, and strips '_id'.
      *
+     * EXAMPLE: <code>
+     * s('author_id')->humanize(); // 'Author'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -1513,6 +1735,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Determine if the current string exists in another string. By
      * default, the comparison is case-sensitive, but can be made insensitive
      * by setting $caseSensitive to false.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $str           <p>The string to compare against.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
@@ -1534,6 +1759,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the index of the first occurrence of $needle in the string,
      * and false if not found. Accepts an optional offset from which to begin
      * the search.
+     *
+     * EXAMPLE: <code>
+     * s('string')->indexOf('ing'); // 3
+     * </code>
      *
      * @param string $needle <p>Substring to look for.</p>
      * @param int    $offset [optional] <p>Offset from which to search. Default: 0</p>
@@ -1557,6 +1786,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the index of the first occurrence of $needle in the string,
      * and false if not found. Accepts an optional offset from which to begin
      * the search.
+     *
+     * EXAMPLE: <code>
+     * s('string')->indexOfIgnoreCase('ING'); // 3
+     * </code>
      *
      * @param string $needle <p>Substring to look for.</p>
      * @param int    $offset [optional] <p>Offset from which to search. Default: 0</p>
@@ -1582,6 +1815,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * the search. Offsets may be negative to count from the last character
      * in the string.
      *
+     * EXAMPLE: <code>
+     * s('foobarfoo')->indexOfLast('foo'); // 10
+     * </code>
+     *
      * @param string $needle <p>Substring to look for.</p>
      * @param int    $offset [optional] <p>Offset from which to search. Default: 0</p>
      *
@@ -1606,6 +1843,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * the search. Offsets may be negative to count from the last character
      * in the string.
      *
+     * EXAMPLE: <code>
+     * s('fooBarFoo')->indexOfLastIgnoreCase('foo'); // 10
+     * </code>
+     *
      * @param string $needle <p>Substring to look for.</p>
      * @param int    $offset [optional] <p>Offset from which to search. Default: 0</p>
      *
@@ -1626,6 +1867,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Inserts $substring into the string at the $index provided.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbř')->insert('à', 4); // 'fòôbàř'
+     * </code>
      *
      * @param string $substring <p>String to be inserted.</p>
      * @param int    $index     <p>The index at which to insert the substring.</p>
@@ -1654,6 +1899,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * WARNING: Asterisks ("*") are translated into (".*") zero-or-more regular
      * expression wildcards.
      *
+     * EXAMPLE: <code>
+     * s('Foo\\Bar\\Lall')->is('*\\Bar\\*'); // true
+     * </code>
+     *
      * @credit Originally from Laravel, thanks Taylor.
      *
      * @param string $pattern <p>The string or pattern to match against.</p>
@@ -1678,6 +1927,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains only alphabetic chars, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s('丹尼爾')->isAlpha(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1691,6 +1944,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains only alphabetic and numeric chars, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s('دانيال1')->isAlphanumeric(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1703,6 +1960,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns true if the string is base64 encoded, false otherwise.
+     *
+     * EXAMPLE: <code>
+     * s('Zm9vYmFy')->isBase64(); // true
+     * </code>
      *
      * @param bool $emptyStringIsValid
      *
@@ -1719,6 +1980,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains only whitespace chars, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s("\n\t  \v\f")->isBlank(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1731,6 +1996,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns true if the string contains a valid E-Mail address, false otherwise.
+     *
+     * EXAMPLE: <code>
+     * s('lars@moelleken.org')->isEmail(); // true
+     * </code>
      *
      * @param bool $useExampleDomainCheck   [optional] <p>Default: false</p>
      * @param bool $useTypoInDomainCheck    [optional] <p>Default: false</p>
@@ -1759,6 +2028,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * A variable is considered empty if it does not exist or if its value equals FALSE.
      *
+     * EXAMPLE: <code>
+     * s('')->isEmpty(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1773,6 +2046,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Determine whether the string is equals to $str.
      * Alias for isEqualsCaseSensitive()
      *
+     * EXAMPLE: <code>
+     * s('foo')->isEquals('foo'); // true
+     * </code>
+     *
      * @param string|Stringy ...$str
      *
      * @psalm-mutation-free
@@ -1786,6 +2063,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Determine whether the string is equals to $str.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param float|int|string|Stringy ...$str <p>The string to compare.</p>
      *
@@ -1821,6 +2101,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine whether the string is equals to $str.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param float|int|string|Stringy ...$str <p>The string to compare.</p>
      *
      * @psalm-mutation-free
@@ -1853,6 +2136,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains only hexadecimal chars, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s('A102F')->isHexadecimal(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1865,6 +2152,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns true if the string contains HTML-Tags, false otherwise.
+     *
+     * EXAMPLE: <code>
+     * s('<h1>foo</h1>')->isHtml(); // true
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -1880,6 +2171,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns true if the string is JSON, false otherwise. Unlike json_decode
      * in PHP 5.x, this method is consistent with PHP 7 and other JSON parsers,
      * in that an empty string is not considered valid JSON.
+     *
+     * EXAMPLE: <code>
+     * s('{"foo":"bar"}')->isJson(); // true
+     * </code>
      *
      * @param bool $onlyArrayOrObjectResultsAreValid
      *
@@ -1902,6 +2197,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns true if the string contains only lower case chars, false otherwise.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->isLowerCase(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1917,6 +2216,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * A variable is considered NOT empty if it does exist or if its value equals TRUE.
      *
+     * EXAMPLE: <code>
+     * s('')->isNotEmpty(); // false
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1930,6 +2233,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine if the string is composed of numeric characters.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1941,6 +2247,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Determine if the string is composed of printable (non-invisible) characters.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -1954,6 +2263,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine if the string is composed of punctuation characters.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -1965,6 +2277,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns true if the string is serialized, false otherwise.
+     *
+     * EXAMPLE: <code>
+     * s('a:1:{s:3:"foo";s:3:"bar";}')->isSerialized(); // true
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -1978,6 +2294,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Check if two strings are similar.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $str                     <p>The string to compare against.</p>
      * @param float  $minPercentForSimilarity [optional] <p>The percentage of needed similarity. | Default: 80%</p>
@@ -1995,6 +2314,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns true if the string contains only lower case chars, false
      * otherwise.
      *
+     * EXAMPLE: <code>
+     * s('FÒÔBÀŘ')->isUpperCase(); // true
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return bool
@@ -2007,6 +2330,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns true if the string contains only whitespace chars, false otherwise.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -2021,6 +2347,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns value which can be serialized by json_encode().
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @noinspection ReturnTypeCanBeDeclaredInspection
      *
      * @psalm-mutation-free
@@ -2034,6 +2363,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Convert the string to kebab-case.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -2053,6 +2385,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns the last $n characters of the string.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->last(3); // 'bàř'
+     * </code>
      *
      * @param int $n <p>Number of characters to retrieve from the end.</p>
      *
@@ -2076,6 +2412,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
      * If no match is found returns new empty Stringy object.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $needle       <p>The string to look for.</p>
      * @param bool   $beforeNeedle [optional] <p>Default: false</p>
@@ -2101,6 +2440,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $needle       <p>The string to look for.</p>
      * @param bool   $beforeNeedle [optional] <p>Default: false</p>
      *
@@ -2124,6 +2466,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns the length of the string.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->length(); // 6
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return int
@@ -2136,6 +2482,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Line-Wrap the string after $limit, but also after the next word.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param int         $limit           [optional] <p>The column width.</p>
      * @param string      $break           [optional] <p>The line is broken using the optional break parameter.</p>
@@ -2172,6 +2521,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Line-Wrap the string after $limit, but also after the next word.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param int         $limit           [optional] <p>The column width.</p>
      * @param string      $break           [optional] <p>The line is broken using the optional break parameter.</p>
@@ -2210,6 +2562,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits on newlines and carriage returns, returning an array of Stringy
      * objects corresponding to the lines in the string.
      *
+     * EXAMPLE: <code>
+     * s("fòô\r\nbàř\n")->lines(); // ['fòô', 'bàř', '']
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static[]
@@ -2240,6 +2596,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits on newlines and carriage returns, returning an array of Stringy
      * objects corresponding to the lines in the string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return CollectionStringy|static[]
@@ -2259,6 +2618,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns the longest common prefix between the string and $otherStr.
+     *
+     * EXAMPLE: <code>
+     * s('foobar')->longestCommonPrefix('foobaz'); // 'fooba'
+     * </code>
      *
      * @param string $otherStr <p>Second string for comparison.</p>
      *
@@ -2283,6 +2646,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the longest common substring between the string and $otherStr.
      * In the case of ties, it returns that which occurs first.
      *
+     * EXAMPLE: <code>
+     * s('foobar')->longestCommonSubstring('boofar'); // 'oo'
+     * </code>
+     *
      * @param string $otherStr <p>Second string for comparison.</p>
      *
      * @psalm-mutation-free
@@ -2304,6 +2671,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns the longest common suffix between the string and $otherStr.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->longestCommonSuffix('fòrbàř'); // 'bàř'
+     * </code>
      *
      * @param string $otherStr <p>Second string for comparison.</p>
      *
@@ -2327,6 +2698,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Converts the first character of the string to lower case.
      *
+     * EXAMPLE: <code>
+     * s('Σ Foo')->lowerCaseFirst(); // 'σ Foo'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -2343,6 +2718,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine if the string matches another string regardless of case.
      * Alias for isEqualsCaseInsensitive()
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -2361,6 +2739,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Determine if the string matches another string.
      * Alias for isEqualsCaseSensitive()
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -2391,6 +2772,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Replace all breaks [<br> | \r\n | \r | \n | ...] into "<br>".
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @return static
      */
     public function newLineToHtmlBreak(): self
@@ -2400,6 +2784,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Get every nth character of the string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param int $step   <p>The number of characters to step.</p>
      * @param int $offset [optional] <p>The string offset to start at.</p>
@@ -2431,6 +2818,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * negative to count from the last character in the string. Implements
      * part of the ArrayAccess interface.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int $offset <p>The index to check.</p>
      *
      * @psalm-mutation-free
@@ -2453,6 +2843,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * ArrayAccess interface, and throws an OutOfBoundsException if the index
      * does not exist.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int $offset <p>The <strong>index</strong> from which to retrieve the char.</p>
      *
      * @throws \OutOfBoundsException
@@ -2472,6 +2865,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Implements part of the ArrayAccess interface, but throws an exception
      * when called. This maintains the immutability of Stringy objects.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int   $offset <p>The index of the character.</p>
      * @param mixed $value  <p>Value to set.</p>
      *
@@ -2490,6 +2886,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Implements part of the ArrayAccess interface, but throws an exception
      * when called. This maintains the immutability of Stringy objects.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param int $offset <p>The index of the character.</p>
      *
@@ -2511,6 +2910,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * default string used for padding is a space, and the default type (one of
      * 'left', 'right', 'both') is 'right'. Throws an InvalidArgumentException
      * if $padType isn't one of those 3 values.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->pad(9, '-/', 'left'); // '-/-fòôbàř'
+     * </code>
      *
      * @param int    $length  <p>Desired string length after padding.</p>
      * @param string $padStr  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
@@ -2541,6 +2944,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns a new string of a given length such that both sides of the
      * string are padded. Alias for pad() with a $padType of 'both'.
      *
+     * EXAMPLE: <code>
+     * s('foo bar')->padBoth(9, ' '); // ' foo bar '
+     * </code>
+     *
      * @param int    $length <p>Desired string length after padding.</p>
      * @param string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      *
@@ -2564,6 +2971,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a new string of a given length such that the beginning of the
      * string is padded. Alias for pad() with a $padType of 'left'.
+     *
+     * EXAMPLE: <code>
+     * s('foo bar')->padLeft(9, ' '); // '  foo bar'
+     * </code>
      *
      * @param int    $length <p>Desired string length after padding.</p>
      * @param string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
@@ -2589,6 +3000,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns a new string of a given length such that the end of the string
      * is padded. Alias for pad() with a $padType of 'right'.
      *
+     * EXAMPLE: <code>
+     * s('foo bar')->padRight(10, '_*'); // 'foo bar_*_'
+     * </code>
+     *
      * @param int    $length <p>Desired string length after padding.</p>
      * @param string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      *
@@ -2613,6 +3028,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Convert the string to PascalCase.
      * Alias for studlyCase()
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -2624,6 +3042,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a new string starting with $prefix.
+     *
+     * EXAMPLE: <code>
+     * s('bàř')->prepend('fòô'); // 'fòôbàř'
+     * </code>
      *
      * @param string ...$prefix <p>The string to append.</p>
      *
@@ -2647,6 +3069,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a new string starting with $prefix.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param CollectionStringy|static ...$prefix <p>The Stringy objects to append.</p>
      *
@@ -2674,6 +3099,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Replaces all occurrences of $pattern in $str by $replacement.
      *
+     * EXAMPLE: <code>
+     * s('fòô ')->regexReplace('f[òô]+\s', 'bàř'); // 'bàř'
+     * s('fò')->regexReplace('(ò)', '\\1ô'); // 'fòô'
+     * </code>
+     *
      * @param string $pattern     <p>The regular expression pattern.</p>
      * @param string $replacement <p>The string to replace with.</p>
      * @param string $options     [optional] <p>Matching conditions to be used.</p>
@@ -2684,7 +3114,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with the result2ing $str after the replacements.</p>
      */
-    public function regexReplace(string $pattern, string $replacement, string $options = '', string $delimiter = '/'): self
+    public function regexReplace(
+        string $pattern,
+        string $replacement,
+        string $options = '',
+        string $delimiter = '/'
+    ): self
     {
         return static::create(
             $this->utf8::regex_replace(
@@ -2700,6 +3135,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Remove html via "strip_tags()" from the string.
+     *
+     * EXAMPLE: <code>
+     * s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtml('<br><br/>'); // 'řàb òf\', ô<br/>foo lall'
+     * </code>
      *
      * @param string $allowableTags [optional] <p>You can use the optional second parameter to specify tags which should
      *                              not be stripped. Default: null
@@ -2720,6 +3159,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
      *
+     * EXAMPLE: <code>
+     * s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtmlBreak(''); // 'řàb <ô>òf\', ô< foo <a href="#">lall</a>'
+     * </code>
+     *
      * @param string $replacement [optional] <p>Default is a empty string.</p>
      *
      * @psalm-mutation-free
@@ -2736,6 +3179,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a new string with the prefix $substring removed, if present.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->removeLeft('fòô'); // 'bàř'
+     * </code>
      *
      * @param string $substring <p>The prefix to remove.</p>
      *
@@ -2755,6 +3202,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a new string with the suffix $substring removed, if present.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->removeRight('bàř'); // 'fòô'
+     * </code>
+     *
      * @param string $substring <p>The suffix to remove.</p>
      *
      * @psalm-mutation-free
@@ -2772,6 +3223,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Try to remove all XSS-attacks from the string.
+     *
+     * EXAMPLE: <code>
+     * s('<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>')->removeXss(); // '<IMG >'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -2801,6 +3256,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a repeated string given a multiplier.
      *
+     * EXAMPLE: <code>
+     * s('α')->repeat(3); // 'ααα'
+     * </code>
+     *
      * @param int $multiplier <p>The number of times to repeat the string.</p>
      *
      * @psalm-mutation-free
@@ -2818,6 +3277,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Replaces all occurrences of $search in $str by $replacement.
+     *
+     * EXAMPLE: <code>
+     * s('fòô bàř fòô bàř')->replace('fòô ', ''); // 'bàř bàř'
+     * </code>
      *
      * @param string $search        <p>The needle to search for.</p>
      * @param string $replacement   <p>The string to replace with.</p>
@@ -2854,6 +3317,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Replaces all occurrences of $search in $str by $replacement.
      *
+     * EXAMPLE: <code>
+     * s('fòô bàř lall bàř')->replaceAll(['fòÔ ', 'lall'], '', false); // 'bàř bàř'
+     * </code>
+     *
      * @param string[]        $search        <p>The elements to search for.</p>
      * @param string|string[] $replacement   <p>The string to replace with.</p>
      * @param bool            $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
@@ -2881,6 +3348,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Replaces all occurrences of $search from the beginning of string with $replacement.
      *
+     * EXAMPLE: <code>
+     * s('fòô bàř fòô bàř')->replaceBeginning('fòô', ''); // ' bàř bàř'
+     * </code>
+     *
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
@@ -2899,6 +3370,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Replaces all occurrences of $search from the ending of string with $replacement.
+     *
+     * EXAMPLE: <code>
+     * s('fòô bàř fòô bàř')->replaceEnding('bàř', ''); // 'fòô bàř fòô '
+     * </code>
      *
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
@@ -2919,6 +3394,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Replaces first occurrences of $search from the beginning of string with $replacement.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
@@ -2937,6 +3415,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Replaces last occurrences of $search from the ending of string with $replacement.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
@@ -2957,6 +3438,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Returns a reversed string. A multibyte version of strrev().
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->reverse(); // 'řàbôòf'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -2972,6 +3457,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * split words. If $substring is provided, and truncating occurs, the
      * string is further truncated so that the substring may be appended without
      * exceeding the desired length.
+     *
+     * EXAMPLE: <code>
+     * s('What are your plans today?')->safeTruncate(22, '...'); // 'What are your plans...'
+     * </code>
      *
      * @param int    $length                          <p>Desired length of the truncated string.</p>
      * @param string $substring                       [optional] <p>The substring to append if it can fit. Default: ''</p>
@@ -3002,6 +3491,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Set the internal character encoding.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $new_encoding <p>The desired character encoding.</p>
      *
      * @psalm-mutation-free
@@ -3016,6 +3508,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Create a sha1 hash from the current string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3027,6 +3522,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Create a sha256 hash from the current string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3040,6 +3538,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Create a sha512 hash from the current string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3051,6 +3552,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Shorten the string after $length, but also after the next word.
+     *
+     * EXAMPLE: <code>
+     * s('this is a test')->shortenAfterWord(2, '...'); // 'this...'
+     * </code>
      *
      * @param int    $length   <p>The given length.</p>
      * @param string $strAddOn [optional] <p>Default: '…'</p>
@@ -3071,6 +3576,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * A multibyte string shuffle function. It returns a string with its
      * characters in random order.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->shuffle(); // 'àôřbòf'
+     * </code>
+     *
      * @return static
      *                <p>Object with a shuffled $str.</p>
      */
@@ -3081,6 +3590,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Calculate the similarity between two strings.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $str <p>The delimiting string.</p>
      *
@@ -3100,6 +3612,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * the index specified by $end. If $end is omitted, the function extracts
      * the remaining string. If $end is negative, it is computed from the end
      * of the string.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->slice(3, -1); // 'bà'
+     * </code>
      *
      * @param int $start <p>Initial index from which to begin extraction.</p>
      * @param int $end   [optional] <p>Index at which to end extraction. Default: null</p>
@@ -3124,6 +3640,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * $separator. The separator defaults to a single dash, and the string
      * is also converted to lowercase. The language of the source string can
      * also be supplied for language-specific transliteration.
+     *
+     * EXAMPLE: <code>
+     * s('Using strings like fòô bàř')->slugify(); // 'using-strings-like-foo-bar'
+     * </code>
      *
      * @param string                $separator             [optional] <p>The string used to replace whitespace.</p>
      * @param string                $language              [optional] <p>Language of the source string.</p>
@@ -3166,6 +3686,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Convert the string to snake_case.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3183,7 +3706,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Convert a string to e.g.: "snake_case"
+     * Convert a string to snake_case.
+     *
+     * EXAMPLE: <code>
+     * s('foo1 Bar')->snakeize(); // 'foo_1_bar'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3202,6 +3729,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Wrap the string after the first whitespace character after a given number
      * of characters.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param int    $width <p>Number of characters at which to wrap.</p>
      * @param string $break [optional] <p>Character used to break the string. | Default "\n"</p>
      *
@@ -3218,6 +3748,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Splits the string with the provided regular expression, returning an
      * array of Stringy objects. An optional integer $limit will truncate the
      * results.
+     *
+     * EXAMPLE: <code>
+     * s('foo,bar,baz')->split(',', 2); // ['foo', 'bar']
+     * </code>
      *
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no
@@ -3258,6 +3792,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * collection of Stringy objects. An optional integer $limit will truncate the
      * results.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no
      *                        limit</p>
@@ -3284,6 +3821,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * default, the comparison is case-sensitive, but can be made insensitive
      * by setting $caseSensitive to false.
      *
+     * EXAMPLE: <code>
+     * s('FÒÔbàřbaz')->startsWith('fòôbàř', false); // true
+     * </code>
+     *
      * @param string $substring     <p>The substring to look for.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
@@ -3306,6 +3847,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * By default the comparison is case-sensitive, but can be made insensitive by
      * setting $caseSensitive to false.
      *
+     * EXAMPLE: <code>
+     * s('FÒÔbàřbaz')->startsWithAny(['fòô', 'bàř'], false); // true
+     * </code>
+     *
      * @param string[] $substrings    <p>Substrings to look for.</p>
      * @param bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
@@ -3326,6 +3871,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Remove one or more strings from the string.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string|string[] $search One or more strings to be removed
      *
      * @psalm-mutation-free
@@ -3345,6 +3893,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Strip all whitespace characters. This includes tabs and newline characters,
      * as well as multibyte whitespace such as the thin space and ideographic space.
      *
+     * EXAMPLE: <code>
+     * s('   Ο     συγγραφέας  ')->stripWhitespace(); // 'Οσυγγραφέας'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3359,6 +3911,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Remove css media-queries.
+     *
+     * EXAMPLE: <code>
+     * s('test @media (min-width:660px){ .des-cla #mv-tiles{width:480px} } test ')->stripeCssMediaQueries(); // 'test  test '
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3375,7 +3931,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Remove empty html-tag.
      *
-     * e.g.: <tag></tag>
+     * EXAMPLE: <code>
+     * s('foo<h1></h1>bar')->stripeEmptyHtmlTags(); // 'foobar'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3391,6 +3949,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Convert the string to StudlyCase.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3414,6 +3975,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns the substring beginning at $start with the specified $length.
      * It differs from the $this->utf8::substr() function in that providing a $length of
      * null will return the rest of the string, rather than an empty string.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param int $start  <p>Position of the first character to use.</p>
      * @param int $length [optional] <p>Maximum number of characters used. Default: null</p>
@@ -3440,6 +4004,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Return part of the string.
      * Alias for substr()
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->substring(2, 3); // 'ôbà'
+     * </code>
+     *
      * @param int $start  <p>Starting position of the substring.</p>
      * @param int $length [optional] <p>Length of substring.</p>
      *
@@ -3459,6 +4027,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
      * If no match is found returns new empty Stringy object.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $needle       <p>The string to look for.</p>
      * @param bool   $beforeNeedle [optional] <p>Default: false</p>
@@ -3484,6 +4055,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
      * If no match is found returns new empty Stringy object.
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @param string $needle       <p>The string to look for.</p>
      * @param bool   $beforeNeedle [optional] <p>Default: false</p>
      *
@@ -3507,6 +4081,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Surrounds $str with the given substring.
      *
+     * EXAMPLE: <code>
+     * s(' ͜ ')->surround('ʘ'); // 'ʘ ͜ ʘ'
+     * </code>
+     *
      * @param string $substring <p>The substring to add to both sides.</P>
      *
      * @psalm-mutation-free
@@ -3524,6 +4102,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a case swapped version of the string.
+     *
+     * EXAMPLE: <code>
+     * s('Ντανιλ')->swapCase(); // 'νΤΑΝΙΛ'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3543,6 +4125,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Windows-1252 (commonly used in Word documents) replaced by their ASCII
      * equivalents.
      *
+     * EXAMPLE: <code>
+     * s('“I see…”')->tidy(); // '"I see..."'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3560,6 +4146,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns a trimmed string with the first letter of each word capitalized.
      * Also accepts an array, $ignore, allowing you to list words not to be
      * capitalized.
+     *
+     * EXAMPLE: <code>
+     * $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
+     * s('i like to watch television')->titleize($ignore); // 'I Like to Watch Television'
+     * </code>
      *
      * @param array|string[]|null $ignore            [optional] <p>An array of words not to capitalize or null.
      *                                               Default: null</p>
@@ -3593,10 +4184,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns a trimmed string in proper title case.
-     *
-     * Also accepts an array, $ignore, allowing you to list words not to be
+     * Returns a trimmed string in proper title case: Also accepts an array, $ignore, allowing you to list words not to be
      * capitalized.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * Adapted from John Gruber's script.
      *
@@ -3629,6 +4221,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * en, en_GB, or en-GB. For example, passing "de" results in "äöü" mapping
      * to "aeoeue" rather than "aou" as in other languages.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->toAscii(); // 'foobar'
+     * </code>
+     *
      * @param string $language          [optional] <p>Language of the source string.</p>
      * @param bool   $removeUnsupported [optional] <p>Whether or not to remove the
      *                                  unsupported characters.</p>
@@ -3652,12 +4248,16 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns a boolean representation of the given logical string value.
-     * For example, 'true', '1', 'on' and 'yes' will return true. 'false', '0',
-     * 'off', and 'no' will return false. In all instances, case is ignored.
+     * For example, <strong>'true', '1', 'on' and 'yes'</strong> will return true. <strong>'false', '0',
+     * 'off', and 'no'</strong> will return false. In all instances, case is ignored.
      * For other numeric strings, their sign will determine the return value.
      * In addition, blank strings consisting of only whitespace will return
      * false. For all other strings, the return value is a result of a
      * boolean cast.
+     *
+     * EXAMPLE: <code>
+     * s('OFF')->toBoolean(); // false
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3674,6 +4274,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Converts all characters in the string to lowercase.
+     *
+     * EXAMPLE: <code>
+     * s('FÒÔBÀŘ')->toLowerCase(); // 'fòôbàř'
+     * </code>
      *
      * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
      * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
@@ -3700,6 +4304,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Converts each tab in the string to some number of spaces, as defined by
      * $tabLength. By default, each tab is converted to 4 consecutive spaces.
+     *
+     * EXAMPLE: <code>
+     * s(' String speech = "Hi"')->toSpaces(); // '    String speech = "Hi"'
+     * </code>
      *
      * @param int $tabLength [optional] <p>Number of spaces to replace each tab with. Default: 4</p>
      *
@@ -3728,6 +4336,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Return Stringy object as string, but you can also use (string) for automatically casting the object into a
      * string.
      *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->toString(); // 'fòôbàř'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return string
@@ -3741,6 +4353,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Converts each occurrence of some consecutive number of spaces, as
      * defined by $tabLength, to a tab. By default, each 4 consecutive spaces
      * are converted to a tab.
+     *
+     * EXAMPLE: <code>
+     * s('    fòô    bàř')->toTabs(); // '   fòô bàř'
+     * </code>
      *
      * @param int $tabLength [optional] <p>Number of spaces to replace with a tab. Default: 4</p>
      *
@@ -3769,6 +4385,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Converts the first character of each word in the string to uppercase
      * and all other chars to lowercase.
      *
+     * EXAMPLE: <code>
+     * s('fòô bàř')->toTitleCase(); // 'Fòô Bàř'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3786,6 +4406,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns an ASCII version of the string. A set of non-ASCII characters are
      * replaced with their closest ASCII counterparts, and the rest are removed
      * unless instructed otherwise.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
      *                        performance | Default: false</p>
@@ -3806,6 +4429,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Converts all characters in the string to uppercase.
+     *
+     * EXAMPLE: <code>
+     * s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
+     * </code>
      *
      * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
      * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
@@ -3828,6 +4455,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * string. Supports the removal of unicode whitespace. Accepts an optional
      * string of characters to strip instead of the defaults.
      *
+     * EXAMPLE: <code>
+     * s('  fòôbàř  ')->trim(); // 'fòôbàř'
+     * </code>
+     *
      * @param string $chars [optional] <p>String of characters to strip. Default: null</p>
      *
      * @psalm-mutation-free
@@ -3847,6 +4478,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns a string with whitespace removed from the start of the string.
      * Supports the removal of unicode whitespace. Accepts an optional
      * string of characters to strip instead of the defaults.
+     *
+     * EXAMPLE: <code>
+     * s('  fòôbàř  ')->trimLeft(); // 'fòôbàř  '
+     * </code>
      *
      * @param string $chars [optional] <p>Optional string of characters to strip. Default: null</p>
      *
@@ -3868,6 +4503,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Supports the removal of unicode whitespace. Accepts an optional
      * string of characters to strip instead of the defaults.
      *
+     * EXAMPLE: <code>
+     * s('  fòôbàř  ')->trimRight(); // '  fòôbàř'
+     * </code>
+     *
      * @param string $chars [optional] <p>Optional string of characters to strip. Default: null</p>
      *
      * @psalm-mutation-free
@@ -3887,6 +4526,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Truncates the string to a given length. If $substring is provided, and
      * truncating occurs, the string is further truncated so that the substring
      * may be appended without exceeding the desired length.
+     *
+     * EXAMPLE: <code>
+     * s('What are your plans today?')->truncate(19, '...'); // 'What are your pl...'
+     * </code>
      *
      * @param int    $length    <p>Desired length of the truncated string.</p>
      * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
@@ -3910,6 +4553,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * of the first character of the string), and in place of spaces as well as
      * dashes.
      *
+     * EXAMPLE: <code>
+     * s('TestUCase')->underscored(); // 'test_u_case'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3924,6 +4571,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Returns an UpperCamelCase version of the supplied string. It trims
      * surrounding spaces, capitalizes letters following digits, spaces, dashes
      * and underscores, and removes spaces, dashes, underscores.
+     *
+     * EXAMPLE: <code>
+     * s('Upper Camel-Case')->upperCamelize(); // 'UpperCamelCase'
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3941,6 +4592,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Converts the first character of the supplied string to upper case.
      *
+     * EXAMPLE: <code>
+     * s('σ foo')->upperCaseFirst(); // 'Σ foo'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3956,6 +4611,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * e.g:
      * 'test+test' => 'test test'
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -3980,6 +4638,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
      * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3993,7 +4654,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * Simple url-decoding.
      *
      * e.g:
-     * 'test+test' => 'test+test'
+     * 'test+test' => 'test+test
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -4018,6 +4682,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
      * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -4032,6 +4699,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * e.g:
      * 'test test' => 'test+test'
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @psalm-mutation-free
      *
@@ -4048,6 +4718,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * e.g:
      * 'test test' => 'test%20test'
      *
+     * EXAMPLE: <code>
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -4063,6 +4736,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * non-ASCII and non-alphanumeric characters, and replacing whitespace with
      * $separator. The separator defaults to a single dash, and the string
      * is also converted to lowercase.
+     *
+     * EXAMPLE: <code>
+     * s('Using strings like fòô bàř - 1$')->urlify(); // 'using-strings-like-foo-bar-1-dollar'
+     * </code>
      *
      * @param string                $separator    [optional] <p>The string used to replace whitespace. Default: '-'</p>
      * @param string                $language     [optional] <p>The language for the url. Default: 'en'</p>
@@ -4103,6 +4780,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Converts the string into an valid UTF-8 string.
      *
+     * EXAMPLE: <code>
+     * s('DÃ¼sseldorf')->utf8ify(); // 'Düsseldorf'
+     * </code>
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -4114,6 +4795,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Convert a string into an array of words.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string   $char_list           [optional] <p>Additional chars for the definition of "words".</p>
      * @param bool     $remove_empty_values [optional] <p>Remove empty values.</p>
@@ -4160,6 +4844,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     /**
      * Convert a string into an collection of words.
      *
+     * EXAMPLE: <code>
+     * S::create('中文空白 oöäü#s')->wordsCollection('#', true)->toStrings(); // ['中文空白', 'oöäü#s']
+     * </code>
+     *
      * @param string   $char_list           [optional] <p>Additional chars for the definition of "words".</p>
      * @param bool     $remove_empty_values [optional] <p>Remove empty values.</p>
      * @param int|null $remove_short_values [optional] <p>The min. string length or null to disable</p>
@@ -4190,6 +4878,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Surrounds $str with the given substring.
+     *
+     * EXAMPLE: <code>
+     * </code>
      *
      * @param string $substring <p>The substring to add to both sides.</P>
      *

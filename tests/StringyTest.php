@@ -1004,6 +1004,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['test', 'test'],
             ['1a', '1a'],
             ['σ test', 'Σ test', 'UTF-8'],
+            ['σ Test', 'Σ Test', 'UTF-8'],
             [' Σ test', ' Σ test', 'UTF-8'],
         ];
     }
@@ -3761,6 +3762,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['iñt', 'ërn', 'I'], S::create('iñt ërn I')->wordsCollection('', true, null)->toStrings());
         static::assertSame(['iñt', 'ërn'], S::create('iñt ërn I')->wordsCollection('', false, 1)->toStrings());
         static::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], S::create('中文空白 oöäü#s')->wordsCollection('#', false, null)->toStrings());
+        static::assertSame(['中文空白', 'oöäü#s'], S::create('中文空白 oöäü#s')->wordsCollection('#', true)->toStrings());
         static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], S::create('foo oo oöäü#s')->wordsCollection('', false, null)->toStrings());
         static::assertSame([''], S::create('')->wordsCollection('', false, null)->toStrings());
 
