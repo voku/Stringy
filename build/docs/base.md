@@ -192,9 +192,9 @@ function importing, and PHP 5.4 short array syntax. They also assume the
 encoding returned by mb_internal_encoding() is UTF-8. For further details,
 see the documentation for the create method above.
 
-%__functions_index__%
+%__functions_index__Stringy\Stringy__%
 
-%__functions_list__%
+%__functions_list__Stringy\Stringy__%
 
 ## Tests
 

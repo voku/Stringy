@@ -192,9 +192,7 @@ function importing, and PHP 5.4 short array syntax. They also assume the
 encoding returned by mb_internal_encoding() is UTF-8. For further details,
 see the documentation for the create method above.
 
-
-<table>
-    <tr><td><a href="#afterstring-string-static">after</a>
+<table><tr><td><a href="#afterstring-string-static">after</a>
 </td><td><a href="#afterfirststring-separator-static">afterFirst</a>
 </td><td><a href="#afterfirstignorecasestring-separator-static">afterFirstIgnoreCase</a>
 </td><td><a href="#afterlaststring-separator-static">afterLast</a>
@@ -207,7 +205,7 @@ see the documentation for the create method above.
 </td><td><a href="#atint-index-static">at</a>
 </td><td><a href="#base64decode-self">base64Decode</a>
 </td></tr><tr><td><a href="#base64encode-self">base64Encode</a>
-</td><td><a href="#bcrypt-options-static">bcrypt</a>
+</td><td><a href="#bcryptarray-options-static">bcrypt</a>
 </td><td><a href="#beforestring-string-static">before</a>
 </td><td><a href="#beforefirststring-separator-static">beforeFirst</a>
 </td></tr><tr><td><a href="#beforefirstignorecasestring-separator-static">beforeFirstIgnoreCase</a>
@@ -336,7 +334,7 @@ see the documentation for the create method above.
 </td><td><a href="#shuffle-static">shuffle</a>
 </td></tr><tr><td><a href="#similaritystring-str-float">similarity</a>
 </td><td><a href="#sliceint-start-int-end-static">slice</a>
-</td><td><a href="#slugifystring-separator-string-language-arraystringstring-replacements-bool-replace_extra_symbols-bool-use_str_to_lower-bool-use_transliterate-static">slugify</a>
+</td><td><a href="#slugifystring-separator-string-language-string-replacements-bool-replace_extra_symbols-bool-use_str_to_lower-bool-use_transliterate-static">slugify</a>
 </td><td><a href="#snakecase-static">snakeCase</a>
 </td></tr><tr><td><a href="#snakeize-static">snakeize</a>
 </td><td><a href="#softwrapint-width-string-break-static">softWrap</a>
@@ -380,14 +378,12 @@ see the documentation for the create method above.
 </td><td><a href="#urldecoderawmulti-static">urlDecodeRawMulti</a>
 </td></tr><tr><td><a href="#urlencode-static">urlEncode</a>
 </td><td><a href="#urlencoderaw-static">urlEncodeRaw</a>
-</td><td><a href="#urlifystring-separator-string-language-arraystringstring-replacements-bool-strtolower-static">urlify</a>
+</td><td><a href="#urlifystring-separator-string-language-string-replacements-bool-strtolower-static">urlify</a>
 </td><td><a href="#utf8ify-static">utf8ify</a>
 </td></tr><tr><td><a href="#wordsstring-char_list-bool-remove_empty_values-intnull-remove_short_values-static">words</a>
 </td><td><a href="#wordscollectionstring-char_list-bool-remove_empty_values-intnull-remove_short_values-collectionstringystatic">wordsCollection</a>
 </td><td><a href="#wrapstring-substring-static">wrap</a>
-</td></tr>
-</table>
-
+</td></tr></table>
 
 ## after(string $string): static
 <a href="#class-methods">↑</a>
@@ -604,7 +600,7 @@ __nothing__
 
 --------
 
-## bcrypt( $options): static
+## bcrypt(array $options): static
 <a href="#class-methods">↑</a>
 Creates a hash from the string using the CRYPT_BLOWFISH algorithm.
 
@@ -615,7 +611,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- ``
+- `array $options`
 
 **Return:**
 - `static`
@@ -2916,7 +2912,7 @@ s('fòôbàř')->slice(3, -1); // 'bà'
 
 --------
 
-## slugify(string $separator, string $language, array<string,string> $replacements, bool $replace_extra_symbols, bool $use_str_to_lower, bool $use_transliterate): static
+## slugify(string $separator, string $language, string[] $replacements, bool $replace_extra_symbols, bool $use_str_to_lower, bool $use_transliterate): static
 <a href="#class-methods">↑</a>
 Converts the string into an URL slug. This includes replacing non-ASCII
 characters with their closest ASCII equivalents, removing remaining
@@ -3736,7 +3732,7 @@ __nothing__
 
 --------
 
-## urlify(string $separator, string $language, array<string,string> $replacements, bool $strToLower): static
+## urlify(string $separator, string $language, string[] $replacements, bool $strToLower): static
 <a href="#class-methods">↑</a>
 Converts the string into an URL slug. This includes replacing non-ASCII
 characters with their closest ASCII equivalents, removing remaining
