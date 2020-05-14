@@ -1,8 +1,10 @@
 # Changelog
 
-### 6.3.0 (2020-05-11)
+### 6.3.0 (2020-05-14)
 - add "callUserFunction()"
 - update vendor lib "voku/arrayy"
+- move code examples into the code
+- use "voku/simple-php-code-parser" for building the "README" 
 
 ### 6.2.2 (2020-02-23)
 - fix "isEqualsCaseInsensitive()" -> thanks to psalm
