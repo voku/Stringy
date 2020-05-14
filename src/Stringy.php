@@ -3119,8 +3119,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         string $replacement,
         string $options = '',
         string $delimiter = '/'
-    ): self
-    {
+    ): self {
         return static::create(
             $this->utf8::regex_replace(
                 $this->str,
