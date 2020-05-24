@@ -4560,7 +4560,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
             ['foo bar', 'fòô bàř'],
             [' TEST ', ' ŤÉŚŢ '],
             ['ph = z = 3', 'φ = ź = 3'],
-            ['kh Kh shch Shch   \' \'', 'х Х щ Щ ъ Ъ ь Ь'],
+            ['kh Kh shch Shch \' \' \' \'', 'х Х щ Щ ъ Ъ ь Ь'],
             ['perevirka', 'перевірка'],
             ['lysaia gora', 'лысая гора'],
             ['shchuka', 'щука'],

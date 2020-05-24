@@ -1,5 +1,8 @@
 # Changelog
 
+### 6.3.1 (2020-05-24)
+- update vendor (ASCII)
+
 ### 6.3.0 (2020-05-14)
 - add "callUserFunction()"
 - update vendor lib "voku/arrayy"
