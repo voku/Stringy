@@ -206,7 +206,7 @@ see the documentation for the create method above.
 </td><td><a href="#atint-index-static">at</a>
 </td><td><a href="#base64decode-self">base64Decode</a>
 </td></tr><tr><td><a href="#base64encode-self">base64Encode</a>
-</td><td><a href="#bcryptarray-options-static">bcrypt</a>
+</td><td><a href="#bcryptarray-options">bcrypt</a>
 </td><td><a href="#beforestring-string-static">before</a>
 </td><td><a href="#beforefirststring-separator-static">beforeFirst</a>
 </td></tr><tr><td><a href="#beforefirstignorecasestring-separator-static">beforeFirstIgnoreCase</a>
@@ -223,48 +223,52 @@ see the documentation for the create method above.
 </td><td><a href="#containsstring-needle-bool-casesensitive-bool">contains</a>
 </td></tr><tr><td><a href="#containsallstring-needles-bool-casesensitive-bool">containsAll</a>
 </td><td><a href="#containsanystring-needles-bool-casesensitive-bool">containsAny</a>
+</td><td><a href="#containsbom-bool">containsBom</a>
 </td><td><a href="#count-int">count</a>
-</td><td><a href="#countsubstrstring-substring-bool-casesensitive-int">countSubstr</a>
-</td></tr><tr><td><a href="#crc32-int">crc32</a>
+</td></tr><tr><td><a href="#countsubstrstring-substring-bool-casesensitive-int">countSubstr</a>
+</td><td><a href="#crc32-int">crc32</a>
 </td><td><a href="#createmixed-str-string-encoding-static">create</a>
 </td><td><a href="#cryptstring-salt-static">crypt</a>
-</td><td><a href="#dasherize-static">dasherize</a>
-</td></tr><tr><td><a href="#decryptstring-password-static">decrypt</a>
+</td></tr><tr><td><a href="#dasherize-static">dasherize</a>
+</td><td><a href="#decryptstring-password-static">decrypt</a>
 </td><td><a href="#delimitstring-delimiter-static">delimit</a>
 </td><td><a href="#encodestring-new_encoding-bool-auto_detect_encoding-static">encode</a>
-</td><td><a href="#encryptstring-password-static">encrypt</a>
-</td></tr><tr><td><a href="#endswithstring-substring-bool-casesensitive-bool">endsWith</a>
+</td></tr><tr><td><a href="#encryptstring-password-static">encrypt</a>
+</td><td><a href="#endswithstring-substring-bool-casesensitive-bool">endsWith</a>
 </td><td><a href="#endswithanystring-substrings-bool-casesensitive-bool">endsWithAny</a>
 </td><td><a href="#ensureleftstring-substring-static">ensureLeft</a>
-</td><td><a href="#ensurerightstring-substring-static">ensureRight</a>
-</td></tr><tr><td><a href="#escape-static">escape</a>
+</td></tr><tr><td><a href="#ensurerightstring-substring-static">ensureRight</a>
+</td><td><a href="#escape-static">escape</a>
 </td><td><a href="#explodestring-delimiter-int-limit-arrayintstatic">explode</a>
 </td><td><a href="#explodecollectionstring-delimiter-int-limit-collectionstringystatic">explodeCollection</a>
-</td><td><a href="#extracttextstring-search-intnull-length-string-replacerforskippedtext-static">extractText</a>
-</td></tr><tr><td><a href="#firstint-n-static">first</a>
+</td></tr><tr><td><a href="#extracttextstring-search-intnull-length-string-replacerforskippedtext-static">extractText</a>
+</td><td><a href="#firstint-n-static">first</a>
 </td><td><a href="#formatmixed-args-static">format</a>
 </td><td><a href="#getencoding-string">getEncoding</a>
-</td><td><a href="#getiterator-arrayiterator">getIterator</a>
-</td></tr><tr><td><a href="#hardwrapint-width-string-break-static">hardWrap</a>
+</td></tr><tr><td><a href="#getiterator-arrayiterator">getIterator</a>
+</td><td><a href="#hardwrapint-width-string-break-static">hardWrap</a>
 </td><td><a href="#haslowercase-bool">hasLowerCase</a>
 </td><td><a href="#hasuppercase-bool">hasUpperCase</a>
-</td><td><a href="#hashstring-algorithm-static">hash</a>
-</td></tr><tr><td><a href="#hexdecode-static">hexDecode</a>
+</td></tr><tr><td><a href="#hashstring-algorithm-static">hash</a>
+</td><td><a href="#hexdecode-static">hexDecode</a>
 </td><td><a href="#hexencode-static">hexEncode</a>
 </td><td><a href="#htmldecodeint-flags-static">htmlDecode</a>
-</td><td><a href="#htmlencodeint-flags-static">htmlEncode</a>
-</td></tr><tr><td><a href="#humanize-static">humanize</a>
+</td></tr><tr><td><a href="#htmlencodeint-flags-static">htmlEncode</a>
+</td><td><a href="#humanize-static">humanize</a>
 </td><td><a href="#instring-str-bool-casesensitive-bool">in</a>
 </td><td><a href="#indexofstring-needle-int-offset-falseint">indexOf</a>
-</td><td><a href="#indexofignorecasestring-needle-int-offset-falseint">indexOfIgnoreCase</a>
-</td></tr><tr><td><a href="#indexoflaststring-needle-int-offset-falseint">indexOfLast</a>
+</td></tr><tr><td><a href="#indexofignorecasestring-needle-int-offset-falseint">indexOfIgnoreCase</a>
+</td><td><a href="#indexoflaststring-needle-int-offset-falseint">indexOfLast</a>
 </td><td><a href="#indexoflastignorecasestring-needle-int-offset-falseint">indexOfLastIgnoreCase</a>
 </td><td><a href="#insertstring-substring-int-index-static">insert</a>
-</td><td><a href="#isstring-pattern-bool">is</a>
-</td></tr><tr><td><a href="#isalpha-bool">isAlpha</a>
+</td></tr><tr><td><a href="#isstring-pattern-bool">is</a>
+</td><td><a href="#isalpha-bool">isAlpha</a>
 </td><td><a href="#isalphanumeric-bool">isAlphanumeric</a>
-</td><td><a href="#isbase64bool-emptystringisvalid-bool">isBase64</a>
+</td><td><a href="#isascii-bool">isAscii</a>
+</td></tr><tr><td><a href="#isbase64bool-emptystringisvalid-bool">isBase64</a>
+</td><td><a href="#isbinary-bool">isBinary</a>
 </td><td><a href="#isblank-bool">isBlank</a>
+</td><td><a href="#isbom-bool">isBom</a>
 </td></tr><tr><td><a href="#isemailbool-useexampledomaincheck-bool-usetypoindomaincheck-bool-usetemporarydomaincheck-bool-usednscheck-bool">isEmail</a>
 </td><td><a href="#isempty-bool">isEmpty</a>
 </td><td><a href="#isequalsstringstringy-str-bool">isEquals</a>
@@ -281,6 +285,10 @@ see the documentation for the create method above.
 </td><td><a href="#isserialized-bool">isSerialized</a>
 </td><td><a href="#issimilarstring-str-float-minpercentforsimilarity-bool">isSimilar</a>
 </td><td><a href="#isuppercase-bool">isUpperCase</a>
+</td></tr><tr><td><a href="#isurlbool-disallow_localhost-bool">isUrl</a>
+</td><td><a href="#isutf8bool-strict-bool">isUtf8</a>
+</td><td><a href="#isutf16-falseint">isUtf16</a>
+</td><td><a href="#isutf32-falseint">isUtf32</a>
 </td></tr><tr><td><a href="#iswhitespace-bool">isWhitespace</a>
 </td><td><a href="#jsonserialize-string">jsonSerialize</a>
 </td><td><a href="#kebabcase-static">kebabCase</a>
@@ -531,7 +539,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `CollectionStringy|static ...$suffix <p>The Stringy objects to append.</p>`
+- `CollectionStringy<int, static>|static ...$suffix <p>The Stringy objects to append.</p>`
 
 **Return:**
 - `static <p>Object with appended $suffix.</p>`
@@ -601,21 +609,15 @@ __nothing__
 
 --------
 
-## bcrypt(array $options): static
+## bcrypt(array $options): 
 <a href="#voku-php-readme-class-methods">↑</a>
-Creates a hash from the string using the CRYPT_BLOWFISH algorithm.
 
-WARNING: Using this algorithm, will result in the ```$this->str```
-         being truncated to a maximum length of 72 characters.
-
-EXAMPLE: <code>
-</code>
 
 **Parameters:**
 - `array $options`
 
 **Return:**
-- `static`
+- `self`
 
 --------
 
@@ -812,7 +814,7 @@ s('foobar')->chunk(3); // ['foo', 'bar']
 
 --------
 
-## chunkCollection(int $length): \CollectionStringy|static[]
+## chunkCollection(int $length): CollectionStringy|static[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Splits the string into chunks of Stringy objects collection.
 
@@ -875,7 +877,7 @@ s('foo & bar')->containsAll(['foo', 'bar']); // true
 </code>
 
 **Parameters:**
-- `array<array-key, string> $needles <p>SubStrings to look for.</p>`
+- `string[] $needles <p>SubStrings to look for.</p>`
 - `bool $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -894,11 +896,26 @@ s('str contains foo')->containsAny(['foo', 'bar']); // true
 </code>
 
 **Parameters:**
-- `array<array-key, string> $needles <p>SubStrings to look for.</p>`
+- `string[] $needles <p>SubStrings to look for.</p>`
 - `bool $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
 - `bool <p>Whether or not $str contains $needle.</p>`
+
+--------
+
+## containsBom(): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Checks if string starts with "BOM" (Byte Order Mark Character) character.
+
+EXAMPLE: <code>s("\xef\xbb\xbf foobar")->containsBom(); // true</code>
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `bool <strong>true</strong> if the string has BOM at the start,<br>
+<strong>false</strong> otherwise`
 
 --------
 
@@ -1105,7 +1122,7 @@ s('fòôbàř')->endsWithAny(['bàř', 'baz'], true); // true
 </code>
 
 **Parameters:**
-- `array<array-key, string> $substrings <p>Substrings to look for.</p>`
+- `string[] $substrings <p>Substrings to look for.</p>`
 - `bool $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -1184,7 +1201,7 @@ element containing the rest of string.
 
 --------
 
-## explodeCollection(string $delimiter, int $limit): \CollectionStringy|static[]
+## explodeCollection(string $delimiter, int $limit): CollectionStringy|static[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Split a string by a string.
 
@@ -1289,7 +1306,7 @@ __nothing__
 
 --------
 
-## getIterator(): \ArrayIterator
+## getIterator(): ArrayIterator
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns a new ArrayIterator, thus implementing the IteratorAggregate
 interface. The ArrayIterator's constructor is passed an array of chars
@@ -1705,6 +1722,23 @@ __nothing__
 
 --------
 
+## isAscii(): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Checks if a string is 7 bit ASCII.
+
+EXAMPLE: <code>s('白')->isAscii; // false</code>
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `bool <p>
+<strong>true</strong> if it is ASCII<br>
+<strong>false</strong> otherwise
+</p>`
+
+--------
+
 ## isBase64(bool $emptyStringIsValid): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns true if the string is base64 encoded, false otherwise.
@@ -1721,6 +1755,22 @@ s('Zm9vYmFy')->isBase64(); // true
 
 --------
 
+## isBinary(): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Check if the input is binary.
+
+.. (is look like a hack).
+
+EXAMPLE: <code>s(01)->isBinary(); // true</code>
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `bool`
+
+--------
+
 ## isBlank(): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns true if the string contains only whitespace chars, false otherwise.
@@ -1734,6 +1784,22 @@ __nothing__
 
 **Return:**
 - `bool <p>Whether or not $str contains only whitespace characters.</p>`
+
+--------
+
+## isBom(): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Checks if the given string is equal to any "Byte Order Mark".
+
+WARNING: Use "s::string_has_bom()" if you will check BOM in a string.
+
+EXAMPLE: <code>s->("\xef\xbb\xbf")->isBom(); // true</code>
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `bool <p><strong>true</strong> if the $utf8_chr is Byte Order Mark, <strong>false</strong> otherwise.</p>`
 
 --------
 
@@ -1785,7 +1851,7 @@ s('foo')->isEquals('foo'); // true
 </code>
 
 **Parameters:**
-- `Stringy|string ...$str`
+- `string|\Stringy ...$str`
 
 **Return:**
 - `bool`
@@ -1800,7 +1866,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `Stringy|float|int|string ...$str <p>The string to compare.</p>`
+- `float|int|string|\Stringy ...$str <p>The string to compare.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str is equals.</p>`
@@ -1815,7 +1881,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `Stringy|float|int|string ...$str <p>The string to compare.</p>`
+- `float|int|string|\Stringy ...$str <p>The string to compare.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str is equals.</p>`
@@ -2000,6 +2066,65 @@ __nothing__
 
 --------
 
+## isUrl(bool $disallow_localhost): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+/**
+Check if $url is an correct url.
+
+**Parameters:**
+- `bool $disallow_localhost`
+
+**Return:**
+- `bool`
+
+--------
+
+## isUtf8(bool $strict): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Checks whether the passed input contains only byte sequences that appear valid UTF-8.
+
+EXAMPLE: <code>
+s('Iñtërnâtiônàlizætiøn')->isUtf8(); // true
+//
+s("Iñtërnâtiônàlizætiøn\xA0\xA1")->isUtf8(); // false
+</code>
+
+**Parameters:**
+- `bool $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>`
+
+**Return:**
+- `bool`
+
+--------
+
+## isUtf16(): false|int
+<a href="#voku-php-readme-class-methods">↑</a>
+Check if the string is UTF-16.
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `false|int <strong>false</strong> if is't not UTF-16,<br>
+<strong>1</strong> for UTF-16LE,<br>
+<strong>2</strong> for UTF-16BE`
+
+--------
+
+## isUtf32(): false|int
+<a href="#voku-php-readme-class-methods">↑</a>
+Check if the string is UTF-32.
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `false|int <strong>false</strong> if is't not UTF-32,<br>
+<strong>1</strong> for UTF-32LE,<br>
+<strong>2</strong> for UTF-32BE`
+
+--------
+
 ## isWhitespace(): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns true if the string contains only whitespace chars, false otherwise.
@@ -2127,7 +2252,7 @@ EXAMPLE: <code>
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `null|string $delimiter [optional] <p>
+- `string|null $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 
@@ -2150,7 +2275,7 @@ EXAMPLE: <code>
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `null|string $delimiter [optional] <p>
+- `string|null $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 
@@ -2176,7 +2301,7 @@ __nothing__
 
 --------
 
-## linesCollection(): \CollectionStringy|static[]
+## linesCollection(): CollectionStringy|static[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Splits on newlines and carriage returns, returning an array of Stringy
 objects corresponding to the lines in the string.
@@ -2268,7 +2393,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `Stringy|string ...$str <p>The string to compare against.</p>`
+- `string|\Stringy ...$str <p>The string to compare against.</p>`
 
 **Return:**
 - `bool`
@@ -2285,7 +2410,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `Stringy|string ...$str <p>The string to compare against.</p>`
+- `string|\Stringy ...$str <p>The string to compare against.</p>`
 
 **Return:**
 - `bool`
@@ -2306,7 +2431,9 @@ __nothing__
 
 ## newLineToHtmlBreak(): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Replace all breaks [<br> | \r\n | \r | \n | ...] into "<br>".
+Replace all breaks [<br> | \r\n | \r | \n | .
+
+..] into "<br>".
 
 EXAMPLE: <code>
 </code>
@@ -2520,7 +2647,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `CollectionStringy|static ...$prefix <p>The Stringy objects to append.</p>`
+- `CollectionStringy<int, static>|static ...$prefix <p>The Stringy objects to append.</p>`
 
 **Return:**
 - `static <p>Object with appended $prefix.</p>`
@@ -2567,7 +2694,9 @@ not be stripped. Default: null
 
 ## removeHtmlBreak(string $replacement): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
+Remove all breaks [<br> | \r\n | \r | \n | .
+
+..] from the string.
 
 EXAMPLE: <code>
 s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtmlBreak(''); // 'řàb <ô>òf\', ô< foo <a href="#">lall</a>'
@@ -2672,8 +2801,8 @@ s('fòô bàř lall bàř')->replaceAll(['fòÔ ', 'lall'], '', false); // 'bà�
 </code>
 
 **Parameters:**
-- `array<array-key, string> $search <p>The elements to search for.</p>`
-- `array<array-key, string>|string $replacement <p>The string to replace with.</p>`
+- `string[] $search <p>The elements to search for.</p>`
+- `string|string[] $replacement <p>The string to replace with.</p>`
 - `bool $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -3009,7 +3138,7 @@ limit</p>`
 
 --------
 
-## splitCollection(string $pattern, int $limit): \CollectionStringy|static[]
+## splitCollection(string $pattern, int $limit): CollectionStringy|static[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Splits the string with the provided regular expression, returning an
 collection of Stringy objects. An optional integer $limit will truncate the
@@ -3059,7 +3188,7 @@ s('FÒÔbàřbaz')->startsWithAny(['fòô', 'bàř'], false); // true
 </code>
 
 **Parameters:**
-- `array<array-key, string> $substrings <p>Substrings to look for.</p>`
+- `string[] $substrings <p>Substrings to look for.</p>`
 - `bool $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -3075,7 +3204,7 @@ EXAMPLE: <code>
 </code>
 
 **Parameters:**
-- `array<array-key, string>|string $search One or more strings to be removed`
+- `string|string[] $search One or more strings to be removed`
 
 **Return:**
 - `static`
@@ -3283,11 +3412,11 @@ s('i like to watch television')->titleize($ignore); // 'I Like to Watch Televisi
 </code>
 
 **Parameters:**
-- `array<array-key, mixed|string>|null $ignore [optional] <p>An array of words not to capitalize or null.
+- `array|string[]|null $ignore [optional] <p>An array of words not to capitalize or null.
 Default: null</p>`
-- `null|string $word_define_chars [optional] <p>An string of chars that will be used as whitespace
+- `string|null $word_define_chars [optional] <p>An string of chars that will be used as whitespace
 separator === words.</p>`
-- `null|string $language [optional] <p>Language of the source string.</p>`
+- `string|null $language [optional] <p>Language of the source string.</p>`
 
 **Return:**
 - `static <p>Object with a titleized $str.</p>`
@@ -3296,8 +3425,8 @@ separator === words.</p>`
 
 ## titleizeForHumans(string[] $ignore): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Returns a trimmed string in proper title case: Also accepts an array, $ignore, allowing you to list words not to be
-capitalized.
+Returns a trimmed string in proper title case: Also accepts an array, $ignore, allowing you to list words not to
+be capitalized.
 
 EXAMPLE: <code>
 </code>
@@ -3305,7 +3434,7 @@ EXAMPLE: <code>
 Adapted from John Gruber's script.
 
 **Parameters:**
-- `array<array-key, string> $ignore <p>An array of words not to capitalize.</p>`
+- `string[] $ignore <p>An array of words not to capitalize.</p>`
 
 **Return:**
 - `static <p>Object with a titleized $str</p>`
@@ -3368,7 +3497,7 @@ s('FÒÔBÀŘ')->toLowerCase(); // 'fòôbàř'
 
 **Parameters:**
 - `bool $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
 
 **Return:**
 - `static <p>Object with all characters of $str being lowercase.</p>`
@@ -3473,7 +3602,7 @@ s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
 
 **Parameters:**
 - `bool $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
 
 **Return:**
 - `static <p>Object with all characters of $str being uppercase.</p>`
@@ -3789,7 +3918,7 @@ EXAMPLE: <code>
 
 --------
 
-## wordsCollection(string $char_list, bool $remove_empty_values, int|null $remove_short_values): \CollectionStringy|static[]
+## wordsCollection(string $char_list, bool $remove_empty_values, int|null $remove_short_values): CollectionStringy|static[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string into an collection of words.
 
