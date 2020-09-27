@@ -597,6 +597,33 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Call a user function.
+     *
+     * EXAMPLE: <code>
+     * S::create('foo bar lall')->callUserFunction(static function ($str) {
+     *     return UTF8::str_limit($str, 8);
+     * })->toString(); // "foo bar…"
+     * </code>
+     *
+     * @param callable $function
+     * @param mixed    ...$parameter
+     *
+     * @psalm-mutation-free
+     *
+     * @return static
+     *                <p>Object having a $str changed via $function.</p>
+     */
+    public function callUserFunction(callable $function, ...$parameter): self
+    {
+        $str = $function($this->str, ...$parameter);
+
+        return static::create(
+            $str,
+            $this->encoding
+        );
+    }
+
+    /**
      * Returns a camelCase version of the string. Trims surrounding spaces,
      * capitalizes letters following digits, spaces, dashes and underscores,
      * and removes spaces, dashes, as well as underscores.
@@ -823,6 +850,22 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Checks if string starts with "BOM" (Byte Order Mark Character) character.
+     *
+     * EXAMPLE: <code>s("\xef\xbb\xbf foobar")->containsBom(); // true</code>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     *              <strong>true</strong> if the string has BOM at the start,<br>
+     *              <strong>false</strong> otherwise
+     */
+    public function containsBom(): bool
+    {
+        return $this->utf8::string_has_bom($this->str);
+    }
+
+    /**
      * Returns the length of the string, implementing the countable interface.
      *
      * EXAMPLE: <code>
@@ -949,33 +992,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         return static::create(
             $this->utf8::str_dasherize($this->str),
-            $this->encoding
-        );
-    }
-
-    /**
-     * Call a user function.
-     *
-     * EXAMPLE: <code>
-     * S::create('foo bar lall')->callUserFunction(static function ($str) {
-     *     return UTF8::str_limit($str, 8);
-     * })->toString(); // "foo bar…"
-     * </code>
-     *
-     * @param callable $function
-     * @param mixed    ...$parameter
-     *
-     * @psalm-mutation-free
-     *
-     * @return static
-     *                <p>Object having a $str changed via $function.</p>
-     */
-    public function callUserFunction(callable $function, ...$parameter): self
-    {
-        $str = $function($this->str, ...$parameter);
-
-        return static::create(
-            $str,
             $this->encoding
         );
     }
@@ -1959,6 +1975,26 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Checks if a string is 7 bit ASCII.
+     *
+     * EXAMPLE: <code>s('白')->isAscii; // false</code>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     *              <p>
+     *              <strong>true</strong> if it is ASCII<br>
+     *              <strong>false</strong> otherwise
+     *              </p>
+     *
+     * @noinspection GetSetMethodCorrectnessInspection
+     */
+    public function isAscii(): bool
+    {
+        return $this->utf8::is_ascii($this->str);
+    }
+
+    /**
      * Returns true if the string is base64 encoded, false otherwise.
      *
      * EXAMPLE: <code>
@@ -1978,6 +2014,20 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
+     * Check if the input is binary... (is look like a hack).
+     *
+     * EXAMPLE: <code>s(01)->isBinary(); // true</code>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isBinary(): bool
+    {
+        return $this->utf8::is_binary($this->str);
+    }
+
+    /**
      * Returns true if the string contains only whitespace chars, false otherwise.
      *
      * EXAMPLE: <code>
@@ -1992,6 +2042,23 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isBlank(): bool
     {
         return $this->utf8::is_blank($this->str);
+    }
+
+    /**
+     * Checks if the given string is equal to any "Byte Order Mark".
+     *
+     * WARNING: Use "s::string_has_bom()" if you will check BOM in a string.
+     *
+     * EXAMPLE: <code>s->("\xef\xbb\xbf")->isBom(); // true</code>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     *              <p><strong>true</strong> if the $utf8_chr is Byte Order Mark, <strong>false</strong> otherwise.</p>
+     */
+    public function isBom(): bool
+    {
+        return $this->utf8::is_bom($this->str);
     }
 
     /**
@@ -2326,6 +2393,71 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isUpperCase(): bool
     {
         return $this->utf8::is_uppercase($this->str);
+    }
+
+    /**
+     * /**
+     * Check if $url is an correct url.
+     *
+     * @param bool $disallow_localhost
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isUrl(bool $disallow_localhost = false): bool
+    {
+        return $this->utf8::is_url($this->str, $disallow_localhost);
+    }
+
+    /**
+     * Check if the string is UTF-16.
+     *
+     * @psalm-mutation-free
+     *
+     * @return false|int
+     *                   <strong>false</strong> if is't not UTF-16,<br>
+     *                   <strong>1</strong> for UTF-16LE,<br>
+     *                   <strong>2</strong> for UTF-16BE
+     */
+    public function isUtf16()
+    {
+        return $this->utf8::is_utf16($this->str);
+    }
+
+    /**
+     * Check if the string is UTF-32.
+     *
+     * @psalm-mutation-free
+     *
+     * @return false|int
+     *                   <strong>false</strong> if is't not UTF-32,<br>
+     *                   <strong>1</strong> for UTF-32LE,<br>
+     *                   <strong>2</strong> for UTF-32BE
+     */
+    public function isUtf32()
+    {
+        return $this->utf8::is_utf32($this->str);
+    }
+
+    /**
+     * Checks whether the passed input contains only byte sequences that appear valid UTF-8.
+     *
+     * EXAMPLE: <code>
+     * s('Iñtërnâtiônàlizætiøn')->isUtf8(); // true
+     * //
+     * s("Iñtërnâtiônàlizætiøn\xA0\xA1")->isUtf8(); // false
+     * </code>
+     *
+     * @param bool $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
+     *
+     * @psalm-mutation-free
+     *
+     * @return bool
+     */
+    public function isUtf8(bool $strict = false): bool
+    {
+        return $this->utf8::is_utf8($this->str, $strict);
     }
 
     /**
@@ -4183,8 +4315,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns a trimmed string in proper title case: Also accepts an array, $ignore, allowing you to list words not to be
-     * capitalized.
+     * Returns a trimmed string in proper title case: Also accepts an array, $ignore, allowing you to list words not to
+     * be capitalized.
      *
      * EXAMPLE: <code>
      * </code>
@@ -4267,6 +4399,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         /**
          * @psalm-suppress ArgumentTypeCoercion -> maybe the string looks like an int ;)
+         * @phpstan-ignore-next-line
          */
         return $this->utf8::to_boolean($this->str);
     }
