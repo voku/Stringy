@@ -297,9 +297,9 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     public function testChars($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->chars();
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $char) {
-            static::assertInternalType('string', $char);
+            static::assertTrue(\is_string($char));
         }
         static::assertEquals($expected, $result);
     }
@@ -987,7 +987,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWith($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -1027,7 +1027,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWithAny($substrings, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -1067,7 +1067,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWith($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -1107,7 +1107,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWithAny($substrings, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -1140,7 +1140,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->toBoolean();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -1424,7 +1424,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->contains($needle, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($haystack, $stringy);
     }
@@ -1474,7 +1474,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAny($needles, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($haystack, $stringy);
     }
@@ -1539,7 +1539,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAll($needles, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($haystack, $stringy);
     }
@@ -2083,7 +2083,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->length();
-        static::assertInternalType('int', $result);
+        static::assertTrue(\is_int($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2517,7 +2517,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlpha();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2549,7 +2549,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlphanumeric();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2584,7 +2584,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isBlank();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2621,7 +2621,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isJson();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2663,7 +2663,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2693,7 +2693,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2727,7 +2727,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isSerialized();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2755,7 +2755,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str);
         $result = $stringy->isBase64();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2784,7 +2784,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2814,7 +2814,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2848,7 +2848,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isHexadecimal();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2890,7 +2890,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->countSubstr($substring, $caseSensitive);
-        static::assertInternalType('int', $result);
+        static::assertTrue(\is_int($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }

@@ -1405,7 +1405,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
                     unset($arg[$name]);
 
-                    $str = \substr_replace($str, $param, (int) $offset, \strlen($nameTmp));
+                    $str = \substr_replace($str, (string) $param, (int) $offset, \strlen($nameTmp));
                 }
 
                 unset($args[$key]);

@@ -2193,9 +2193,9 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     public function testChars($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->chars();
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $char) {
-            static::assertInternalType('string', $char);
+            static::assertTrue(\is_string($char));
         }
         static::assertSame($expected, $result);
     }
@@ -2246,7 +2246,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->contains($needle, (bool) $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());
     }
@@ -2264,7 +2264,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAll($needles, (bool) $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $haystack);
         static::assertSame($haystack, $stringy->toString());
     }
@@ -2354,7 +2354,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWith($substring, (bool) $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2372,7 +2372,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWithAny($substrings, (bool) $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2564,7 +2564,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2580,7 +2580,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2725,7 +2725,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $str = S::create($string, $encoding);
         $result = $str->is($pattern);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result, 'tested: ' . $pattern);
         static::assertEquals($string, $str);
     }
@@ -2741,7 +2741,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlpha();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2757,7 +2757,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlphanumeric();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2772,7 +2772,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str);
         $result = $stringy->isBase64(false);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2799,7 +2799,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isBlank();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
 
@@ -2807,7 +2807,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
         $stringy = S::create($str, $encoding);
         $result = $stringy->isWhitespace();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2858,7 +2858,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isHexadecimal();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2895,7 +2895,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isJson(true);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
         static::assertSame($str, $stringy->toString());
     }
@@ -2922,7 +2922,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2938,7 +2938,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isSerialized();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2954,7 +2954,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3034,7 +3034,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->length();
-        static::assertInternalType('int', $result);
+        static::assertTrue(\is_int($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3800,7 +3800,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWith($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3818,7 +3818,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWithAny($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -4139,7 +4139,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->toBoolean();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
         static::assertSame($str, $stringy->toString());
     }
@@ -4193,7 +4193,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create('öäü - foo');
         $result = $stringy->toString();
-        static::assertInternalType('string', $result);
+        static::assertTrue(\is_string($result));
         static::assertSame((string) $stringy, $result);
         static::assertSame('öäü - foo', $result);
     }
@@ -4489,7 +4489,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAny($needles, (bool) $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());
     }

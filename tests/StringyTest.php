@@ -2201,9 +2201,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testChars($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->chars();
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $char) {
-            static::assertInternalType('string', $char);
+            static::assertTrue(\is_string($char));
         }
         static::assertSame($expected, $result);
     }
@@ -2254,7 +2254,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->contains($needle, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());
     }
@@ -2272,7 +2272,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAll($needles, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $haystack);
         static::assertSame($haystack, $stringy->toString());
     }
@@ -2362,7 +2362,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWith($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2380,7 +2380,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->endsWithAny($substrings, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result);
         static::assertEquals($str, $stringy);
     }
@@ -2572,7 +2572,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2588,7 +2588,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->hasUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2733,7 +2733,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $str = S::create($string, $encoding);
         $result = $str->is($pattern);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertEquals($expected, $result, 'tested: ' . $pattern);
         static::assertEquals($string, $str);
     }
@@ -2749,7 +2749,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlpha();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2765,7 +2765,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isAlphanumeric();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2780,7 +2780,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str);
         $result = $stringy->isBase64(false);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2807,7 +2807,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isBlank();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
 
@@ -2815,7 +2815,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
         $stringy = S::create($str, $encoding);
         $result = $stringy->isWhitespace();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2866,7 +2866,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isHexadecimal();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2903,7 +2903,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isJson(true);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
         static::assertSame($str, $stringy->toString());
     }
@@ -2930,7 +2930,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isLowerCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2946,7 +2946,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isSerialized();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -2962,7 +2962,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->isUpperCase();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3042,7 +3042,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->length();
-        static::assertInternalType('int', $result);
+        static::assertTrue(\is_int($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3804,8 +3804,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $stringy = S::create($str, $encoding);
         $result = $stringy->split($pattern, $limit);
 
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $string) {
+            static::assertInstanceOf(\Stringy\Stringy::class, $string);
             $this->assertStringy($string);
         }
 
@@ -3828,7 +3829,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWith($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -3846,7 +3847,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->startsWithAny($substring, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($str, $stringy->toString());
     }
@@ -4167,7 +4168,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($str, $encoding);
         $result = $stringy->toBoolean();
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
         static::assertSame($str, $stringy->toString());
     }
@@ -4221,7 +4222,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create('öäü - foo');
         $result = $stringy->toString();
-        static::assertInternalType('string', $result);
+        static::assertTrue(\is_string($result));
         static::assertSame((string) $stringy, $result);
         static::assertSame('öäü - foo', $result);
     }
@@ -4517,7 +4518,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $stringy = S::create($haystack, $encoding);
         $result = $stringy->containsAny($needles, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
         static::assertSame($haystack, $stringy->toString());
     }
@@ -5125,7 +5126,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = \Stringy\create('john pinkerton', 'ASCII');
         $nth = $string->nth(3);
-        static::assertAttributeEquals('ASCII', 'encoding', $nth);
+        static::assertSame('ASCII', $nth->getEncoding());
     }
 
     public function testCrc32()
@@ -5274,7 +5275,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $wrappedSoft = $string->softWrap(5);
-        static::assertAttributeEquals('ASCII', 'encoding', $wrappedSoft);
+        static::assertSame('ASCII', $wrappedSoft->getEncoding());
     }
 
     public function testItCanBeHardWrapped()
@@ -5289,7 +5290,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $wrappedHard = $string->hardWrap(5);
-        static::assertAttributeEquals('ASCII', 'encoding', $wrappedHard);
+        static::assertSame('ASCII', $wrappedHard->getEncoding());
     }
 
     public function testItCanBeHexEncoded()
@@ -5381,7 +5382,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $chunks = $string->chunk(3);
         foreach ($chunks as $chunk) {
-            static::assertAttributeEquals('ASCII', 'encoding', $chunk);
+            static::assertSame('ASCII', $chunk->getEncoding());
         }
     }
 
@@ -5410,7 +5411,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $exploded = $string->explode(' ');
         foreach ($exploded as $string) {
-            static::assertAttributeEquals('ASCII', 'encoding', $string);
+            static::assertSame('ASCII', $string->getEncoding());
         }
     }
 
@@ -5442,7 +5443,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $lastName = $string->after(' ');
-        static::assertAttributeEquals('ASCII', 'encoding', $lastName);
+        static::assertSame('ASCII', $lastName->getEncoding());
     }
 
     public function testItCanGetPartOfAStringBeforeACharacter()
@@ -5473,7 +5474,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $firstName = $string->before(' ');
-        static::assertAttributeEquals('ASCII', 'encoding', $firstName);
+        static::assertSame('ASCII', $firstName->getEncoding());
     }
 
     public function testItCanBeHashedWithBcrypt()
@@ -5481,7 +5482,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('john pinkerton');
         $bcrypt = $string->bcrypt();
         static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
-        static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
+            static::assertMatchesRegularExpression('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        } else {
+            static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        }
     }
 
     public function testAMultibyteStringCanBeHashedWithBcrypt()
@@ -5489,14 +5494,18 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $string = new \Stringy\Stringy('宮本 茂');
         $bcrypt = $string->bcrypt([\PASSWORD_BCRYPT_DEFAULT_COST]);
         static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
-        static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
+            static::assertMatchesRegularExpression('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        } else {
+            static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+        }
     }
 
     public function testItPreservesEncodingBcrypt()
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $bcrypt = $string->bcrypt();
-        static::assertAttributeEquals('ASCII', 'encoding', $bcrypt);
+        static::assertSame('ASCII', $bcrypt->getEncoding());
     }
 
     public function testItCanBeHashedWithCrypt()
@@ -5519,7 +5528,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $crypt = $string->crypt('NaCL');
-        static::assertAttributeEquals('ASCII', 'encoding', $crypt);
+        static::assertSame('ASCII', $crypt->getEncoding());
     }
 
     public function testItCanBeDecrypted()
@@ -5564,7 +5573,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
         $string = new \Stringy\Stringy($encryptedString, 'ASCII');
         $decrypted = $string->decrypt('secret');
-        static::assertAttributeEquals('ASCII', 'encoding', $decrypted);
+        static::assertSame('ASCII', $decrypted->getEncoding());
     }
 
     public function testItCanSetTheInternalEncoding()
@@ -5573,7 +5582,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $ascii = $string->setInternalEncoding('ASCII');
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
         static::assertSame('john pinkerton 宮本', $ascii->toString());
-        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+        static::assertSame('ASCII', $ascii->getEncoding());
     }
 
     public function testItCanUseNewEncoding()
@@ -5582,7 +5591,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $ascii = $string->encode('ASCII');
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
         static::assertSame('john pinkerton ??', $ascii->toString());
-        static::assertAttributeEquals('ASCII', 'encoding', $ascii);
+        static::assertSame('ASCII', $ascii->getEncoding());
     }
 
     public function testItCanUseNewEncodingv2()
@@ -5591,7 +5600,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $ascii = $string->encode('HTML', true);
         static::assertInstanceOf(\Stringy\Stringy::class, $ascii);
         static::assertSame('john pinkerton &#23470;&#26412;', $ascii->toString());
-        static::assertAttributeEquals('HTML-ENTITIES', 'encoding', $ascii);
+        static::assertSame('HTML-ENTITIES', $ascii->getEncoding());
     }
 
     public function testItCanDetermineIfTheStringIsNumeric()
@@ -5684,7 +5693,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $studlyCase = $string->studlyCase();
-        static::assertAttributeEquals('ASCII', 'encoding', $studlyCase);
+        static::assertSame('ASCII', $studlyCase->getEncoding());
     }
 
     public function testItCanConvertToPascalCase()
@@ -5707,7 +5716,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $pascalCase = $string->pascalCase();
-        static::assertAttributeEquals('ASCII', 'encoding', $pascalCase);
+        static::assertSame('ASCII', $pascalCase->getEncoding());
     }
 
     public function testItCanConvertToSnakeCase()
@@ -5730,7 +5739,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $snakeCase = $string->snakeCase();
-        static::assertAttributeEquals('ASCII', 'encoding', $snakeCase);
+        static::assertSame('ASCII', $snakeCase->getEncoding());
     }
 
     public function testItCanConvertToKebabCase()
@@ -5753,7 +5762,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $kebabCase = $string->kebabCase();
-        static::assertAttributeEquals('ASCII', 'encoding', $kebabCase);
+        static::assertSame('ASCII', $kebabCase->getEncoding());
     }
 
     public function testItCanReturnASubstring()
@@ -5780,7 +5789,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $string = new \Stringy\Stringy('john pinkerton', 'ASCII');
         $substring = $string->substring(5, 4);
-        static::assertAttributeEquals('ASCII', 'encoding', $substring);
+        static::assertSame('ASCII', $substring->getEncoding());
     }
 
     public function testUrlDecodeMulti()
