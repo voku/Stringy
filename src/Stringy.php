@@ -1245,6 +1245,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         }
 
         $strings = \explode($delimiter, $this->str, $limit);
+        /** @phpstan-ignore-next-line - if "$delimiter" is an empty string, then "explode()" will return "false" */
         if ($strings === false) {
             $strings = [];
         }

@@ -2,7 +2,7 @@ parameters:
     level: max
     paths:
         - %currentWorkingDirectory%/src/
-    reportUnmatchedIgnoredErrors: true
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # false-postive?
         - '#Arrayy\\Collection\\AbstractCollection<int, Stringy\\Stringy>#'
