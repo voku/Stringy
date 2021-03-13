@@ -39,6 +39,9 @@ before_install:
   # Disable PHP extensions: mbstring, intl, iconv
   - |
     sed -i -e 's|^extension = \(mbstring\|intl\|iconv\)\.so$|# &|' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    ! php --ri mbstring
+    ! php --ri intl
+    ! php --ri iconv
   - "mkdir -p build/logs"
   
 install: 
