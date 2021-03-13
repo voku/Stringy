@@ -36,22 +36,21 @@ cache:
     - "${HOME}/.composer/cache"
 
 before_install:
-  # Disable PHP extensions
-  - "phpenv config-rm mbstring.ini"
-  - "phpenv config-rm intl.ini"
-  - "phpenv config-rm iconv.ini"
+  # Disable PHP extensions: mbstring, intl, iconv
+  - |
+    sed -i -e 's|^extension = \(mbstring\|intl\|iconv\)\.so$|# &|' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - "mkdir -p build/logs"
   
 install: 
-  - "travis_retry composer update --no-interaction --prefer-source --optimize-autoloader"
+  - "travis_retry composer update --no-interaction --prefer-dist --optimize-autoloader"
 
 script:
   - "vendor/bin/phpunit --verbose"
 
 after_script:
   # Upload to Coveralls
-  - "travis_retry composer require --no-interaction --prefer-source --dev satooshi/php-coveralls"
-  - "vendor/bin/coveralls -v"
+  - "travis_retry composer require --no-interaction --prefer-source --dev php-coveralls/php-coveralls"
+  - "php vendor/bin/coveralls -v"
   # Upload to Scrutinizer
   - "wget https://scrutinizer-ci.com/ocular.phar"
   - "php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml"
