@@ -1,54 +1,118 @@
+# TravisCI configuration for voku/Stringy
 
-language: php
+if: "branch = master"
 
-sudo: false
+language: "php"
+os:
+  - "linux"
+dist: "bionic"
 
-php:
-  - nightly
+jobs:
+  fast_finish: true
+  include:
+    - name: "PHP 7.4"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php7.4-cli"
+            - "php7.4-xdebug"
+            - "php7.4-xml"
+
+    - name: "PHP 7.3"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php7.3-cli"
+            - "php7.3-xdebug"
+            - "php7.3-xml"
+
+    - name: "PHP 7.2"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php7.2-cli"
+            - "php7.2-xdebug"
+            - "php7.2-xml"
+
+    - name: "PHP 7.1"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php7.1-cli"
+            - "php7.1-xdebug"
+            - "php7.1-xml"
+
+    - name: "PHP 7.0"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php7.0-cli"
+            - "php7.0-xdebug"
+            - "php7.0-xml"
+
+    - name: "PHP 8.0"
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ondrej/php"
+          packages:
+            - "php8.0-cli"
+            - "php8.0-xdebug"
+            - "php8.0-xml"
+
+    - name: "Static analysis"
+      php: "7.1"
+      before_install: "skip"
+      script:
+        - "travis_retry composer require --no-interaction --dev phpstan/phpstan"
+        - "vendor/bin/phpstan analyse"
+      after_script: "skip"
+  allow_failures:
+    - name: "PHP 8.0"
 
 git:
   depth: 2
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - "${HOME}/.composer/cache"
 
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: nightly
-  include:
-    - php: nightly
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
+before_install:
+  - |
+    ln -v -f -s /usr/bin/php ~/.phpenv/shims/php
+    sudo /usr/sbin/phpdismod iconv
+    echo "xdebug.mode = coverage" | sudo tee --append "$(php -r 'echo php_ini_loaded_file();')"
+  # Verify disable PHP extensions
+  - |
+    ! php --ri iconv
+    ! php --ri intl
+    ! php --ri mbstring
+  - "mkdir -p build/logs"
 
-before_script:
-  - php --version
-  - mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
-  - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "php-config -> orig"
-  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "php-config -> new"
-  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - travis_retry composer self-update
-  - travis_retry composer require satooshi/php-coveralls
-  - if [ "${TRAVIS_PHP_VERSION:0:3}" != 7.0 ]; then travis_retry composer require phpstan/phpstan; fi
-  - travis_retry composer install --no-interaction --prefer-source
-  - composer dump-autoload -o
+install:
+  - "travis_retry composer update --no-interaction --prefer-dist --optimize-autoloader"
 
 script:
-  - mkdir -p build/logs
-  - vendor/bin/phpunit -c phpunit.xml.dist
-  - if [ "${TRAVIS_PHP_VERSION:0:3}" != 7.0 ]; then vendor/bin/phpstan analyse; fi
+  - "vendor/bin/phpunit --verbose"
 
 after_script:
-  - php vendor/bin/coveralls -v
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
-  - bash <(curl -s https://codecov.io/bash)
+  # Upload to Coveralls
+  ##- "travis_retry composer require --no-interaction --prefer-source --dev php-coveralls/php-coveralls"
+  ##- "vendor/bin/php-coveralls -v"
+  - "travis_retry composer require --no-interaction --prefer-source --dev satooshi/php-coveralls"
+  - "vendor/bin/coveralls -v"
+  # Upload to Scrutinizer
+  - "wget https://scrutinizer-ci.com/ocular.phar"
+  - "php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml"
+  # Upload to Codecov
+  - "bash <(curl -s https://codecov.io/bash)"
