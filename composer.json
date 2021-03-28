@@ -24,7 +24,7 @@
         {
             "name": "Lars Moelleken",
             "email": "lars@moelleken.org",
-            "homepage": "http://www.moelleken.org/",
+            "homepage": "https://www.moelleken.org/",
             "role": "Fork-Maintainer"
         }
     ],
@@ -36,10 +36,10 @@
         "php": ">=7.0.0",
         "ext-json": "*",
         "defuse/php-encryption": "~2.0",
-        "voku/arrayy": "~7.5",
+        "voku/arrayy": "~7.8",
         "voku/urlify": "~5.0",
         "voku/anti-xss": "~4.1",
-        "voku/email-check": "~3.0",
+        "voku/email-check": "~3.1",
         "voku/portable-ascii": "~1.5",
         "voku/portable-utf8": "~5.4"
     },
