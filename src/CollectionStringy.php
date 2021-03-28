@@ -6,11 +6,42 @@ namespace Stringy;
 
 /**
  * @template TKey of array-key
- * @template T
- * @extends \Arrayy\Collection\Collection<TKey,T|Stringy>
+ * @template T of Stringy
+ * @extends \Arrayy\Collection\Collection<TKey,T>
  */
 class CollectionStringy extends \Arrayy\Collection\Collection
 {
+    /**
+     * Creates an CollectionInterface object.
+     *
+     * @param mixed  $data
+     * @param string $iteratorClass
+     * @param bool   $checkPropertiesInConstructor
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
+     *
+     * @template TKeyCreate as array-key
+     * @template TCreate of Stringy
+     *
+     * @phpstan-param  array<TKeyCreate,TCreate> $data
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator<array-key, mixed>> $iteratorClass
+     * @phpstan-return static<TKeyCreate,TCreate>
+     *
+     * @psalm-mutation-free
+     */
+    public static function create(
+        $data = [],
+        string $iteratorClass = \Arrayy\ArrayyIterator::class,
+        bool $checkPropertiesInConstructor = true
+    ) {
+        return new static(
+            $data,
+            $iteratorClass,
+            $checkPropertiesInConstructor
+        );
+    }
+
     public function getType(): string
     {
         return Stringy::class;
@@ -19,9 +50,7 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     /**
      * @return Stringy[]
      *
-     * @psalm-return array<array-key,Stringy>
-     *
-     * @noinspection SenselessProxyMethodInspection - other phpdocs ;)
+     * @phpstan-return array<array-key,Stringy>
      */
     public function getAll(): array
     {
@@ -31,11 +60,8 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     /**
      * @return \Generator|Stringy[]
      *
-     * @psalm-return \Generator<mixed,Stringy>|\Generator<TKey,Stringy>
+     * @phpstan-return \Generator<mixed,Stringy>|\Generator<TKey,T>
      * @psalm-mutation-free
-     *
-     * @noinspection PhpInconsistentReturnPointsInspection
-     * @noinspection SenselessProxyMethodInspection - other phpdocs ;)
      */
     public function getGenerator(): \Generator
     {
@@ -62,12 +88,11 @@ class CollectionStringy extends \Arrayy\Collection\Collection
      * @param string ...$string
      *
      * @return $this
-     *
-     * @noinspection PhpDocSignatureInspection
      */
     public function addString(string ...$string): self
     {
         foreach ($string as $stringTmp) {
+            /** @phpstan-ignore-next-line | FP? */
             $this->add(Stringy::create($stringTmp));
         }
 
@@ -82,6 +107,7 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     public function addStringy(Stringy ...$stringy): self
     {
         foreach ($stringy as $stringyTmp) {
+            /** @phpstan-ignore-next-line | FP? */
             $this->add($stringyTmp);
         }
 

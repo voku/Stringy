@@ -170,7 +170,7 @@ class StaticStringy
      *
      * @return CollectionStringy|Stringy[]
      *
-     * @psalm-return CollectionStringy<array-key, Stringy>
+     * @phpstan-return CollectionStringy<array-key, Stringy>
      */
     public static function collection($input = null): CollectionStringy
     {

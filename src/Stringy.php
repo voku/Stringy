@@ -258,10 +258,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function append(string ...$suffix): self
     {
         if (\count($suffix) <= 1) {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $suffix = $suffix[0];
         } else {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $suffix = \implode('', $suffix);
         }
 
@@ -316,7 +314,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param CollectionStringy|static ...$suffix <p>The Stringy objects to append.</p>
      *
-     * @psalm-param CollectionStringy<int,static>|static ...$suffix
+     * @phpstan-param CollectionStringy<int,static>|static ...$suffix
      *
      * @psalm-mutation-free
      *
@@ -698,7 +696,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static[]
      *                  <p>An array of Stringy objects.</p>
      *
-     * @psalm-return array<int,static>
+     * @phpstan-return array<int,static>
      */
     public function chunk(int $length = 1): array
     {
@@ -712,8 +710,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         $chunks = $this->utf8::str_split($this->str, $length);
 
-        /** @noinspection AlterInForeachInspection */
-        foreach ($chunks as $i => &$value) {
+        foreach ($chunks as &$value) {
             $value = static::create($value, $this->encoding);
         }
 
@@ -737,7 +734,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function chunkCollection(int $length = 1): CollectionStringy
     {
@@ -938,7 +935,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>A Stringy object.</p>
-     * @psalm-pure
+     * @phpstan-pure
      */
     public static function create($str = '', string $encoding = null): self
     {
@@ -1278,7 +1275,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function explodeCollection(string $delimiter, int $limit = \PHP_INT_MAX): CollectionStringy
     {
@@ -1452,7 +1449,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return \ArrayIterator
      *                        <p>An iterator for the characters in the string.</p>
      *
-     * @psalm-return \ArrayIterator<array-key,string>
+     * @phpstan-return \ArrayIterator<array-key,string>
      */
     public function getIterator(): \ArrayIterator
     {
@@ -2704,7 +2701,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static[]
      *                  <p>An array of Stringy objects.</p>
      *
-     * @psalm-return array<int,static>
+     * @phpstan-return array<int,static>
      */
     public function lines(): array
     {
@@ -2737,7 +2734,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function linesCollection(): CollectionStringy
     {
@@ -3012,7 +3009,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function offsetSet($offset, $value)
     {
         // Stringy is immutable, cannot directly set char
-        /** @noinspection ThrowRawExceptionInspection */
         throw new \Exception('Stringy object is immutable, cannot modify char');
     }
 
@@ -3033,7 +3029,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function offsetUnset($offset)
     {
         // Don't allow directly modifying the string
-        /** @noinspection ThrowRawExceptionInspection */
         throw new \Exception('Stringy object is immutable, cannot unset char');
     }
 
@@ -3190,10 +3185,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function prepend(string ...$prefix): self
     {
         if (\count($prefix) <= 1) {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $prefix = $prefix[0];
         } else {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $prefix = \implode('', $prefix);
         }
 
@@ -3208,7 +3201,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @param CollectionStringy|static ...$prefix <p>The Stringy objects to append.</p>
      *
-     * @psalm-param CollectionStringy<int,static>|static ...$prefix
+     * @phpstan-param CollectionStringy<int,static>|static ...$prefix
      *
      * @psalm-mutation-free
      *
@@ -3894,7 +3887,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static[]
      *                  <p>An array of Stringy objects.</p>
      *
-     * @psalm-return array<int,static>
+     * @phpstan-return array<int,static>
      */
     public function split(string $pattern, int $limit = null): array
     {
@@ -3907,8 +3900,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         }
 
         $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit);
-        /** @noinspection AlterInForeachInspection */
-        foreach ($array as $i => &$value) {
+        foreach ($array as &$value) {
             $value = static::create($value, $this->encoding);
         }
 
@@ -3936,7 +3928,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function splitCollection(string $pattern, int $limit = null): CollectionStringy
     {
@@ -4940,7 +4932,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static[]
      *
-     * @psalm-return array<int,static>
+     * @phpstan-return array<int,static>
      */
     public function words(
         string $char_list = '',
@@ -4990,7 +4982,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @psalm-return CollectionStringy<int,static>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function wordsCollection(
         string $char_list = '',
@@ -5029,8 +5021,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
     /**
      * Returns the replacements for the toAscii() method.
-     *
-     * @noinspection PhpUnused
      *
      * @psalm-mutation-free
      *
