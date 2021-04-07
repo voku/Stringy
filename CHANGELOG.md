@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.4.1 (2021-04-07)
+- use Github Actions
+- use optimized phpdocs for phpstan
+- use phpdocs (generics) for collections
+
 ### 6.4.0 (2020-09-27)
 - add "isAscii()"
 - add "isBinary()"
