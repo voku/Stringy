@@ -11,5 +11,4 @@
   <testsuite name="Stringy">
     <directory>tests</directory>
   </testsuite>
-  <logging/>
 </phpunit>
