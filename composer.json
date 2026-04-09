@@ -44,7 +44,7 @@
         "voku/portable-utf8": "~6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0",
+        "phpunit/phpunit": "~9.0 || ~10.0 || ~11.0",
         "phpstan/phpstan": "^1.0 || ^2.0"
     },
     "replace": {
