@@ -47,6 +47,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['ò', 'fòô bàř', 1, 'UTF-8'],
             ['ř', 'fòô bàř', 6, 'UTF-8'],
             ['', 'fòô bàř', 7, 'UTF-8'],
+            // negative indices count from end (mb_substr semantics)
+            ['r', 'foo bar', -1],
+            ['f', 'foo bar', -7],
+            ['ř', 'fòô bàř', -1, 'UTF-8'],
+            ['f', 'fòô bàř', -7, 'UTF-8'],
         ];
     }
 
@@ -1546,6 +1551,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['this is...', 'this is öäü-foo test', 8, '...'],
             ['fòô', 'fòô bàř fòô', 6, ''],
             ['fòô bàř', 'fòô bàř fòô', 8, ''],
+            // zero / negative length → returns empty string
+            ['', 'this is a test', 0, '...'],
+            ['', 'this is a test', -1, '...'],
         ];
     }
 
@@ -1875,6 +1883,31 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
             static::assertSame($testResult[1], $stringy->length(), 'tested: ' . $testString . ' | ' . $stringy->toString());
         }
+    }
+
+    public function testAppendRandomStringZeroLengthReturnsUnchanged()
+    {
+        // $length === 0 → nothing appended
+        $stringy = S::create('base')->appendRandomString(0);
+        static::assertSame('base', $stringy->toString());
+
+        // $length < 0 → nothing appended
+        $stringy = S::create('base')->appendRandomString(-5);
+        static::assertSame('base', $stringy->toString());
+    }
+
+    public function testAppendRandomStringEmptyCharsReturnsUnchanged()
+    {
+        // empty possibleChars → nothing appended regardless of length
+        $stringy = S::create('base')->appendRandomString(10, '');
+        static::assertSame('base', $stringy->toString());
+    }
+
+    public function testAppendRandomStringProducesCorrectChars()
+    {
+        $result = S::create('')->appendRandomString(8, 'abc');
+        static::assertSame(8, $result->length());
+        static::assertMatchesRegularExpression('/^[abc]{8}$/', $result->toString());
     }
 
     public function testAddUniqueIdentifier()
@@ -3122,6 +3155,37 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testLineWrapZeroLimitReturnsEmpty()
+    {
+        static::assertSame('', S::create('hello world')->lineWrap(0)->toString());
+        static::assertSame('', S::create('hello world')->lineWrap(-1)->toString());
+    }
+
+    public function testLineWrapAfterWordZeroLimitReturnsEmpty()
+    {
+        static::assertSame('', S::create('hello world')->lineWrapAfterWord(0)->toString());
+        static::assertSame('', S::create('hello world')->lineWrapAfterWord(-3)->toString());
+    }
+
+    public function testLineWrapEmptyDelimiterNormalisedToNewline()
+    {
+        // empty string delimiter must behave the same as null (split by \n)
+        $str = "line1\nline2\nline3";
+        static::assertSame(
+            S::create($str)->lineWrap(10, "\n", true)->toString(),
+            S::create($str)->lineWrap(10, "\n", true, '')->toString()
+        );
+    }
+
+    public function testLineWrapAfterWordEmptyDelimiterNormalisedToNewline()
+    {
+        $str = "line1\nline2\nline3";
+        static::assertSame(
+            S::create($str)->lineWrapAfterWord(10, "\n", true)->toString(),
+            S::create($str)->lineWrapAfterWord(10, "\n", true, '')->toString()
+        );
+    }
+
     /**
      * @dataProvider longestCommonPrefixProvider()
      *
@@ -3224,6 +3288,19 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('ô', $stringy[2]);
     }
 
+    public function testOffsetGetNegativeIndex()
+    {
+        $stringy = S::create('fòô', 'UTF-8');
+
+        // -1 → last char, -3 → first char
+        static::assertSame('ô', $stringy->offsetGet(-1));
+        static::assertSame('ò', $stringy->offsetGet(-2));
+        static::assertSame('f', $stringy->offsetGet(-3));
+
+        // bracket-access shorthand
+        static::assertSame('ô', $stringy[-1]);
+    }
+
     public function testOffsetGetOutOfBounds()
     {
         $this->expectException(\OutOfBoundsException::class);
@@ -3232,6 +3309,15 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUnusedLocalVariableInspection */
         /** @noinspection OnlyWritesOnParameterInspection */
         $test = $stringy[3];
+    }
+
+    public function testOffsetGetNegativeOutOfBounds()
+    {
+        $this->expectException(\OutOfBoundsException::class);
+
+        $stringy = S::create('fòô', 'UTF-8');
+        // -4 is out of range for a 3-char string
+        $test = $stringy->offsetGet(-4);
     }
 
     public function testOffsetSet()
