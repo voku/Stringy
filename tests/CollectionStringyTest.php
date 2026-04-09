@@ -40,4 +40,62 @@ final class CollectionStringyTest extends \PHPUnit\Framework\TestCase
 
         S::collection(['fòôbàř', 'lall', 1]);
     }
+
+    public function testCollectionFunctionWithSingleString()
+    {
+        // A single (non-array) string must be wrapped and produce a one-element collection.
+        $collection = \Stringy\collection('hello');
+
+        static::assertSame(1, $collection->count());
+        static::assertSame('hello', $collection->implode(','));
+    }
+
+    public function testCollectionFunctionWithSingleStringy()
+    {
+        // A single Stringy object (non-array) must be accepted and produce a one-element collection.
+        $collection = \Stringy\collection(Stringy::create('world'));
+
+        static::assertSame(1, $collection->count());
+        static::assertSame('world', $collection->implode(','));
+    }
+
+    public function testCollectionFunctionWithNull()
+    {
+        // null input must return an empty collection.
+        $collection = \Stringy\collection(null);
+
+        static::assertSame(0, $collection->count());
+        static::assertSame('', $collection->implode(','));
+    }
+
+    public function testCreateFromStringsPreservesKeys()
+    {
+        // createFromStrings must preserve associative keys.
+        $collection = \Stringy\CollectionStringy::createFromStrings(['a' => 'foo', 'b' => 'bar', 'c' => 'baz']);
+
+        $all = $collection->getAll();
+        static::assertArrayHasKey('a', $all);
+        static::assertArrayHasKey('b', $all);
+        static::assertArrayHasKey('c', $all);
+
+        static::assertSame('foo', $all['a']->toString());
+        static::assertSame('bar', $all['b']->toString());
+        static::assertSame('baz', $all['c']->toString());
+    }
+
+    public function testCreateFromStringsReturnsStringyObjects()
+    {
+        $collection = \Stringy\CollectionStringy::createFromStrings(['hello', 'wörld']);
+
+        foreach ($collection->getAll() as $item) {
+            static::assertInstanceOf(Stringy::class, $item);
+        }
+    }
+
+    public function testCreateFromStringsWithEmptyInput()
+    {
+        $collection = \Stringy\CollectionStringy::createFromStrings([]);
+
+        static::assertSame(0, $collection->count());
+    }
 }

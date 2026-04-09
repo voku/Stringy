@@ -77,7 +77,6 @@ class CollectionStringy extends \Arrayy\Collection\Collection
         $result = [];
 
         foreach ($this->getArray() as $key => $value) {
-            \assert($value instanceof Stringy);
             $result[$key] = $value->toString();
         }
 
@@ -115,21 +114,21 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     }
 
     /**
-     * @param string[] $strings
+     * @param array<array-key, string> $strings
      *
-     * @return static
+     * @return static<array-key, Stringy>
      */
     public static function createFromStrings($strings = []): self
     {
-        /** @noinspection AlterInForeachInspection */
-        foreach ($strings as &$string) {
-            $string = Stringy::create($string);
+        $stringyStrings = [];
+
+        foreach ($strings as $key => $string) {
+            $stringyStrings[$key] = Stringy::create($string);
         }
 
-        /** @noinspection PhpSillyAssignmentInspection */
-        /** @var Stringy[] $strings */
-        $strings = $strings;
+        /** @var static<array-key, Stringy> $collection */
+        $collection = static::create($stringyStrings);
 
-        return new static($strings);
+        return $collection;
     }
 }
