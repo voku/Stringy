@@ -6,6 +6,9 @@ on:
       - master
   pull_request:
 
+permissions:
+  contents: read
+
 defaults:
   run:
     shell: bash
@@ -17,20 +20,16 @@ jobs:
       fail-fast: false
       matrix:
         php: [
-            7.3,
-            7.4,
-            8.0,
-            8.1,
-            8.2,
-            8.3
+            "8.1",
+            "8.2",
+            "8.3",
+            "8.4"
         ]
         composer: [basic]
     timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -45,7 +44,7 @@ jobs:
         run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -69,12 +68,12 @@ jobs:
           XDEBUG_MODE=coverage php vendor/bin/phpunit -c phpunit.xml.dist
 
       - name: Run phpstan
-        continue-on-error: true
-        if: ${{ matrix.php == '8.1' }}
+        if: ${{ matrix.php == '8.3' }}
         run: |
           php vendor/bin/phpstan analyse
 
       - name: Upload coverage results to Coveralls
+        if: ${{ matrix.php == '8.3' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -82,18 +81,20 @@ jobs:
           php-coveralls --coverage_clover=build/logs/clover.xml -v
 
       - name: Upload coverage results to Codecov
-        uses: codecov/codecov-action@v4
+        if: ${{ matrix.php == '8.3' }}
+        uses: codecov/codecov-action@v6
         with:
           files: build/logs/clover.xml
 
       - name: Upload coverage results to Scrutinizer
+        if: ${{ matrix.php == '8.3' }}
         uses: sudo-bot/action-scrutinizer@latest
         with:
           cli-args: "--format=php-clover build/logs/clover.xml"
 
       - name: Archive logs artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
