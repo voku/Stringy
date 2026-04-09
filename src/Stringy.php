@@ -318,6 +318,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function appendRandomString(int $length, string $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): self
     {
+        if ($length <= 0 || $possibleChars === '') {
+            return $this->append('');
+        }
+
         $str = $this->utf8::get_random_string($length, $possibleChars);
 
         return $this->append($str);
@@ -388,7 +392,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function at(int $index): self
     {
-        return static::create($this->utf8::char_at($this->str, $index), $this->encoding);
+        if ($this->encoding === 'UTF-8') {
+            return static::create((string) \mb_substr($this->str, $index, 1), $this->encoding);
+        }
+
+        return static::create($this->utf8::substr($this->str, $index, 1, $this->encoding), $this->encoding);
     }
 
     /**
@@ -952,7 +960,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>A Stringy object.</p>
-     * @phpstan-pure
      */
     public static function create($str = '', string $encoding = null): self
     {
@@ -1351,6 +1358,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function first(int $n): self
     {
+        if ($n <= 0) {
+            return static::create('', $this->encoding);
+        }
+
         return static::create(
             $this->utf8::first_char($this->str, $n, $this->encoding),
             $this->encoding
@@ -2655,6 +2666,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         bool $add_final_break = true,
         string $delimiter = null
     ): self {
+        if ($limit <= 0) {
+            return static::create('', $this->encoding);
+        }
+
+        $delimiter = $delimiter === '' ? null : $delimiter;
+
         return static::create(
             $this->utf8::wordwrap_per_line(
                 $this->str,
@@ -2694,6 +2711,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         bool $add_final_break = true,
         string $delimiter = null
     ): self {
+        if ($limit <= 0) {
+            return static::create('', $this->encoding);
+        }
+
+        $delimiter = $delimiter === '' ? null : $delimiter;
+
         return static::create(
             $this->utf8::wordwrap_per_line(
                 $this->str,
@@ -2982,7 +3005,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         \preg_match_all('/(?<integers>\d+)/', $this->str, $matches);
 
         return static::create(
-            \implode('', $matches['integers'] ?? []),
+            \implode('', $matches['integers']),
             $this->encoding
         );
     }
@@ -3008,7 +3031,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         \preg_match_all('/((?![\p{L}0-9\s]+).)/u', $this->str, $matches);
 
         return static::create(
-            \implode('', $matches[0] ?? []),
+            \implode('', $matches[0]),
             $this->encoding
         );
     }
@@ -3058,7 +3081,21 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function offsetGet($offset): string
     {
-        return $this->utf8::str_offset_get($this->str, $offset, $this->encoding);
+        $length = $this->length();
+
+        if (
+            ($offset >= 0 && $length <= $offset)
+            ||
+            $length < \abs($offset)
+        ) {
+            throw new \OutOfBoundsException('No character exists at the index');
+        }
+
+        if ($this->encoding === 'UTF-8') {
+            return (string) \mb_substr($this->str, $offset, 1);
+        }
+
+        return $this->utf8::substr($this->str, $offset, 1, $this->encoding);
     }
 
     /**
@@ -3763,6 +3800,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function shortenAfterWord(int $length, string $strAddOn = '…'): self
     {
+        if ($length <= 0) {
+            return static::create('', $this->encoding);
+        }
+
         return static::create(
             $this->utf8::str_limit_after_word($this->str, $length, $strAddOn),
             $this->encoding
