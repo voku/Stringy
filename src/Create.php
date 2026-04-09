@@ -14,7 +14,7 @@ if (!\function_exists('Stringy\create')) {
      *
      * @return Stringy A Stringy object
      */
-    function create($str, string $encoding = null)
+    function create($str, ?string $encoding = null)
     {
         return new Stringy($str, $encoding);
     }

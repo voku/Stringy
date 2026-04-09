@@ -74,7 +74,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @psalm-mutation-free
      */
-    public function __construct($str = '', string $encoding = null)
+    public function __construct($str = '', ?string $encoding = null)
     {
         /* @phpstan-ignore-next-line | always false in theory */
         if (\is_array($str)) {
@@ -606,7 +606,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object whose $str is a substring between $start and $end.</p>
      */
-    public function between(string $start, string $end, int $offset = null): self
+    public function between(string $start, string $end, ?int $offset = null): self
     {
         $str = $this->utf8::between(
             $this->str,
@@ -961,7 +961,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>A Stringy object.</p>
      */
-    public static function create($str = '', string $encoding = null): self
+    public static function create($str = '', ?string $encoding = null): self
     {
         return new static($str, $encoding);
     }
@@ -1328,7 +1328,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      */
-    public function extractText(string $search = '', int $length = null, string $replacerForSkippedText = '…'): self
+    public function extractText(string $search = '', ?int $length = null, string $replacerForSkippedText = '…'): self
     {
         return static::create(
             $this->utf8::extract_text(
@@ -2664,7 +2664,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         int $limit,
         string $break = "\n",
         bool $add_final_break = true,
-        string $delimiter = null
+        ?string $delimiter = null
     ): self {
         if ($limit <= 0) {
             return static::create('', $this->encoding);
@@ -2709,7 +2709,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         int $limit,
         string $break = "\n",
         bool $add_final_break = true,
-        string $delimiter = null
+        ?string $delimiter = null
     ): self {
         if ($limit <= 0) {
             return static::create('', $this->encoding);
@@ -3863,7 +3863,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with its $str being the extracted substring.</p>
      */
-    public function slice(int $start, int $end = null): self
+    public function slice(int $start, ?int $end = null): self
     {
         return static::create(
             $this->utf8::str_slice($this->str, $start, $end, $this->encoding),
@@ -4004,7 +4004,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @phpstan-return array<int,static>
      */
-    public function split(string $pattern, int $limit = null): array
+    public function split(string $pattern, ?int $limit = null): array
     {
         if ($this->str === '') {
             return [];
@@ -4045,7 +4045,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @phpstan-return CollectionStringy<int,static>
      */
-    public function splitCollection(string $pattern, int $limit = null): CollectionStringy
+    public function splitCollection(string $pattern, ?int $limit = null): CollectionStringy
     {
         /**
          * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
@@ -4226,7 +4226,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with its $str being the substring.</p>
      */
-    public function substr(int $start, int $length = null): self
+    public function substr(int $start, ?int $length = null): self
     {
         return static::create(
             $this->utf8::substr(
@@ -4254,7 +4254,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      */
-    public function substring(int $start, int $length = null): self
+    public function substring(int $start, ?int $length = null): self
     {
         if ($length === null) {
             return $this->substr($start);
@@ -4403,9 +4403,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *                <p>Object with a titleized $str.</p>
      */
     public function titleize(
-        array $ignore = null,
-        string $word_define_chars = null,
-        string $language = null
+        ?array $ignore = null,
+        ?string $word_define_chars = null,
+        ?string $language = null
     ): self {
         return static::create(
             $this->utf8::str_titleize(
@@ -4708,7 +4708,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with a trimmed $str.</p>
      */
-    public function trim(string $chars = null): self
+    public function trim(?string $chars = null): self
     {
         return static::create(
             $this->utf8::trim($this->str, $chars),
@@ -4732,7 +4732,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with a trimmed $str.</p>
      */
-    public function trimLeft(string $chars = null): self
+    public function trimLeft(?string $chars = null): self
     {
         return static::create(
             $this->utf8::ltrim($this->str, $chars),
@@ -4756,7 +4756,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object with a trimmed $str.</p>
      */
-    public function trimRight(string $chars = null): self
+    public function trimRight(?string $chars = null): self
     {
         return static::create(
             $this->utf8::rtrim($this->str, $chars),
@@ -5054,7 +5054,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function words(
         string $char_list = '',
         bool $remove_empty_values = false,
-        int $remove_short_values = null
+        ?int $remove_short_values = null
     ): array {
         if ($remove_short_values === null) {
             $strings = $this->utf8::str_to_words(
@@ -5104,7 +5104,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function wordsCollection(
         string $char_list = '',
         bool $remove_empty_values = false,
-        int $remove_short_values = null
+        ?int $remove_short_values = null
     ): CollectionStringy {
         /**
          * @psalm-suppress ImpureMethodCall -> add more psalm stuff to the collection class
