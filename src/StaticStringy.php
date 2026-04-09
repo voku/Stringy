@@ -18,7 +18,7 @@ namespace Stringy;
  * @method static string[] chars(string $stringInput, string $encoding = null)
  * @method static Stringy collapseWhitespace(string $stringInput, string $encoding = null)
  * @method static bool   contains(string $stringInput, string $needle, bool $caseSensitive = true, string $encoding = null)
- * @method static bool   containsAll(string $stringInput, array $needle, bool $caseSensitive = true, string $encoding = null)
+ * @method static bool   containsAll(string $stringInput, array<string> $needles, bool $caseSensitive = true, string $encoding = null)
  * @method static bool   containsAny(string $stringInput, string $needle, bool $caseSensitive = true, string $encoding = null)
  * @method static int    count(string $stringInput, string $encoding = null)
  * @method static int    countSubstr(string $stringInput, string $substring, bool $caseSensitive = true, string $encoding = null)
@@ -32,8 +32,8 @@ namespace Stringy;
  * @method static Stringy first(string $stringInput, int $n, string $encoding = null)
  * @method static bool   hasLowerCase(string $stringInput, string $encoding = null)
  * @method static bool   hasUpperCase(string $stringInput, string $encoding = null)
- * @method static Stringy htmlDecode(string $stringInput, int $flags = ENT_COMPAT, string $encoding = null)
- * @method static Stringy htmlEncode(string $stringInput, int $flags = ENT_COMPAT, string $encoding = null)
+ * @method static Stringy htmlDecode(string $stringInput, int $flags = 2, string $encoding = null)
+ * @method static Stringy htmlEncode(string $stringInput, int $flags = 2, string $encoding = null)
  * @method static Stringy humanize(string $stringInput, string $encoding = null)
  * @method static int|bool indexOf(string $stringInput, string $needle, int $offset = 0, string $encoding = null)
  * @method static int|bool indexOfLast(string $stringInput, string $needle, int $offset = 0, string $encoding = null)
@@ -71,12 +71,12 @@ namespace Stringy;
  * @method static Stringy removeXss(string $stringInput, string $encoding = null)
  * @method static Stringy repeat(string $stringInput, int $multiplier, string $encoding = null)
  * @method static Stringy replace(string $stringInput, string $search, string $replacement, bool $caseSensitive, string $encoding = null)
- * @method static Stringy replaceAll(string $stringInput, array $search, string $replacement, bool $caseSensitive, string $encoding = null)
+ * @method static Stringy replaceAll(string $stringInput, array<string> $search, string $replacement, bool $caseSensitive = true, string $encoding = null)
  * @method static Stringy reverse(string $stringInput, string $encoding = null)
  * @method static Stringy safeTruncate(string $stringInput, int $length, string $substring = '', string $encoding = null)
  * @method static Stringy shuffle(string $stringInput, string $encoding = null)
- * @method static Stringy shortenAfterWord(string $stringInput, int $length, string $strAddOn)
- * @method static Stringy slugify(string $stringInput, string $separator = '-', string $language = 'en', array $replacements = [], string $encoding = null)
+ * @method static Stringy shortenAfterWord(string $stringInput, int $length, string $strAddOn = '…')
+ * @method static Stringy slugify(string $stringInput, string $separator = '-', string $language = 'en', array<string, string> $replacements = [], string $encoding = null)
  * @method static Stringy stripeCssMediaQueries(string $stringInput)
  * @method static Stringy stripeEmptyHtmlTags(string $stringInput)
  * @method static Stringy utf8ify(string $stringInput)
@@ -189,7 +189,6 @@ class StaticStringy
             if (\is_string($stringOrStringy)) {
                 $stringOrStringy = new Stringy($stringOrStringy);
             }
-            assert($stringOrStringy instanceof Stringy);
 
             /** @phpstan-ignore-next-line - FP? */
             $newCollection[] = $stringOrStringy;
