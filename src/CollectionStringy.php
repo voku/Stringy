@@ -114,9 +114,9 @@ class CollectionStringy extends \Arrayy\Collection\Collection
     }
 
     /**
-     * @param string[] $strings
+     * @param array<array-key, string> $strings
      *
-     * @return static
+     * @return static<array-key, Stringy>
      */
     public static function createFromStrings($strings = []): self
     {

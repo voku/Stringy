@@ -3095,7 +3095,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             return (string) \mb_substr($this->str, $offset, 1);
         }
 
-        return $this->utf8::substr($this->str, $offset, 1, $this->encoding);
+        return (string) $this->utf8::substr($this->str, $offset, 1, $this->encoding);
     }
 
     /**
