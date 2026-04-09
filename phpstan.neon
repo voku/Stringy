@@ -4,7 +4,7 @@ parameters:
         - %currentWorkingDirectory%/src/
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-        # false-postive?
+        # false-positive?
         - '#Arrayy\\Collection\\AbstractCollection<int, Stringy\\Stringy>#'
         # not supported
         - '#bound type \(int\|string\) is not supported#'

@@ -1909,20 +1909,20 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
     public function testAddUniqueIdentifier()
     {
-        $uniquIDs = [];
+        $uniqueIDs = [];
         for ($i = 0; $i <= 100; ++$i) {
             $stringy = S::create('');
-            $uniquIDs[] = (string) $stringy->appendUniqueIdentifier();
+            $uniqueIDs[] = (string) $stringy->appendUniqueIdentifier();
         }
 
         // detect duplicate values in the array
-        foreach (\array_count_values($uniquIDs) as $uniquID => $count) {
+        foreach (\array_count_values($uniqueIDs) as $uniqueID => $count) {
             static::assertSame(1, $count);
         }
 
         // check the string length
-        foreach ($uniquIDs as $uniquID) {
-            static::assertSame(32, \strlen($uniquID));
+        foreach ($uniqueIDs as $uniqueID) {
+            static::assertSame(32, \strlen($uniqueID));
         }
     }
 
@@ -4133,8 +4133,8 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
                 'Notes and Observations Regarding Apple’s Announcements From ‘The Beat Goes On’ Special Event',
             ],
             [
-                'Read markdown_rules.txt to find out how _underscores around words_ will be interpretted',
-                'Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpretted',
+                'Read markdown_rules.txt to find out how _underscores around words_ will be interpreted',
+                'Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpreted',
             ],
             [
                 "Q&A with Steve Jobs: 'That's what happens in technology'",
@@ -4502,13 +4502,13 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
             'κόσμε'    => ['κόσμε' => 'κόσμε'],
             '中'        => ['中' => '中'],
             '«foobar»' => ['«foobar»' => '«foobar»'],
-            // Valid UTF-8 + Invalied Chars
+            // Valid UTF-8 + Invalid Chars
             "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid ASCII
             'a' => ['a' => 'a'],
             // Valid emoji (non-UTF-8)
             '😃' => ['😃' => '😃'],
-            // Valid ASCII + Invalied Chars
+            // Valid ASCII + Invalid Chars
             "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
             "\xc3\xb1" => ['ñ' => 'ñ'],

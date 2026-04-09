@@ -444,7 +444,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * EXAMPLE: <code>
      * </code>
      *
-     * @param array<array-key, int|string> $options [optional] <p>An array of bcrypt hasing options.</p>
+     * @param array<array-key, int|string> $options [optional] <p>An array of bcrypt hashing options.</p>
      *
      * @psalm-mutation-free
      *

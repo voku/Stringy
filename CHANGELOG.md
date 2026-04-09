@@ -26,7 +26,7 @@
 - update vendor (UTF-8)
 
 ### 6.4.1 (2021-04-07)
-- use Github Actions
+- use GitHub Actions
 - use optimized phpdocs for phpstan
 - use phpdocs (generics) for collections
 
