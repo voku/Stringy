@@ -38,7 +38,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           extensions: zip
-          tools: 'composer:2.2'
+          tools: 'composer'
 
       - name: Determine composer cache directory
         id: composer-cache
