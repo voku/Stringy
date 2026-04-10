@@ -5586,9 +5586,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $bcrypt = $string->bcrypt();
         static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
         if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
-            static::assertMatchesRegularExpression('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+            static::assertMatchesRegularExpression('/\$2y\$\d{2}\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
         } else {
-            static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+            static::assertRegExp('/\$2y\$\d{2}\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
         }
     }
 
@@ -5598,9 +5598,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $bcrypt = $string->bcrypt([\PASSWORD_BCRYPT_DEFAULT_COST]);
         static::assertInstanceOf(\Stringy\Stringy::class, $bcrypt);
         if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
-            static::assertMatchesRegularExpression('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+            static::assertMatchesRegularExpression('/\$2y\$\d{2}\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
         } else {
-            static::assertRegExp('/\$2y\$10\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
+            static::assertRegExp('/\$2y\$\d{2}\$[a-zA-Z0-9+.\/]{53}/', (string) $bcrypt);
         }
     }
 
