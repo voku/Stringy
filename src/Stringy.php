@@ -2509,14 +2509,11 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * EXAMPLE: <code>
      * </code>
      *
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     *
      * @psalm-mutation-free
      *
      * @return string The current value of the $str property
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return (string) $this;
     }
@@ -3113,8 +3110,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         // Stringy is immutable, cannot directly set char
         throw new \Exception('Stringy object is immutable, cannot modify char');
@@ -3134,8 +3130,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         // Don't allow directly modifying the string
         throw new \Exception('Stringy object is immutable, cannot unset char');
