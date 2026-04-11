@@ -662,8 +662,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function camelize(): self
     {
+        $str = $this->str;
+
+        if (\preg_match('/[-_\s]/', $str)) {
+            $str = $this->utf8::strtolower($str, $this->encoding);
+        }
+
         return static::create(
-            $this->utf8::str_camelize($this->str, $this->encoding),
+            $this->utf8::str_camelize($str, $this->encoding),
             $this->encoding
         );
     }
@@ -4825,8 +4831,14 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function upperCamelize(): self
     {
+        $str = $this->str;
+
+        if (\preg_match('/[-_\s]/', $str)) {
+            $str = $this->utf8::strtolower($str, $this->encoding);
+        }
+
         return static::create(
-            $this->utf8::str_upper_camelize($this->str, $this->encoding),
+            $this->utf8::str_upper_camelize($str, $this->encoding),
             $this->encoding
         );
     }
