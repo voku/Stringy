@@ -451,6 +451,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['fooBar', 'FOO_BAR'],
             ['fooBar', 'FOO-BAR'],
             ['fòôBàř', 'FÒÔ BÀŘ', 'UTF-8'],
+            ['api2Url', 'API2URL'],
         ];
     }
 
@@ -490,6 +491,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
             ['FooBar', 'FOO_BAR'],
             ['FooBar', 'FOO-BAR'],
             ['FòôBàř', 'FÒÔ BÀŘ', 'UTF-8'],
+            ['Api2Url', 'API2URL'],
         ];
     }
 

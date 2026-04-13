@@ -662,14 +662,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function camelize(): self
     {
-        $str = $this->str;
-
-        if (\preg_match('/[-_\s]/', $str)) {
-            $str = $this->utf8::strtolower($str, $this->encoding);
-        }
-
         return static::create(
-            $this->utf8::str_camelize($str, $this->encoding),
+            $this->utf8::str_camelize($this->prepareStringForCamelization($this->str), $this->encoding),
             $this->encoding
         );
     }
@@ -4831,14 +4825,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function upperCamelize(): self
     {
-        $str = $this->str;
-
-        if (\preg_match('/[-_\s]/', $str)) {
-            $str = $this->utf8::strtolower($str, $this->encoding);
-        }
-
         return static::create(
-            $this->utf8::str_upper_camelize($str, $this->encoding),
+            $this->utf8::str_upper_camelize($this->prepareStringForCamelization($this->str), $this->encoding),
             $this->encoding
         );
     }
@@ -5176,5 +5164,26 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     protected function matchesPattern(string $pattern): bool
     {
         return $this->utf8::str_matches_pattern($this->str, $pattern);
+    }
+
+    /**
+     * Lowercases a string before camelization when it contains delimiters
+     * (spaces, dashes, underscores, or digits) but no lowercase letters.
+     * This ensures all-caps inputs like 'FOO BAR' or 'API2URL' are handled
+     * correctly by str_camelize / str_upper_camelize.
+     *
+     * @param string $str
+     *
+     * @psalm-mutation-free
+     *
+     * @return string
+     */
+    private function prepareStringForCamelization(string $str): string
+    {
+        if (\preg_match('/[-_\s\d]/u', $str) && !$this->utf8::has_lowercase($str)) {
+            return $this->utf8::strtolower($str, $this->encoding);
+        }
+
+        return $str;
     }
 }
