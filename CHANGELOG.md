@@ -1,5 +1,15 @@
 # Changelog
 
+### 7.0.0 (2026-04-22)
+- breaking-change: drop support for PHP 7.1
+- fix "camelize()" + "upperCamelize()" for all-caps input such as "FOO BAR" and "API2URL"
+- fix PHP 8.4 compatibility / deprecation warnings
+- add proper return types and optimized nullable phpdocs for better PHP / PHPStan compatibility
+- improve "collection()" handling for single strings, Stringy objects, and "null"; preserve keys in "CollectionStringy::createFromStrings()"
+- improve edge-case handling for "appendRandomString()", "at()", "offsetGet()", "lineWrap()", "lineWrapAfterWord()", and truncation-related methods
+- update vendor lib "voku/portable-utf8" to "~6.1.0"
+- modernize GitHub Actions / PHPUnit configuration and add dependency automation via Dependabot + Renovate
+
 ### 6.5.3 (2022-03-28)
 - "To people of Russia": There is a war in Ukraine right now. The forces of the Russian Federation are attacking civilians.
 - use optimized phpdocs for phpstan
