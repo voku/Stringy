@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Stringy;
 
-require_once __DIR__ . '/JsonSerializableReturnTypeTrait.php';
-
 use Defuse\Crypto\Crypto;
 use voku\helper\AntiXSS;
 use voku\helper\ASCII;
