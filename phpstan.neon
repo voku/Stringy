@@ -1,4 +1,6 @@
 parameters:
+    # Analyze against the minimum supported runtime so PHP 7.1 compatibility
+    # issues are caught even when phpstan itself runs on a newer PHP in CI.
     phpVersion: 70100
     level: 8
     paths:

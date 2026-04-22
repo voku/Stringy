@@ -84,7 +84,6 @@ jobs:
       - name: Install dependencies
         run: |
           composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
-
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
           fi;
