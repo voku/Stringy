@@ -1,7 +1,14 @@
 parameters:
+    # Analyze against the minimum supported runtime so PHP 7.1 compatibility
+    # issues are caught even when phpstan itself runs on a newer PHP in CI.
+    phpVersion: 70100
     level: 8
     paths:
         - %currentWorkingDirectory%/src/
+    excludePaths:
+        # This file is only loaded on PHP 8.1+ by JsonSerializableReturnTypeTrait.php.
+        # It defines the same trait name, so excluding it prevents a duplicate-symbol error.
+        - %currentWorkingDirectory%/src/JsonSerializableReturnTypeTraitPhp81.php
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # false-positive?

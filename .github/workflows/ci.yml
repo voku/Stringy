@@ -16,19 +16,45 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [
-            7.1,
-            7.2,
-            7.3
-            7.4,
-            8.0,
-            8.1,
-            8.2,
-            8.3,
-            8.4,
-            8.5
-        ]
-        composer: [basic]
+        # Keep the "modern" leg on PHPUnit 9 until the suite is upgraded for
+        # PHPUnit 10+, so CI currently stops at PHP 8.4.
+        include:
+          - php: '7.1'
+            composer: basic
+            phpunit: '^7.5'
+            phpunit_config: phpunit.legacy.xml.dist
+          - php: '7.2'
+            composer: basic
+            phpunit: '^8.5'
+            phpunit_config: phpunit.legacy.xml.dist
+          - php: '7.3'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '7.4'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '8.0'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '8.1'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '8.2'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '8.3'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
+          - php: '8.4'
+            composer: basic
+            phpunit: '^9.6'
+            phpunit_config: phpunit.xml.dist
     timeout-minutes: 10
     steps:
       - name: Checkout code
@@ -57,6 +83,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
           fi;
@@ -70,7 +97,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p build/logs
-          XDEBUG_MODE=coverage php vendor/bin/phpunit -c phpunit.xml.dist
+          XDEBUG_MODE=coverage php vendor/bin/phpunit -c "${{ matrix.phpunit_config }}"
 
       - name: Run phpstan
         continue-on-error: true

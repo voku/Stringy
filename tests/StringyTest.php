@@ -1907,7 +1907,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = S::create('')->appendRandomString(8, 'abc');
         static::assertSame(8, $result->length());
-        static::assertMatchesRegularExpression('/^[abc]{8}$/', $result->toString());
+        if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
+            static::assertMatchesRegularExpression('/^[abc]{8}$/', $result->toString());
+        } else {
+            static::assertRegExp('/^[abc]{8}$/', $result->toString());
+        }
     }
 
     public function testAddUniqueIdentifier()

@@ -33,6 +33,8 @@ use voku\helper\UTF8;
  */
 class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable
 {
+    use JsonSerializableReturnTypeTrait;
+
     /**
      * An instance's string.
      *
@@ -2504,21 +2506,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     }
 
     /**
-     * Returns value which can be serialized by json_encode().
-     *
-     * EXAMPLE: <code>
-     * </code>
-     *
-     * @psalm-mutation-free
-     *
-     * @return string The current value of the $str property
-     */
-    public function jsonSerialize(): mixed
-    {
-        return (string) $this;
-    }
-
-    /**
      * Convert the string to kebab-case.
      *
      * EXAMPLE: <code>
@@ -4987,6 +4974,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
+     *
+     * @phpstan-param ASCII::*_LANGUAGE_CODE $language
      *
      * @psalm-suppress ImpureMethodCall :/
      */

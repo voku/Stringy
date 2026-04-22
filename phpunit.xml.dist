@@ -4,6 +4,11 @@
     <include>
       <directory suffix=".php">./src/</directory>
     </include>
+    <exclude>
+      <!-- Loaded conditionally by JsonSerializableReturnTypeTrait.php on PHP 8.1+;
+           including it unconditionally here would re-declare the trait on PHP < 8.1. -->
+      <file>./src/JsonSerializableReturnTypeTraitPhp81.php</file>
+    </exclude>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
     </report>
