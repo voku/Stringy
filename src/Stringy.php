@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Stringy;
 
+require_once __DIR__ . '/JsonSerializableReturnTypeTrait.php';
+
 use Defuse\Crypto\Crypto;
 use voku\helper\AntiXSS;
 use voku\helper\ASCII;
@@ -33,6 +35,8 @@ use voku\helper\UTF8;
  */
 class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable
 {
+    use JsonSerializableReturnTypeTrait;
+
     /**
      * An instance's string.
      *
@@ -2501,21 +2505,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function isWhitespace(): bool
     {
         return $this->isBlank();
-    }
-
-    /**
-     * Returns value which can be serialized by json_encode().
-     *
-     * EXAMPLE: <code>
-     * </code>
-     *
-     * @psalm-mutation-free
-     *
-     * @return string The current value of the $str property
-     */
-    public function jsonSerialize()
-    {
-        return (string) $this;
     }
 
     /**
