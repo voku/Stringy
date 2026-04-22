@@ -4988,6 +4988,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return static
      *                <p>Object whose $str has been converted to an URL slug.</p>
      *
+     * @phpstan-param ASCII::*_LANGUAGE_CODE $language
+     *
      * @psalm-suppress ImpureMethodCall :/
      */
     public function urlify(
