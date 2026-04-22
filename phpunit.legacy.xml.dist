@@ -3,6 +3,11 @@
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">./src/</directory>
+      <exclude>
+        <!-- Loaded conditionally by JsonSerializableReturnTypeTrait.php on PHP 8.1+;
+             including it unconditionally here would re-declare the trait on PHP < 8.1. -->
+        <file>./src/JsonSerializableReturnTypeTraitPhp81.php</file>
+      </exclude>
     </whitelist>
   </filter>
   <logging>
