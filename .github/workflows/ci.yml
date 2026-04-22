@@ -16,6 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Keep the "modern" leg on PHPUnit 9 until the suite is upgraded for
+        # PHPUnit 10+, so CI currently stops at PHP 8.4.
         include:
           - php: '7.1'
             composer: basic
