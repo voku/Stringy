@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Stringy;
 
-if (\PHP_VERSION_ID >= 80100) {
-    require_once __DIR__ . '/../resources/JsonSerializableReturnTypeTraitPhp81.php';
-} else {
+if (\PHP_VERSION_ID < 80100) {
     trait JsonSerializableReturnTypeTrait
     {
         /**
@@ -21,4 +19,6 @@ if (\PHP_VERSION_ID >= 80100) {
             return (string) $this;
         }
     }
+} else {
+    require_once __DIR__ . '/JsonSerializableReturnTypeTraitPhp81.php';
 }
