@@ -2513,7 +2513,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      *
      * @return string The current value of the $str property
      */
-    public function jsonSerialize(): mixed
+    public function jsonSerialize()
     {
         return (string) $this;
     }

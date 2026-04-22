@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<phpunit>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src/</directory>
+    </whitelist>
+  </filter>
+  <logging>
+    <log type="coverage-clover" target="build/logs/clover.xml"/>
+  </logging>
+  <testsuites>
+    <testsuite name="Stringy">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
