@@ -107,6 +107,11 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
             ['camelΣase', 'camel σase', 'UTF-8'],
             ['στανιλCase', 'Στανιλ case', 'UTF-8'],
             ['σamelCase', 'σamel  Case', 'UTF-8'],
+            ['fooBar', 'FOO BAR'],
+            ['fooBar', 'FOO_BAR'],
+            ['fooBar', 'FOO-BAR'],
+            ['fòôBàř', 'FÒÔ BÀŘ', 'UTF-8'],
+            ['api2Url', 'API2URL'],
         ];
     }
 
@@ -4898,6 +4903,11 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
             ['CamelΣase', 'camel σase', 'UTF-8'],
             ['ΣτανιλCase', 'στανιλ case', 'UTF-8'],
             ['ΣamelCase', 'Σamel  Case', 'UTF-8'],
+            ['FooBar', 'FOO BAR'],
+            ['FooBar', 'FOO_BAR'],
+            ['FooBar', 'FOO-BAR'],
+            ['FòôBàř', 'FÒÔ BÀŘ', 'UTF-8'],
+            ['Api2Url', 'API2URL'],
         ];
     }
 
