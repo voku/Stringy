@@ -1,5 +1,8 @@
 # Changelog
 
+### 7.0.1 (2026-04-24)
+- fix: improve Composer distribution archive metadata by excluding dev-only files from release archives
+
 ### 7.0.0 (2026-04-22)
 - fix: clean up Composer distribution archive (add missing .gitattributes export-ignore entries for dev-only files)
 - fix "camelize()" + "upperCamelize()" for all-caps input such as "FOO BAR" and "API2URL"
