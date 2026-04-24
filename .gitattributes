@@ -12,5 +12,8 @@
 /appveyor.yml export-ignore
 /circle.yml export-ignore
 /phpstan.neon export-ignore
+/.deepsource.toml export-ignore
+/phpcs.php_cs export-ignore
+/phpunit.legacy.xml.dist export-ignore
 /phpunit.xml.dist export-ignore
 /psalm.xml export-ignore
