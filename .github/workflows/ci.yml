@@ -51,11 +51,12 @@ jobs:
             composer: basic
             phpunit: '^9.6'
             phpunit_config: phpunit.xml.dist
+            run_infection: true
           - php: '8.4'
             composer: basic
             phpunit: '^9.6'
             phpunit_config: phpunit.xml.dist
-    timeout-minutes: 30
+    timeout-minutes: ${{ matrix.run_infection && 30 || 10 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -84,7 +85,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
-          if [[ "${{ matrix.php }}" == "8.3" ]]; then
+          if [[ "${{ matrix.run_infection }}" == "true" ]]; then
             composer config --no-plugins allow-plugins.infection/extension-installer false
             composer require --dev --no-update "infection/infection:^0.32.7"
           fi
@@ -110,7 +111,7 @@ jobs:
           php vendor/bin/phpstan analyse
 
       - name: Run infection with phpstan integration
-        if: ${{ matrix.php == '8.3' }}
+        if: ${{ matrix.run_infection == true }}
         run: |
           XDEBUG_MODE=coverage php vendor/bin/infection \
             --configuration=infection.json.dist \
