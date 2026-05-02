@@ -761,7 +761,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @phpstan-return CollectionStringy<int,Stringy>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function chunkCollection(int $length = 1): CollectionStringy
     {
@@ -1302,7 +1302,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @phpstan-return CollectionStringy<int,Stringy>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function explodeCollection(string $delimiter, int $limit = \PHP_INT_MAX): CollectionStringy
     {
@@ -2760,7 +2760,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @phpstan-return CollectionStringy<int,Stringy>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function linesCollection(): CollectionStringy
     {
@@ -4025,7 +4025,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @phpstan-return CollectionStringy<int,Stringy>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function splitCollection(string $pattern, ?int $limit = null): CollectionStringy
     {
@@ -5083,7 +5083,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return CollectionStringy|static[]
      *                                    <p>An collection of Stringy objects.</p>
      *
-     * @phpstan-return CollectionStringy<int,Stringy>
+     * @phpstan-return CollectionStringy<int,static>
      */
     public function wordsCollection(
         string $char_list = '',

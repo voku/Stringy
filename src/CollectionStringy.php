@@ -22,10 +22,11 @@ class CollectionStringy extends \Arrayy\Collection\Collection
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
      * @template TKeyCreate as array-key
+     * @template TCreate of Stringy
      *
-     * @phpstan-param  array<TKeyCreate,Stringy> $data
+     * @phpstan-param  array<TKeyCreate,TCreate> $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator<array-key, mixed>> $iteratorClass
-     * @phpstan-return static<TKeyCreate,Stringy>
+     * @phpstan-return static<TKeyCreate,TCreate>
      *
      * @psalm-mutation-free
      */
@@ -34,6 +35,7 @@ class CollectionStringy extends \Arrayy\Collection\Collection
         string $iteratorClass = \Arrayy\ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
+        /** @phpstan-ignore-next-line */
         return new static(
             $data,
             $iteratorClass,
