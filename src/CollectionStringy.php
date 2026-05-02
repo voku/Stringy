@@ -35,11 +35,14 @@ class CollectionStringy extends \Arrayy\Collection\Collection
         string $iteratorClass = \Arrayy\ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        return new static(
+        /** @var static<TKeyCreate,TCreate> $collection */
+        $collection = new static(
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor
         );
+
+        return $collection;
     }
 
     public function getType(): string
