@@ -41,6 +41,14 @@ final class CollectionStringyTest extends \PHPUnit\Framework\TestCase
         S::collection(['fòôbàř', 'lall', 1]);
     }
 
+    public function testCreateValidatesElementTypesByDefault()
+    {
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected to be of type {Stringy\Stringy}, instead got value `1` with type {integer}.');
+
+        \Stringy\CollectionStringy::create([1]);
+    }
+
     public function testCollectionFunctionWithSingleString()
     {
         // A single (non-array) string must be wrapped and produce a one-element collection.

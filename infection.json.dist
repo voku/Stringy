@@ -11,5 +11,8 @@
     "phpUnit": {
         "configDir": "."
     },
-    "staticAnalysisTool": "phpstan"
+    "staticAnalysisTool": "phpstan",
+    "staticAnalysisToolOptions": "--memory-limit=512M",
+    "minMsi": 87,
+    "minCoveredMsi": 87
 }

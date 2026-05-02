@@ -116,8 +116,6 @@ jobs:
           XDEBUG_MODE=coverage php vendor/bin/infection \
             --configuration=infection.json.dist \
             --threads=max \
-            --min-msi=0 \
-            --min-covered-msi=0 \
             --ignore-msi-with-no-mutations \
             --only-covering-test-cases \
             --logger-github
