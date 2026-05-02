@@ -16,6 +16,7 @@ final class StaticStringyTest extends \PHPUnit\Framework\TestCase
     public function testBadMethodCall()
     {
         $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('invalidMethod is not a valid method');
 
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedLocalVariableInspection */
@@ -56,6 +57,13 @@ final class StaticStringyTest extends \PHPUnit\Framework\TestCase
     public function testArgumentNumbers()
     {
         $staticStringyClass = new ReflectionClass(S::class);
+        $methodArgsProperty = $staticStringyClass->getProperty('methodArgs');
+        $methodArgsProperty->setAccessible(true);
+        // Reset the cache so this test always exercises __callStatic()'s argument counting.
+        $methodArgsProperty->setValue(null, null);
+
+        S::slice('fòôbàř', 0, 3, 'UTF-8');
+
         $stringyClass = new ReflectionClass(Stringy::class);
 
         // getStaticPropertyValue can't access protected properties

@@ -35,6 +35,7 @@ class CollectionStringy extends \Arrayy\Collection\Collection
         string $iteratorClass = \Arrayy\ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
+        /** @phpstan-ignore return.type (generic static<TCreate> is not preserved through new static) */
         return new static(
             $data,
             $iteratorClass,
