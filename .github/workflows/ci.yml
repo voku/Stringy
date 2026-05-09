@@ -51,11 +51,13 @@ jobs:
             composer: basic
             phpunit: '^9.6'
             phpunit_config: phpunit.xml.dist
+            run_infection: true
           - php: '8.4'
             composer: basic
             phpunit: '^9.6'
             phpunit_config: phpunit.xml.dist
-    timeout-minutes: 10
+    # Infection mutates and re-runs the suite, so that leg needs a longer timeout.
+    timeout-minutes: ${{ matrix.run_infection && 30 || 10 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -84,6 +86,10 @@ jobs:
       - name: Install dependencies
         run: |
           composer require --dev --no-update "phpunit/phpunit:${{ matrix.phpunit }}"
+          if [[ "${{ matrix.run_infection }}" == "true" ]]; then
+            composer config --no-plugins allow-plugins.infection/extension-installer false
+            composer require --dev --no-update "infection/infection:^0.32.7"
+          fi
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
           fi;
@@ -104,6 +110,16 @@ jobs:
         if: ${{ matrix.php == '8.1' }}
         run: |
           php vendor/bin/phpstan analyse
+
+      - name: Run infection with phpstan integration
+        if: ${{ matrix.run_infection == true }}
+        run: |
+          XDEBUG_MODE=coverage php vendor/bin/infection \
+            --configuration=infection.json.dist \
+            --threads=max \
+            --ignore-msi-with-no-mutations \
+            --only-covering-test-cases \
+            --logger-github
 
       - name: Upload coverage results to Coveralls
         if: ${{ matrix.php == '8.3' }}

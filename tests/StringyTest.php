@@ -2055,6 +2055,17 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('abczzz123öäüdef', $result->toString());
     }
 
+    public function testAppendStringyConcatenatesEveryArgument()
+    {
+        $result = S::create('abc')->appendStringy(
+            S::create('123'),
+            S::create('öäü'),
+            S::create('def')
+        );
+
+        static::assertSame('abc123öäüdef', $result->toString());
+    }
+
     /**
      * @dataProvider atProvider()
      *
@@ -3897,6 +3908,18 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testWordsKeepsEmptyValuesByDefault()
+    {
+        $words = S::create('foo oo oöäü#s')->words();
+        $result = [];
+
+        foreach ($words as $word) {
+            $result[] = $word->toString();
+        }
+
+        static::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], $result);
+    }
+
     /**
      * @dataProvider splitProvider()
      *
@@ -5491,6 +5514,20 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         foreach ($chunks as $chunk) {
             static::assertSame('ASCII', $chunk->getEncoding());
         }
+    }
+
+    public function testChunkUsesSingleCharacterLengthByDefault()
+    {
+        $chunks = S::create('foo')->chunk();
+
+        static::assertSame(['f', 'o', 'o'], \array_map('strval', $chunks));
+    }
+
+    public function testChunkCollectionUsesSingleCharacterLengthByDefault()
+    {
+        $chunks = S::create('foo')->chunkCollection();
+
+        static::assertSame(['f', 'o', 'o'], \array_map('strval', $chunks->toArray()));
     }
 
     public function testItCanBeExploded()

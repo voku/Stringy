@@ -1,0 +1,18 @@
+{
+    "$schema": "https://infection.github.io/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "src/JsonSerializableReturnTypeTraitPhp81.php"
+        ]
+    },
+    "phpUnit": {
+        "configDir": "."
+    },
+    "staticAnalysisTool": "phpstan",
+    "staticAnalysisToolOptions": "--memory-limit=512M",
+    "minMsi": 87,
+    "minCoveredMsi": 87
+}
