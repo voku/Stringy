@@ -129,7 +129,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function __toString()
     {
-        return (string) $this->str;
+        return $this->str;
     }
 
     /**
@@ -394,11 +394,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function at(int $index): self
     {
-        if ($this->encoding === 'UTF-8') {
-            return static::create((string) \mb_substr($this->str, $index, 1), $this->encoding);
-        }
-
-        return static::create($this->utf8::substr($this->str, $index, 1, $this->encoding), $this->encoding);
+        return static::create(
+            $this->utf8::substr($this->str, $index, 1, $this->encoding),
+            $this->encoding
+        );
     }
 
     /**
@@ -729,10 +728,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     {
         if ($length < 1) {
             throw new \InvalidArgumentException('The chunk length must be greater than zero.');
-        }
-
-        if ($this->str === '') {
-            return [];
         }
 
         $chunks = $this->utf8::str_split($this->str, $length);
@@ -1082,19 +1077,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function encode(string $new_encoding, bool $auto_detect_encoding = false): self
     {
-        if ($auto_detect_encoding) {
-            $str = $this->utf8::encode(
-                $new_encoding,
-                $this->str
-            );
-        } else {
-            $str = $this->utf8::encode(
-                $new_encoding,
-                $this->str,
-                false,
-                $this->encoding
-            );
-        }
+        $str = $this->utf8::encode(
+            $new_encoding,
+            $this->str,
+            $auto_detect_encoding,
+            $auto_detect_encoding ? '' : $this->encoding
+        );
 
         return new static($str, $new_encoding);
     }
@@ -1407,7 +1395,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         if (\strpos($this->str, '%:') !== false) {
             $offset = null;
-            $replacement = null;
             /** @noinspection AlterInForeachInspection */
             foreach ($args as $key => &$arg) {
                 if (!\is_array($arg)) {
@@ -1426,7 +1413,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                     if ($offset === null) {
                         $offset = \strpos($str, $nameTmp);
                     } else {
-                        $offset = \strpos($str, $nameTmp, (int) $offset + \strlen((string) $replacement));
+                        $offset = \strpos($str, $nameTmp, (int) $offset);
                     }
                     if ($offset === false) {
                         continue;
@@ -1574,7 +1561,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         $string = \preg_replace_callback(
             '/\\\\x([0-9A-Fa-f]+)/',
             function (array $matched) {
-                return (string) $this->utf8::hex_to_chr($matched[1]);
+                return $this->utf8::hex_to_chr($matched[1]);
             },
             $this->str
         );
@@ -1959,10 +1946,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function is(string $pattern): bool
     {
-        if ($this->toString() === $pattern) {
-            return true;
-        }
-
         $quotedPattern = \preg_quote($pattern, '/');
         $replaceWildCards = \str_replace('\*', '.*', $quotedPattern);
 
@@ -2982,10 +2965,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function extractIntegers(): self
     {
-        if ($this->str === '') {
-            return new static('', $this->encoding);
-        }
-
         \preg_match_all('/(?<integers>\d+)/', $this->str, $matches);
 
         return static::create(
@@ -3007,12 +2986,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function extractSpecialCharacters(): self
     {
-        if ($this->str === '') {
-            return new static('', $this->encoding);
-        }
-
         // no letter, no digit, no space
-        \preg_match_all('/((?![\p{L}0-9\s]+).)/u', $this->str, $matches);
+        \preg_match_all('/[^\p{L}0-9\s]/u', $this->str, $matches);
 
         return static::create(
             \implode('', $matches[0]),
@@ -3073,10 +3048,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             $length < \abs($offset)
         ) {
             throw new \OutOfBoundsException('No character exists at the index');
-        }
-
-        if ($this->encoding === 'UTF-8') {
-            return (string) \mb_substr($this->str, $offset, 1);
         }
 
         return (string) $this->utf8::substr($this->str, $offset, 1, $this->encoding);
@@ -3509,10 +3480,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function replace(string $search, string $replacement, bool $caseSensitive = true): self
     {
-        if ($search === '' && $replacement === '') {
-            return static::create($this->str, $this->encoding);
-        }
-
         if ($this->str === '' && $search === '') {
             return static::create($replacement, $this->encoding);
         }
@@ -4238,10 +4205,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function substring(int $start, ?int $length = null): self
     {
-        if ($length === null) {
-            return $this->substr($start);
-        }
-
         return $this->substr($start, $length);
     }
 
@@ -4542,13 +4505,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function toSpaces(int $tabLength = 4): self
     {
-        if ($tabLength === 4) {
-            $tab = '    ';
-        } elseif ($tabLength === 2) {
-            $tab = '  ';
-        } else {
-            $tab = \str_repeat(' ', $tabLength);
-        }
+        $tab = \str_repeat(' ', $tabLength);
 
         return static::create(
             \str_replace("\t", $tab, $this->str),
@@ -4591,13 +4548,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function toTabs(int $tabLength = 4): self
     {
-        if ($tabLength === 4) {
-            $tab = '    ';
-        } elseif ($tabLength === 2) {
-            $tab = '  ';
-        } else {
-            $tab = \str_repeat(' ', $tabLength);
-        }
+        $tab = \str_repeat(' ', $tabLength);
 
         return static::create(
             \str_replace($tab, "\t", $this->str),
