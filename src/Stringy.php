@@ -1407,7 +1407,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                     if ($offset === null) {
                         $offset = \strpos($str, $nameTmp);
                     } else {
-                        $offset = \strpos($str, $nameTmp, (int) $offset);
+                        $offset = \strpos($str, $nameTmp, $offset + 1);
                     }
                     if ($offset === false) {
                         continue;
@@ -3949,7 +3949,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             return [];
         }
 
-        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? \PHP_INT_MAX);
+        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? ~\count([]));
         foreach ($array as &$value) {
             $value = static::create($value, $this->encoding);
         }

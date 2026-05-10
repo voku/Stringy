@@ -5833,6 +5833,8 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(S::create('prefixsame')->is('same'));
         static::assertTrue(S::create('identical')->isSimilar('identical', 100.0));
         static::assertSame('A y B', S::create('A %:first B')->format(['missing' => 'x', 'first' => 'y'])->toString());
+        static::assertSame('xy', S::create('%:a%:b')->format(['a' => 'x', 'b' => 'y'])->toString());
+        static::assertSame('%:b x', S::create('%:a %:b')->format(['a' => '%:b', 'b' => 'x'])->toString());
 
         $isEqualsCaseInsensitive = new \ReflectionMethod(S::class, 'isEqualsCaseInsensitive');
         static::assertTrue($isEqualsCaseInsensitive->isPublic());
