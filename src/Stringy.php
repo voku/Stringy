@@ -477,14 +477,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function before(string $string): self
     {
-        $strArray = UTF8::str_split_pattern(
-            $this->str,
-            $string,
-            1
-        );
-
         return new static(
-            $strArray[0] ?? '',
+            UTF8::str_substr_before_first_separator($this->str, $string, $this->encoding),
             $this->encoding
         );
     }
@@ -1559,9 +1553,9 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
     public function hexDecode(): self
     {
         $string = \preg_replace_callback(
-            '/\\\\x([0-9A-Fa-f]+)/',
+            '/\\\\x(?<hex>[0-9A-Fa-f]+)/',
             function (array $matched) {
-                return $this->utf8::hex_to_chr($matched[1]);
+                return $this->utf8::hex_to_chr($matched['hex']);
             },
             $this->str
         );
@@ -1804,12 +1798,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOf(string $needle, int $offset = 0)
+    public function indexOf(string $needle, ?int $offset = null)
     {
         return $this->utf8::strpos(
             $this->str,
             $needle,
-            $offset,
+            $offset ?? 0,
             $this->encoding
         );
     }
@@ -1831,12 +1825,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfIgnoreCase(string $needle, int $offset = 0)
+    public function indexOfIgnoreCase(string $needle, ?int $offset = null)
     {
         return $this->utf8::stripos(
             $this->str,
             $needle,
-            $offset,
+            $offset ?? 0,
             $this->encoding
         );
     }
@@ -1859,12 +1853,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfLast(string $needle, int $offset = 0)
+    public function indexOfLast(string $needle, ?int $offset = null)
     {
         return $this->utf8::strrpos(
             $this->str,
             $needle,
-            $offset,
+            \intval($offset),
             $this->encoding
         );
     }
@@ -1887,12 +1881,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfLastIgnoreCase(string $needle, int $offset = 0)
+    public function indexOfLastIgnoreCase(string $needle, ?int $offset = null)
     {
         return $this->utf8::strripos(
             $this->str,
             $needle,
-            $offset,
+            \intval($offset),
             $this->encoding
         );
     }
@@ -2714,10 +2708,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function lines(): array
     {
-        if ($this->str === '') {
-            return [static::create('')];
-        }
-
         $strings = $this->utf8::str_to_lines($this->str);
         /** @noinspection AlterInForeachInspection */
         foreach ($strings as &$str) {
@@ -3959,11 +3949,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             return [];
         }
 
-        if ($limit === null) {
-            $limit = -1;
-        }
-
-        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit);
+        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? \PHP_INT_MAX);
         foreach ($array as &$value) {
             $value = static::create($value, $this->encoding);
         }

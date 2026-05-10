@@ -5806,12 +5806,10 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     public function testMutationGuardsIndexDefaults()
     {
-        $string = S::create('foo bar foo');
-
-        static::assertSame(4, $string->indexOf('bar'));
-        static::assertSame(4, $string->indexOfIgnoreCase('BAR'));
-        static::assertSame(8, $string->indexOfLast('foo'));
-        static::assertSame(8, $string->indexOfLastIgnoreCase('FOO'));
+        static::assertSame(0, S::create('foo bar')->indexOf('foo'));
+        static::assertSame(0, S::create('Foo bar')->indexOfIgnoreCase('FOO'));
+        static::assertSame(0, S::create('a')->indexOfLast('a'));
+        static::assertSame(0, S::create('A')->indexOfLastIgnoreCase('a'));
     }
 
     public function testMutationGuardsEquivalentBranchesAndVisibility()
@@ -5832,8 +5830,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(S::create('straße')->isEqualsCaseInsensitive('STRASSE'));
         static::assertTrue(S::create('same')->is('same'));
         static::assertFalse(S::create('prefix-same-suffix')->is('same'));
+        static::assertFalse(S::create('prefixsame')->is('same'));
         static::assertTrue(S::create('identical')->isSimilar('identical', 100.0));
-        static::assertSame('A second A', S::create('%:first %:missing %:first')->format(['first' => 'A', 'missing' => 'second'])->toString());
+        static::assertSame('A y B', S::create('A %:first B')->format(['missing' => 'x', 'first' => 'y'])->toString());
 
         $isEqualsCaseInsensitive = new \ReflectionMethod(S::class, 'isEqualsCaseInsensitive');
         static::assertTrue($isEqualsCaseInsensitive->isPublic());
@@ -5844,6 +5843,13 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $matchesPattern = new \ReflectionMethod(S::class, 'matchesPattern');
         static::assertTrue($matchesPattern->isProtected());
         static::assertFalse($matchesPattern->isPrivate());
+
+        static::assertNull((new \ReflectionMethod(S::class, 'indexOf'))->getParameters()[1]->getDefaultValue());
+        static::assertNull((new \ReflectionMethod(S::class, 'indexOfIgnoreCase'))->getParameters()[1]->getDefaultValue());
+        static::assertNull((new \ReflectionMethod(S::class, 'indexOfLast'))->getParameters()[1]->getDefaultValue());
+        static::assertNull((new \ReflectionMethod(S::class, 'indexOfLastIgnoreCase'))->getParameters()[1]->getDefaultValue());
+        static::assertSame(4, (new \ReflectionMethod(S::class, 'toSpaces'))->getParameters()[0]->getDefaultValue());
+        static::assertSame(4, (new \ReflectionMethod(S::class, 'toTabs'))->getParameters()[0]->getDefaultValue());
     }
 
     public function testMutationGuardsEncodingAndAsciiOptions()
@@ -5858,19 +5864,29 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
     public function testMutationGuardsSubstringAndCaseConversions()
     {
-        static::assertSame('bar--baz', S::create('foo--bar--baz')->substringOf('--')->toString());
-        static::assertSame('bar--Baz', S::create('foo--bar--Baz')->substringOfIgnoreCase('--')->toString());
-        static::assertSame('baz', S::create('foo--bar--baz')->lastSubstringOf('--')->toString());
-        static::assertSame('baz', S::create('foo--bar--BAZ')->lastSubstringOfIgnoreCase('--')->toString());
+        static::assertSame('--bar--baz', S::create('foo--bar--baz')->substringOf('--')->toString());
+        static::assertSame('--bar--Baz', S::create('foo--bar--Baz')->substringOfIgnoreCase('--')->toString());
+        static::assertSame('--baz', S::create('foo--bar--baz')->lastSubstringOf('--')->toString());
+        static::assertSame('--BAZ', S::create('foo--bar--BAZ')->lastSubstringOfIgnoreCase('--')->toString());
         static::assertSame('pinkerton', S::create('john pinkerton')->substring(5)->toString());
         static::assertSame('john_pinkerton', S::create('John PINKERTON')->snakeCase()->toString());
         static::assertSame('john-pinkerton', S::create('John PINKERTON')->kebabCase()->toString());
 
         $invalid = "\xC3foo";
         static::assertSame('?foo', S::create($invalid)->toLowerCase()->toString());
+        static::assertSame('déjà σσς iıi̇i', S::create('DÉJÀ Σσς Iıİi')->toLowerCase()->toString());
+        static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
         static::assertSame('A SS', S::create('a ß')->titleize()->toString());
         static::assertSame('?FOOSS', S::create("\xC3fooß")->toUpperCase()->toString());
         static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
+        static::assertSame('    foo', S::create("\tfoo")->toSpaces()->toString());
+        static::assertSame("\tfoo", S::create('    foo')->toTabs()->toString());
+        static::assertSame('', S::create('')->before(',')->toString());
+        static::assertSame('foo', S::create('foo,bar,baz')->before(',')->toString());
+        static::assertSame('ÄÖÜ', S::create('\\xC4\\xD6\\xDC')->hexDecode()->toUpperCase()->toString());
+
+        $this->expectException(\OutOfBoundsException::class);
+        S::create('')->offsetGet(0);
     }
 
     public function testItCanDetermineIfTheStringIsNumeric()
