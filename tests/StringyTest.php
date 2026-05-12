@@ -5810,6 +5810,8 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, S::create('Foo bar')->indexOfIgnoreCase('FOO'));
         static::assertSame(0, S::create('a')->indexOfLast('a'));
         static::assertSame(0, S::create('A')->indexOfLastIgnoreCase('a'));
+        static::assertSame(1, S::create('a')->indexOfLast(''));
+        static::assertSame(1, S::create('A')->indexOfLastIgnoreCase(''));
     }
 
     public function testMutationGuardsEquivalentBranchesAndVisibility()
@@ -5846,10 +5848,10 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($matchesPattern->isProtected());
         static::assertFalse($matchesPattern->isPrivate());
 
-        static::assertNull((new \ReflectionMethod(S::class, 'indexOf'))->getParameters()[1]->getDefaultValue());
-        static::assertNull((new \ReflectionMethod(S::class, 'indexOfIgnoreCase'))->getParameters()[1]->getDefaultValue());
-        static::assertNull((new \ReflectionMethod(S::class, 'indexOfLast'))->getParameters()[1]->getDefaultValue());
-        static::assertNull((new \ReflectionMethod(S::class, 'indexOfLastIgnoreCase'))->getParameters()[1]->getDefaultValue());
+        static::assertSame(0, (new \ReflectionMethod(S::class, 'indexOf'))->getParameters()[1]->getDefaultValue());
+        static::assertSame(0, (new \ReflectionMethod(S::class, 'indexOfIgnoreCase'))->getParameters()[1]->getDefaultValue());
+        static::assertSame(0, (new \ReflectionMethod(S::class, 'indexOfLast'))->getParameters()[1]->getDefaultValue());
+        static::assertSame(0, (new \ReflectionMethod(S::class, 'indexOfLastIgnoreCase'))->getParameters()[1]->getDefaultValue());
         static::assertSame(4, (new \ReflectionMethod(S::class, 'toSpaces'))->getParameters()[0]->getDefaultValue());
         static::assertSame(4, (new \ReflectionMethod(S::class, 'toTabs'))->getParameters()[0]->getDefaultValue());
     }

@@ -1798,12 +1798,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOf(string $needle, ?int $offset = null)
+    public function indexOf(string $needle, int $offset = 0)
     {
         return $this->utf8::strpos(
             $this->str,
             $needle,
-            $offset ?? 0,
+            $offset,
             $this->encoding
         );
     }
@@ -1825,12 +1825,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfIgnoreCase(string $needle, ?int $offset = null)
+    public function indexOfIgnoreCase(string $needle, int $offset = 0)
     {
         return $this->utf8::stripos(
             $this->str,
             $needle,
-            $offset ?? 0,
+            $offset,
             $this->encoding
         );
     }
@@ -1853,12 +1853,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfLast(string $needle, ?int $offset = null)
+    public function indexOfLast(string $needle, int $offset = 0)
     {
         return $this->utf8::strrpos(
             $this->str,
             $needle,
-            \intval($offset),
+            $offset,
             $this->encoding
         );
     }
@@ -1881,12 +1881,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      */
-    public function indexOfLastIgnoreCase(string $needle, ?int $offset = null)
+    public function indexOfLastIgnoreCase(string $needle, int $offset = 0)
     {
         return $this->utf8::strripos(
             $this->str,
             $needle,
-            \intval($offset),
+            $offset,
             $this->encoding
         );
     }
