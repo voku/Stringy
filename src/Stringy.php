@@ -1389,6 +1389,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         if (\strpos($this->str, '%:') !== false) {
             $offset = null;
+            $replacementLength = 0;
             /** @noinspection AlterInForeachInspection */
             foreach ($args as $key => &$arg) {
                 if (!\is_array($arg)) {
@@ -1407,7 +1408,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                     if ($offset === null) {
                         $offset = \strpos($str, $nameTmp);
                     } else {
-                        $offset = \strpos($str, $nameTmp, $offset + 1);
+                        $offset = \strpos($str, $nameTmp, $offset + $replacementLength);
                     }
                     if ($offset === false) {
                         continue;
@@ -1415,6 +1416,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
                     unset($arg[$name]);
 
+                    $replacementLength = \strlen((string) $param);
                     $str = \substr_replace($str, (string) $param, (int) $offset, \strlen($nameTmp));
                 }
 
