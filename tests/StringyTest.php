@@ -5823,6 +5823,12 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             return $part->toString();
         }, $split));
 
+        $splitWithNullLimit = S::create('foo,bar,baz')->split(',', null);
+        static::assertCount(3, $splitWithNullLimit);
+        static::assertSame(['foo', 'bar', 'baz'], \array_map(static function (S $part): string {
+            return $part->toString();
+        }, $splitWithNullLimit));
+
         static::assertSame('ab', S::create('ab')->replace('', 'x')->toString());
         static::assertSame('foo x', S::create('foo FOO')->replaceAll(['FOO'], 'x')->toString());
         static::assertSame('xyzabc', S::create('abc')->prependStringy(S::create('x'), S::create('y'), \Stringy\CollectionStringy::createFromStrings(['z']))->toString());
@@ -5864,6 +5870,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('ello-test', S::create('ℌello test')->slugify()->toString());
     }
 
+    public function testMutationGuardsTitleizeInvalidUtf8Cleaning()
+    {
+        static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
+    }
+
     public function testMutationGuardsSubstringAndCaseConversions()
     {
         static::assertSame('--bar--baz', S::create('foo--bar--baz')->substringOf('--')->toString());
@@ -5878,17 +5889,21 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         $invalid = "\xC3foo";
         static::assertSame('?foo', S::create($invalid)->toLowerCase()->toString());
         static::assertSame('déjà σσς', S::create('DÉJÀ Σσς')->toLowerCase()->toString());
-        static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
         if (\PHP_VERSION_ID >= 70300) {
             static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
             static::assertSame('WEIẞ', S::create('weiß')->toUpperCase(true)->toString());
         }
         static::assertSame('    foo', S::create("\tfoo")->toSpaces()->toString());
         static::assertSame("\tfoo", S::create('    foo')->toTabs()->toString());
+        static::assertSame(' foo', S::create("\tfoo")->toSpaces(1)->toString());
+        static::assertSame("\tfoo", S::create(' foo')->toTabs(1)->toString());
         static::assertSame('  foo', S::create("\tfoo")->toSpaces(2)->toString());
         static::assertSame("\tfoo", S::create('  foo')->toTabs(2)->toString());
         static::assertSame('   foo', S::create("\tfoo")->toSpaces(3)->toString());
         static::assertSame("\tfoo", S::create('   foo')->toTabs(3)->toString());
+        if (\PHP_VERSION_ID >= 70300) {
+            static::assertSame('?FOOSS', S::create("\xC3fooß")->toUpperCase()->toString());
+        }
         static::assertSame('', S::create('')->before(',')->toString());
         static::assertSame('foo', S::create('foo,bar,baz')->before(',')->toString());
         static::assertSame('foo', S::create('foo,bar,baz')->split(',', null)[0]->toString());

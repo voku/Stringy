@@ -4191,10 +4191,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function substring(int $start, ?int $length = null): self
     {
-        if ($length === null) {
-            return $this->substr($start);
-        }
-
         return $this->substr($start, $length);
     }
 
