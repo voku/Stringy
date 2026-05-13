@@ -5879,10 +5879,16 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('?foo', S::create($invalid)->toLowerCase()->toString());
         static::assertSame('déjà σσς', S::create('DÉJÀ Σσς')->toLowerCase()->toString());
         static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
+        if (\PHP_VERSION_ID >= 70300) {
+            static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
+            static::assertSame('WEIẞ', S::create('weiß')->toUpperCase(true)->toString());
+        }
         static::assertSame('    foo', S::create("\tfoo")->toSpaces()->toString());
         static::assertSame("\tfoo", S::create('    foo')->toTabs()->toString());
         static::assertSame('  foo', S::create("\tfoo")->toSpaces(2)->toString());
         static::assertSame("\tfoo", S::create('  foo')->toTabs(2)->toString());
+        static::assertSame('   foo', S::create("\tfoo")->toSpaces(3)->toString());
+        static::assertSame("\tfoo", S::create('   foo')->toTabs(3)->toString());
         static::assertSame('', S::create('')->before(',')->toString());
         static::assertSame('foo', S::create('foo,bar,baz')->before(',')->toString());
         static::assertSame('foo', S::create('foo,bar,baz')->split(',', null)[0]->toString());
