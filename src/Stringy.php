@@ -501,7 +501,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                 $this->str,
                 $separator,
                 $this->encoding
-            )
+            ),
+            $this->encoding
         );
     }
 
