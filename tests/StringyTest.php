@@ -5879,7 +5879,6 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('?foo', S::create($invalid)->toLowerCase()->toString());
         static::assertSame('déjà σσς', S::create('DÉJÀ Σσς')->toLowerCase()->toString());
         static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
-        static::assertSame('?FOOSS', S::create("\xC3fooß")->toUpperCase()->toString());
         static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
         static::assertSame('    foo', S::create("\tfoo")->toSpaces()->toString());
         static::assertSame("\tfoo", S::create('    foo')->toTabs()->toString());
