@@ -477,10 +477,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function before(string $string): self
     {
-        return new static(
-            UTF8::str_substr_before_first_separator($this->str, $string, $this->encoding),
-            $this->encoding
-        );
+        return $this->beforeFirst($string);
     }
 
     /**
@@ -3951,7 +3948,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             return [];
         }
 
-        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? -\strlen('x'));
+        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? -1);
         foreach ($array as &$value) {
             $value = static::create($value, $this->encoding);
         }
@@ -4193,6 +4190,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function substring(int $start, ?int $length = null): self
     {
+        if ($length === null) {
+            return $this->substr($start);
+        }
+
         return $this->substr($start, $length);
     }
 
@@ -4493,7 +4494,13 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function toSpaces(int $tabLength = 4): self
     {
-        $tab = \str_repeat(' ', $tabLength);
+        if ($tabLength === 4) {
+            $tab = '    ';
+        } elseif ($tabLength === 2) {
+            $tab = '  ';
+        } else {
+            $tab = \str_repeat(' ', $tabLength);
+        }
 
         return static::create(
             \str_replace("\t", $tab, $this->str),
@@ -4536,7 +4543,13 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function toTabs(int $tabLength = 4): self
     {
-        $tab = \str_repeat(' ', $tabLength);
+        if ($tabLength === 4) {
+            $tab = '    ';
+        } elseif ($tabLength === 2) {
+            $tab = '  ';
+        } else {
+            $tab = \str_repeat(' ', $tabLength);
+        }
 
         return static::create(
             \str_replace($tab, "\t", $this->str),

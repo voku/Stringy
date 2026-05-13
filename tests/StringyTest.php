@@ -5873,6 +5873,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('--baz', S::create('foo--bar--baz')->lastSubstringOf('--')->toString());
         static::assertSame('--BAZ', S::create('foo--bar--BAZ')->lastSubstringOfIgnoreCase('--')->toString());
         static::assertSame('pinkerton', S::create('john pinkerton')->substring(5)->toString());
+        static::assertSame('pinkerton', S::create('john pinkerton')->substring(5, null)->toString());
         static::assertSame('john_pinkerton', S::create('John PINKERTON')->snakeCase()->toString());
         static::assertSame('john-pinkerton', S::create('John PINKERTON')->kebabCase()->toString());
 
@@ -5885,8 +5886,11 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
         static::assertSame('    foo', S::create("\tfoo")->toSpaces()->toString());
         static::assertSame("\tfoo", S::create('    foo')->toTabs()->toString());
+        static::assertSame('  foo', S::create("\tfoo")->toSpaces(2)->toString());
+        static::assertSame("\tfoo", S::create('  foo')->toTabs(2)->toString());
         static::assertSame('', S::create('')->before(',')->toString());
         static::assertSame('foo', S::create('foo,bar,baz')->before(',')->toString());
+        static::assertSame('foo', S::create('foo,bar,baz')->split(',', null)[0]->toString());
         static::assertSame('ÄÖÜ', S::create('\\xC4\\xD6\\xDC')->hexDecode()->toUpperCase()->toString());
 
         $this->expectException(\OutOfBoundsException::class);
