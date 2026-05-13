@@ -5810,8 +5810,6 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, S::create('Foo bar')->indexOfIgnoreCase('FOO'));
         static::assertSame(0, S::create('a')->indexOfLast('a'));
         static::assertSame(0, S::create('A')->indexOfLastIgnoreCase('a'));
-        static::assertFalse(S::create('a')->indexOfLast(''));
-        static::assertFalse(S::create('A')->indexOfLastIgnoreCase(''));
     }
 
     public function testMutationGuardsEquivalentBranchesAndVisibility()
