@@ -76,6 +76,7 @@ jobs:
           coverage: xdebug
           extensions: zip
           tools: 'composer'
+          github-token: ''
 
       - name: Determine composer cache directory
         id: composer-cache
