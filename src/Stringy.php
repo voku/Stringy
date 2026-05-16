@@ -1386,8 +1386,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
         $str = $this->str;
 
         if (\strpos($this->str, '%:') !== false) {
-            $offset = null;
-            $replacementLength = 0;
+            $namedArgs = [];
             /** @noinspection AlterInForeachInspection */
             foreach ($args as $key => &$arg) {
                 if (!\is_array($arg)) {
@@ -1397,28 +1396,39 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                 foreach ($arg as $name => $param) {
                     $name = (string) $name;
 
-                    if (\strpos($name, '%:') !== 0) {
-                        $nameTmp = '%:' . $name;
-                    } else {
-                        $nameTmp = $name;
+                    if (\strpos($name, '%:') === 0) {
+                        $name = (string) \substr($name, 2);
                     }
 
-                    if ($offset === null) {
-                        $offset = \strpos($str, $nameTmp);
-                    } else {
-                        $offset = \strpos($str, $nameTmp, $offset + $replacementLength);
-                    }
-                    if ($offset === false) {
+                    if (\array_key_exists($name, $namedArgs)) {
                         continue;
                     }
 
-                    unset($arg[$name]);
-
-                    $replacementLength = \strlen((string) $param);
-                    $str = \substr_replace($str, (string) $param, (int) $offset, \strlen($nameTmp));
+                    $namedArgs[$name] = (string) $param;
                 }
 
                 unset($args[$key]);
+            }
+
+            if ($namedArgs !== []) {
+                $usedNames = [];
+                $formattedStr = \preg_replace_callback(
+                    '/%:([0-9A-Za-z_]+)/',
+                    static function (array $matches) use (&$namedArgs, &$usedNames): string {
+                        $name = $matches[1];
+                        if (($usedNames[$name] ?? false) === true || !\array_key_exists($name, $namedArgs)) {
+                            return $matches[0];
+                        }
+
+                        $usedNames[$name] = true;
+
+                        return $namedArgs[$name];
+                    },
+                    $str
+                );
+                if ($formattedStr !== null) {
+                    $str = $formattedStr;
+                }
             }
         }
 

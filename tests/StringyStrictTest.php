@@ -5105,13 +5105,13 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     public function testFormatInvalidNamed()
     {
         $result = \Stringy\create('One: %:1, %:text_two: 2, %:text_three: %:3')->format(['text_three' => 'three', '1' => 1]);
-        static::assertEquals('One: %:1, %:text_two: 2, three: %:3', (string) $result);
+        static::assertEquals('One: 1, %:text_two: 2, three: %:3', (string) $result);
     }
 
     public function testFormatComplexNamed()
     {
         $result = \Stringy\create('One: %:1, %:text_two: 2, %:text_three: %:3')->format(['text_three' => '%s', '1' => 1], 'three');
-        static::assertEquals('One: %:1, %:text_two: 2, three: %:3', (string) $result);
+        static::assertEquals('One: 1, %:text_two: 2, three: %:3', (string) $result);
 
         $result = \Stringy\create('One: %2$d, %1$s: 2, %:text_three: %3$d')->format('two', 1, 3, ['text_three' => 'three']);
         static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
@@ -5121,6 +5121,15 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
         $result = \Stringy\create('One: %2$d, %1$s: 2, %:text_three: %3$d')->format(['text_three' => '%4$s'], 'two', 1, 3, 'three');
         static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
+    }
+
+    public function testFormatNamedPlaceholderOrderDoesNotMatter()
+    {
+        $result = \Stringy\create('%:a %:b')->format(['b' => 2, 'a' => 1]);
+        static::assertSame('1 2', (string) $result);
+
+        $result = \Stringy\create('%:a %:a')->format(['a' => 'x']);
+        static::assertSame('x %:a', (string) $result);
     }
 
     /**
