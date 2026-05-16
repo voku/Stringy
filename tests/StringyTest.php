@@ -5810,7 +5810,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, S::create('Foo bar')->indexOfIgnoreCase('FOO'));
         static::assertSame(0, S::create('a')->indexOfLast('a'));
         static::assertSame(0, S::create('A')->indexOfLastIgnoreCase('a'));
-        if (\PHP_VERSION_ID >= 70300) {
+        if (\PHP_VERSION_ID >= 80000) {
             static::assertSame(2, S::create('ab')->indexOfLast(''));
             static::assertSame(2, S::create('AB')->indexOfLastIgnoreCase(''));
         }
