@@ -5810,6 +5810,10 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, S::create('Foo bar')->indexOfIgnoreCase('FOO'));
         static::assertSame(0, S::create('a')->indexOfLast('a'));
         static::assertSame(0, S::create('A')->indexOfLastIgnoreCase('a'));
+        if (\PHP_VERSION_ID >= 70300) {
+            static::assertSame(2, S::create('ab')->indexOfLast(''));
+            static::assertSame(2, S::create('AB')->indexOfLastIgnoreCase(''));
+        }
     }
 
     public function testMutationGuardsEquivalentBranchesAndVisibility()
@@ -5863,9 +5867,15 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
     public function testMutationGuardsEncodingAndAsciiOptions()
     {
         $string = new \Stringy\Stringy(\utf8_decode('ä'), 'ISO-8859-1');
+        $misdeclaredUtf8 = new \Stringy\Stringy(\utf8_decode('ä'), 'UTF-8');
 
         static::assertSame('ä', $string->encode('UTF-8')->toString());
         static::assertSame('ä', $string->encode('UTF-8', true)->toString());
+        static::assertSame('ä', $misdeclaredUtf8->encode('UTF-8', true)->toString());
+        static::assertNotSame(
+            $misdeclaredUtf8->encode('UTF-8', true)->toString(),
+            $misdeclaredUtf8->encode('UTF-8')->toString()
+        );
         static::assertSame('foo', S::create('😀foo')->toAscii()->toString());
         static::assertSame('ello-test', S::create('ℌello test')->slugify()->toString());
     }
@@ -5890,6 +5900,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('?foo', S::create($invalid)->toLowerCase()->toString());
         static::assertSame('déjà σσς', S::create('DÉJÀ Σσς')->toLowerCase()->toString());
         if (\PHP_VERSION_ID >= 70300) {
+            static::assertSame('A SS', S::create('a ß')->titleize()->toString());
             static::assertSame('WEISS', S::create('weiß')->toUpperCase()->toString());
             static::assertSame('WEIẞ', S::create('weiß')->toUpperCase(true)->toString());
         }

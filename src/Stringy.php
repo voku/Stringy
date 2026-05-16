@@ -3949,7 +3949,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             return [];
         }
 
-        $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit ?? -1);
+        if ($limit === null) {
+            $array = $this->utf8::str_split_pattern($this->str, $pattern);
+        } else {
+            $array = $this->utf8::str_split_pattern($this->str, $pattern, $limit);
+        }
+
         foreach ($array as &$value) {
             $value = static::create($value, $this->encoding);
         }
