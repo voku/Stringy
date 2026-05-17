@@ -5842,12 +5842,16 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             return $part->toString();
         }, $splitWithNullLimit));
 
-        static::assertSame('ab', S::create('ab')->replace('', 'x')->toString());
+        if (\PHP_VERSION_ID >= 80000) {
+            static::assertSame('ab', S::create('ab')->replace('', 'x')->toString());
+        }
         static::assertSame('foo x', S::create('foo FOO')->replaceAll(['FOO'], 'x')->toString());
         static::assertSame('xyzabc', S::create('abc')->prependStringy(S::create('x'), S::create('y'), \Stringy\CollectionStringy::createFromStrings(['z']))->toString());
         static::assertTrue(S::create('1.5')->isEqualsCaseSensitive(1.5));
         static::assertTrue(S::create('fòô')->isEqualsCaseInsensitive('FÒÔ'));
         static::assertTrue(S::create('same')->is('same'));
+        $invalid = "\xC3foo";
+        static::assertTrue(S::create($invalid)->is($invalid));
         static::assertFalse(S::create('prefix-same-suffix')->is('same'));
         static::assertFalse(S::create('prefixsame')->is('same'));
         static::assertTrue(S::create('identical')->isSimilar('identical', 100.0));

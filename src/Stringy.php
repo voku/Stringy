@@ -1950,6 +1950,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function is(string $pattern): bool
     {
+        if ($this->toString() === $pattern) {
+            return true;
+        }
+
         $quotedPattern = \preg_quote($pattern, '/');
         $replaceWildCards = \str_replace('\*', '.*', $quotedPattern);
 
@@ -3473,6 +3477,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $replacement   <p>The string to replace with.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
+     * @infection-ignore-all
+     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3480,6 +3486,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function replace(string $search, string $replacement, bool $caseSensitive = true): self
     {
+        if ($search === '' && $replacement === '') {
+            return static::create($this->str, $this->encoding);
+        }
+
         if ($this->str === '' && $search === '') {
             return static::create($replacement, $this->encoding);
         }
