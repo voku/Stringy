@@ -13,6 +13,6 @@
     },
     "staticAnalysisTool": "phpstan",
     "staticAnalysisToolOptions": "--memory-limit=512M",
-    "minMsi": 87,
-    "minCoveredMsi": 87
+    "minMsi": 100,
+    "minCoveredMsi": 100
 }

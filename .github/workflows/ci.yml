@@ -13,6 +13,11 @@ defaults:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      COMPOSER_PROCESS_TIMEOUT: 0
+      COMPOSER_NO_INTERACTION: 1
+      COMPOSER_NO_AUDIT: 1
+      COMPOSER_AUTH: '{}'
     strategy:
       fail-fast: false
       matrix:
@@ -71,6 +76,7 @@ jobs:
           coverage: xdebug
           extensions: zip
           tools: 'composer'
+          github-token: ''
 
       - name: Determine composer cache directory
         id: composer-cache
