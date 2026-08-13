@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "forkProcessing": "enabled",
   "packageRules": [
     {
       "matchManagers": ["composer"],
