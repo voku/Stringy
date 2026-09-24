@@ -5123,6 +5123,9 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
     }
 
+    /**
+     * Named placeholders are resolved in string order, independent of the argument order.
+     */
     public function testFormatNamedPlaceholderOrderDoesNotMatter()
     {
         $result = \Stringy\create('%:a %:b')->format(['b' => 2, 'a' => 1]);

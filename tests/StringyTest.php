@@ -5198,6 +5198,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertEquals('One: 1, two: 2, three: 3', (string) $result);
     }
 
+    /**
+     * Named placeholders are resolved in string order, independent of the argument order.
+     */
     public function testFormatNamedPlaceholderOrderDoesNotMatter()
     {
         $result = \Stringy\create('%:a %:b')->format(['b' => 2, 'a' => 1]);
@@ -5207,6 +5210,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('x %:a', (string) $result);
     }
 
+    /**
+     * Named placeholders accept any name, prefer the longest match and consume repeated names in order.
+     */
     public function testFormatNamedPlaceholderNames()
     {
         // any name is allowed, not only [A-Za-z0-9_]
@@ -5229,6 +5235,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('A B', (string) S::create('%:a %:b')->format(['%:a' => 'A', 'b' => 'B']));
     }
 
+    /**
+     * before() returns the whole string (keeping the encoding) if the delimiter is not found.
+     */
     public function testBeforeReturnsWholeStringIfNotFound()
     {
         static::assertSame('foo', S::create('foo')->before(',')->toString());
@@ -5829,6 +5838,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('HTML-ENTITIES', $ascii->getEncoding());
     }
 
+    /**
+     * Guards the case-sensitive defaults of the contains/count/startsWith/endsWith helpers.
+     */
     public function testMutationGuardsCaseSensitiveDefaults()
     {
         $string = S::create('Foo foo bar');
@@ -5842,6 +5854,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(S::create('needle')->in('Needle'));
     }
 
+    /**
+     * Guards the default offsets of the indexOf*() helpers.
+     */
     public function testMutationGuardsIndexDefaults()
     {
         static::assertSame(0, S::create('foo bar')->indexOf('foo'));
@@ -5854,6 +5869,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Guards branches, method visibility and default parameter values that mutation testing flagged.
+     */
     public function testMutationGuardsEquivalentBranchesAndVisibility()
     {
         $lines = S::create('')->lines();
@@ -5906,6 +5924,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(4, (new \ReflectionMethod(S::class, 'toTabs'))->getParameters()[0]->getDefaultValue());
     }
 
+    /**
+     * Guards the encoding auto-detection and ASCII transliteration options.
+     */
     public function testMutationGuardsEncodingAndAsciiOptions()
     {
         $string = new \Stringy\Stringy(\utf8_decode('ä'), 'ISO-8859-1');
@@ -5922,11 +5943,17 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('ello-test', S::create('ℌello test')->slugify()->toString());
     }
 
+    /**
+     * Guards the invalid UTF-8 cleanup in titleize().
+     */
     public function testMutationGuardsTitleizeInvalidUtf8Cleaning()
     {
         static::assertSame('', S::create("\xC3foo bar")->titleize()->toString());
     }
 
+    /**
+     * Guards substring helpers, case conversions and tab/space conversions.
+     */
     public function testMutationGuardsSubstringAndCaseConversions()
     {
         static::assertSame('--bar--baz', S::create('foo--bar--baz')->substringOf('--')->toString());
