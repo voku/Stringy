@@ -13,6 +13,10 @@ defaults:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Codecov authenticates via OIDC (no upload token secret needed)
+      id-token: write
     env:
       COMPOSER_PROCESS_TIMEOUT: 0
       COMPOSER_NO_INTERACTION: 1
@@ -65,7 +69,7 @@ jobs:
     timeout-minutes: ${{ matrix.run_infection && 30 || 10 }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -83,7 +87,7 @@ jobs:
         run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -137,22 +141,25 @@ jobs:
           php-coveralls --coverage_clover=build/logs/clover.xml -v
 
       - name: Upload coverage results to Codecov
-        if: ${{ matrix.php == '8.3' }}
+        # OIDC tokens are not issued to pull requests from forks
+        if: ${{ matrix.php == '8.3' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         continue-on-error: true
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: build/logs/clover.xml
+          use_oidc: true
 
       - name: Upload coverage results to Scrutinizer
         if: ${{ matrix.php == '8.3' }}
         continue-on-error: true
         uses: sudo-bot/action-scrutinizer@latest
         with:
-          cli-args: "--format=php-clover build/logs/clover.xml"
+          # report for the PR head commit, not the temporary merge commit
+          cli-args: "--format=php-clover --revision=${{ github.event.pull_request.head.sha || github.sha }} build/logs/clover.xml"
 
       - name: Archive logs artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
