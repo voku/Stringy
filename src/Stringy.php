@@ -394,10 +394,13 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function at(int $index): self
     {
-        return static::create(
-            $this->utf8::substr($this->str, $index, 1, $this->encoding),
-            $this->encoding
-        );
+        // fast path for UTF-8; the generic path below returns the same result
+        // @infection-ignore-all
+        if ($this->encoding === 'UTF-8') {
+            return static::create((string) \mb_substr($this->str, $index, 1), $this->encoding);
+        }
+
+        return static::create($this->utf8::substr($this->str, $index, 1, $this->encoding), $this->encoding);
     }
 
     /**
@@ -477,7 +480,18 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function before(string $string): self
     {
-        return $this->beforeFirst($string);
+        // only the first part is used, so any limit >= 1 gives the same result
+        // @infection-ignore-all
+        $strArray = UTF8::str_split_pattern(
+            $this->str,
+            $string,
+            1
+        );
+
+        return new static(
+            $strArray[0] ?? '',
+            $this->encoding
+        );
     }
 
     /**
@@ -1387,8 +1401,7 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
 
         if (\strpos($this->str, '%:') !== false) {
             $namedArgs = [];
-            /** @noinspection AlterInForeachInspection */
-            foreach ($args as $key => &$arg) {
+            foreach ($args as $key => $arg) {
                 if (!\is_array($arg)) {
                     continue;
                 }
@@ -1400,29 +1413,38 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                         $name = (string) \substr($name, 2);
                     }
 
-                    if (\array_key_exists($name, $namedArgs)) {
-                        continue;
-                    }
-
-                    $namedArgs[$name] = (string) $param;
+                    // the same name in several arrays fills the next occurrence of that placeholder
+                    $namedArgs[$name][] = $param;
                 }
 
                 unset($args[$key]);
             }
 
             if ($namedArgs !== []) {
-                $usedNames = [];
+                $names = \array_map('strval', \array_keys($namedArgs));
+                // prefer the longest name, e.g. "%:foo-bar" over "%:foo-"
+                \usort(
+                    $names,
+                    static function (string $a, string $b): int {
+                        return \strlen($b) <=> \strlen($a);
+                    }
+                );
+
+                $namePatterns = [];
+                foreach ($names as $name) {
+                    // "%:foo" must not match the beginning of "%:foo_bar"
+                    $namePatterns[] = \preg_quote($name, '/') . (\preg_match('/\w$/', $name) === 1 ? '(?!\w)' : '');
+                }
+
+                // single pass: replaced values are never expanded again
                 $formattedStr = \preg_replace_callback(
-                    '/%:([0-9A-Za-z_]+)/',
-                    static function (array $matches) use (&$namedArgs, &$usedNames): string {
-                        $name = $matches[1];
-                        if (($usedNames[$name] ?? false) === true || !\array_key_exists($name, $namedArgs)) {
+                    '/%:(' . \implode('|', $namePatterns) . ')/',
+                    static function (array $matches) use (&$namedArgs): string {
+                        if ($namedArgs[$matches[1]] === []) {
                             return $matches[0];
                         }
 
-                        $usedNames[$name] = true;
-
-                        return $namedArgs[$name];
+                        return (string) \array_shift($namedArgs[$matches[1]]);
                     },
                     $str
                 );
@@ -3054,6 +3076,12 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
             throw new \OutOfBoundsException('No character exists at the index');
         }
 
+        // fast path for UTF-8; the generic path below returns the same result
+        // @infection-ignore-all
+        if ($this->encoding === 'UTF-8') {
+            return (string) \mb_substr($this->str, $offset, 1);
+        }
+
         return (string) $this->utf8::substr($this->str, $offset, 1, $this->encoding);
     }
 
@@ -3477,8 +3505,6 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      * @param string $replacement   <p>The string to replace with.</p>
      * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @infection-ignore-all
-     *
      * @psalm-mutation-free
      *
      * @return static
@@ -3486,6 +3512,8 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
      */
     public function replace(string $search, string $replacement, bool $caseSensitive = true): self
     {
+        // no-op guard kept for older PHP versions, where str_replace() with an empty needle behaves differently
+        // @infection-ignore-all
         if ($search === '' && $replacement === '') {
             return static::create($this->str, $this->encoding);
         }

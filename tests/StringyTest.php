@@ -5207,6 +5207,32 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('x %:a', (string) $result);
     }
 
+    public function testFormatNamedPlaceholderNames()
+    {
+        // any name is allowed, not only [A-Za-z0-9_]
+        static::assertSame('X U', (string) S::create('%:foo-bar %:ü')->format(['foo-bar' => 'X', 'ü' => 'U']));
+        static::assertSame('%:abc X', (string) S::create('%:abc %:a.c')->format(['a.c' => 'X']));
+        static::assertSame('X', (string) S::create('%:a/b')->format(['a/b' => 'X']));
+
+        // a name ending in a word character does not match a longer placeholder
+        static::assertSame('%:text_two 1', (string) S::create('%:text_two %:text')->format(['text' => 1]));
+        static::assertSame('1 2', (string) S::create('%:text %:text_two')->format(['text' => 1, 'text_two' => 2]));
+
+        // other names match as prefix (legacy behaviour), but the longest name wins
+        static::assertSame('1b', (string) S::create('%:a-b')->format(['a-' => 1]));
+        static::assertSame('2 1', (string) S::create('%:a-b %:a-')->format(['a-' => 1, 'a-b' => 2]));
+
+        // the same name in several arrays fills the next occurrence
+        static::assertSame('1 2 %:a', (string) S::create('%:a %:a %:a')->format(['a' => 1], ['a' => 2]));
+    }
+
+    public function testBeforeReturnsWholeStringIfNotFound()
+    {
+        static::assertSame('foo', S::create('foo')->before(',')->toString());
+        static::assertSame('fòô', S::create('fòô,bàř')->before(',')->toString());
+        static::assertSame('ISO-8859-1', S::create('foo', 'ISO-8859-1')->before(',')->getEncoding());
+    }
+
     /**
      * @return array
      */
