@@ -144,7 +144,7 @@ jobs:
         # OIDC tokens are not issued to pull requests from forks
         if: ${{ matrix.php == '8.3' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
         continue-on-error: true
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: build/logs/clover.xml
           use_oidc: true
