@@ -5224,6 +5224,9 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
 
         // the same name in several arrays fills the next occurrence
         static::assertSame('1 2 %:a', (string) S::create('%:a %:a %:a')->format(['a' => 1], ['a' => 2]));
+
+        // keys may carry the "%:" prefix themselves
+        static::assertSame('A B', (string) S::create('%:a %:b')->format(['%:a' => 'A', 'b' => 'B']));
     }
 
     public function testBeforeReturnsWholeStringIfNotFound()

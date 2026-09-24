@@ -1410,7 +1410,10 @@ class Stringy implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSeri
                     $name = (string) $name;
 
                     if (\strpos($name, '%:') === 0) {
-                        $name = (string) \substr($name, 2);
+                        $name = \substr($name, 2);
+                        // the cast is needed on PHP < 8, where substr('%:', 2) returns false
+                        // @infection-ignore-all
+                        $name = (string) $name;
                     }
 
                     // the same name in several arrays fills the next occurrence of that placeholder
