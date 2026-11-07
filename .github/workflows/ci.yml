@@ -67,7 +67,7 @@ jobs:
           - php: '8.5'
             composer: basic
             phpunit: '^13.0'
-            phpunit_config: phpunit.xml.dist
+            phpunit_config: phpunit.13.xml.dist
     # Infection mutates and re-runs the suite, so that leg needs a longer timeout.
     timeout-minutes: ${{ matrix.run_infection && 30 || 10 }}
     steps:
