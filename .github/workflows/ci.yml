@@ -25,8 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Keep the "modern" leg on PHPUnit 9 until the suite is upgraded for
-        # PHPUnit 10+, so CI currently stops at PHP 8.4.
+        # Exercise the supported legacy matrix and PHPUnit 13 on PHP 8.5.
         include:
           - php: '7.1'
             composer: basic
@@ -65,6 +64,10 @@ jobs:
             composer: basic
             phpunit: '^9.6'
             phpunit_config: phpunit.xml.dist
+          - php: '8.5'
+            composer: basic
+            phpunit: '^13.0'
+            phpunit_config: phpunit.13.xml.dist
     # Infection mutates and re-runs the suite, so that leg needs a longer timeout.
     timeout-minutes: ${{ matrix.run_infection && 30 || 10 }}
     steps:
