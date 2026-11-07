@@ -59,12 +59,13 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $expected
      * @param mixed $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toStringProvider')]
     public function testToString($expected, $str)
     {
         static::assertEquals($expected, (string) new S($str));
     }
 
-    public function toStringProvider()
+    public static function toStringProvider()
     {
         return [
             ['', null],
@@ -123,6 +124,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $expected
      * @param mixed $offset
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('offsetExistsProvider')]
     public function testOffsetExists($expected, $offset)
     {
         $stringy = S::create('fòô', 'UTF-8');
@@ -130,7 +132,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, isset($stringy[$offset]));
     }
 
-    public function offsetExistsProvider()
+    public static function offsetExistsProvider()
     {
         return [
             [true, 0],
@@ -186,13 +188,14 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $offset
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfProvider')]
     public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOf($subStr, $offset);
         static::assertEquals($expected, $result);
     }
 
-    public function indexOfProvider()
+    public static function indexOfProvider()
     {
         return [
             [3, 'string', 'ing'],
@@ -218,13 +221,14 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $offset
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfLastProvider')]
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOfLast($subStr, $offset);
         static::assertEquals($expected, $result);
     }
 
-    public function indexOfLastProvider()
+    public static function indexOfLastProvider()
     {
         return [
             [false, 'foo & Bar', 'bar'],
@@ -249,6 +253,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $string
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('appendProvider')]
     public function testAppend($expected, $str, $string, $encoding = null)
     {
         $result = S::create($str, $encoding)->append($string);
@@ -256,7 +261,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $result);
     }
 
-    public function appendProvider()
+    public static function appendProvider()
     {
         return [
             ['foobar', 'foo', 'bar'],
@@ -272,6 +277,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $string
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('prependProvider')]
     public function testPrepend($expected, $str, $string, $encoding = null)
     {
         $result = S::create($str, $encoding)->prepend($string);
@@ -279,7 +285,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $result);
     }
 
-    public function prependProvider()
+    public static function prependProvider()
     {
         return [
             ['foobar', 'bar', 'foo'],
@@ -294,6 +300,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('charsProvider')]
     public function testChars($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->chars();
@@ -304,7 +311,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $result);
     }
 
-    public function charsProvider()
+    public static function charsProvider()
     {
         return [
             [[], ''],
@@ -320,6 +327,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('linesProvider')]
     public function testLines($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->linesCollection();
@@ -334,7 +342,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function linesProvider()
+    public static function linesProvider()
     {
         return [
             [[], ''],
@@ -364,6 +372,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('upperCaseFirstProvider')]
     public function testUpperCaseFirst($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->upperCaseFirst();
@@ -371,7 +380,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $result);
     }
 
-    public function upperCaseFirstProvider()
+    public static function upperCaseFirstProvider()
     {
         return [
             ['Test', 'Test'],
@@ -389,6 +398,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lowerCaseFirstProvider')]
     public function testLowerCaseFirst($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -398,7 +408,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function lowerCaseFirstProvider()
+    public static function lowerCaseFirstProvider()
     {
         return [
             ['test', 'Test'],
@@ -416,6 +426,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('camelizeProvider')]
     public function testCamelize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -425,7 +436,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function camelizeProvider()
+    public static function camelizeProvider()
     {
         return [
             ['camelCase', 'CamelCase'],
@@ -462,6 +473,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('upperCamelizeProvider')]
     public function testUpperCamelize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -471,7 +483,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function upperCamelizeProvider()
+    public static function upperCamelizeProvider()
     {
         return [
             ['CamelCase', 'camelCase'],
@@ -502,6 +514,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dasherizeProvider')]
     public function testDasherize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -511,7 +524,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function dasherizeProvider()
+    public static function dasherizeProvider()
     {
         return [
             ['test-case', 'testCase'],
@@ -543,6 +556,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('underscoredProvider')]
     public function testUnderscored($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -552,7 +566,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function underscoredProvider()
+    public static function underscoredProvider()
     {
         return [
             ['test_case', 'testCase'],
@@ -582,6 +596,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $delimiter
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('delimitProvider')]
     public function testDelimit($expected, $str, $delimiter, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -591,7 +606,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function delimitProvider()
+    public static function delimitProvider()
     {
         return [
             ['test*case', 'testCase', '*'],
@@ -618,6 +633,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('swapCaseProvider')]
     public function testSwapCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -627,7 +643,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function swapCaseProvider()
+    public static function swapCaseProvider()
     {
         return [
             ['TESTcASE', 'testCase'],
@@ -645,6 +661,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $ignore
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('titleizeProvider')]
     public function testTitleize(
         $expected,
         $str,
@@ -658,7 +675,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function titleizeProvider()
+    public static function titleizeProvider()
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
 
@@ -682,6 +699,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('humanizeProvider')]
     public function testHumanize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -691,7 +709,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function humanizeProvider()
+    public static function humanizeProvider()
     {
         return [
             ['Author', 'author_id'],
@@ -706,6 +724,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $expected
      * @param mixed $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tidyProvider')]
     public function testTidy($expected, $str)
     {
         $stringy = S::create($str);
@@ -715,7 +734,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function tidyProvider()
+    public static function tidyProvider()
     {
         return [
             ['"I see..."', '“I see…”'],
@@ -732,6 +751,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('collapseWhitespaceProvider')]
     public function testCollapseWhitespace($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -741,7 +761,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function collapseWhitespaceProvider()
+    public static function collapseWhitespaceProvider()
     {
         return [
             ['foo bar', '  foo   bar  '],
@@ -767,6 +787,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $language
      * @param mixed $removeUnsupported
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toAsciiProvider')]
     public function testToAscii(
         $expected,
         $str,
@@ -780,7 +801,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toAsciiProvider()
+    public static function toAsciiProvider()
     {
         return [
             ['foo bar', 'fòô bàř'],
@@ -819,6 +840,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $padType
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padProvider')]
     public function testPad(
         $expected,
         $str,
@@ -834,7 +856,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function padProvider()
+    public static function padProvider()
     {
         return [
             // length <= str
@@ -876,6 +898,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $padStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padLeftProvider')]
     public function testPadLeft(
         $expected,
         $str,
@@ -890,7 +913,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function padLeftProvider()
+    public static function padLeftProvider()
     {
         return [
             ['  foo bar', 'foo bar', 9],
@@ -912,6 +935,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $padStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padRightProvider')]
     public function testPadRight(
         $expected,
         $str,
@@ -926,7 +950,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function padRightProvider()
+    public static function padRightProvider()
     {
         return [
             ['foo bar  ', 'foo bar', 9],
@@ -948,6 +972,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $padStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padBothProvider')]
     public function testPadBoth(
         $expected,
         $str,
@@ -962,7 +987,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function padBothProvider()
+    public static function padBothProvider()
     {
         return [
             ['foo bar ', 'foo bar', 8],
@@ -988,6 +1013,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('startsWithProvider')]
     public function testStartsWith(
         $expected,
         $str,
@@ -1002,7 +1028,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function startsWithProvider()
+    public static function startsWithProvider()
     {
         return [
             [true, 'foo bars', 'foo bar'],
@@ -1028,6 +1054,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('startsWithProviderAny')]
     public function testStartsWithAny(
         $expected,
         $str,
@@ -1042,7 +1069,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function startsWithProviderAny()
+    public static function startsWithProviderAny()
     {
         return [
             [true, 'foo bars', ['foo bar']],
@@ -1068,6 +1095,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('endsWithProvider')]
     public function testEndsWith(
         $expected,
         $str,
@@ -1082,7 +1110,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function endsWithProvider()
+    public static function endsWithProvider()
     {
         return [
             [true, 'foo bars', 'o bars'],
@@ -1108,6 +1136,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('endsWithAnyProvider')]
     public function testEndsWithAny(
         $expected,
         $str,
@@ -1122,7 +1151,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function endsWithAnyProvider()
+    public static function endsWithAnyProvider()
     {
         return [
             [true, 'foo bars', ['foo', 'o bars']],
@@ -1146,6 +1175,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toBooleanProvider')]
     public function testToBoolean($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1155,7 +1185,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toBooleanProvider()
+    public static function toBooleanProvider()
     {
         return [
             [true, 'true'],
@@ -1183,6 +1213,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $str
      * @param mixed $tabLength
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toSpacesProvider')]
     public function testToSpaces($expected, $str, $tabLength = 4)
     {
         $stringy = S::create($str);
@@ -1192,7 +1223,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toSpacesProvider()
+    public static function toSpacesProvider()
     {
         return [
             ['    foo    bar    ', '	foo	bar	'],
@@ -1211,6 +1242,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $str
      * @param mixed $tabLength
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toTabsProvider')]
     public function testToTabs($expected, $str, $tabLength = 4)
     {
         $stringy = S::create($str);
@@ -1220,7 +1252,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toTabsProvider()
+    public static function toTabsProvider()
     {
         return [
             ['	foo	bar	', '    foo    bar    '],
@@ -1238,6 +1270,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toLowerCaseProvider')]
     public function testToLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1247,7 +1280,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toLowerCaseProvider()
+    public static function toLowerCaseProvider()
     {
         return [
             ['foo bar', 'FOO BAR'],
@@ -1265,6 +1298,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toTitleCaseProvider')]
     public function testToTitleCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1274,7 +1308,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toTitleCaseProvider()
+    public static function toTitleCaseProvider()
     {
         return [
             ['Foo Bar', 'foo bar'],
@@ -1292,6 +1326,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toUpperCaseProvider')]
     public function testToUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1301,7 +1336,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function toUpperCaseProvider()
+    public static function toUpperCaseProvider()
     {
         return [
             ['FOO BAR', 'foo bar'],
@@ -1319,6 +1354,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $str
      * @param mixed $replacement
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('slugifyProvider')]
     public function testSlugify($expected, $str, $replacement = '-')
     {
         $stringy = S::create($str);
@@ -1338,7 +1374,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expected, $actual);
     }
 
-    public function slugifyProvider()
+    public static function slugifyProvider()
     {
         return [
             ['foo-bar', ' foo  bar '],
@@ -1379,6 +1415,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $offset
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('betweenProvider')]
     public function testBetween(
         $expected,
         $str,
@@ -1394,7 +1431,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function betweenProvider()
+    public static function betweenProvider()
     {
         return [
             ['', 'foo', '{', '}'],
@@ -1425,6 +1462,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsProvider')]
     public function testContains(
         $expected,
         $haystack,
@@ -1439,7 +1477,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($haystack, $stringy);
     }
 
-    public function containsProvider()
+    public static function containsProvider()
     {
         return [
             [true, 'Str contains foo bar', 'foo bar'],
@@ -1475,6 +1513,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsAnyProvider')]
     public function testTestcontainsAny(
         $expected,
         $haystack,
@@ -1489,7 +1528,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($haystack, $stringy);
     }
 
-    public function containsAnyProvider()
+    public static function containsAnyProvider()
     {
         // One needle
         $singleNeedle = \array_map(
@@ -1498,7 +1537,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
 
                 return $array;
             },
-            $this->containsProvider()
+            self::containsProvider()
         );
 
         $provider = [
@@ -1540,6 +1579,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsAllProvider')]
     public function testContainsAll(
         $expected,
         $haystack,
@@ -1554,7 +1594,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($haystack, $stringy);
     }
 
-    public function containsAllProvider()
+    public static function containsAllProvider()
     {
         // One needle
         $singleNeedle = \array_map(
@@ -1563,7 +1603,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
 
                 return $array;
             },
-            $this->containsProvider()
+            self::containsProvider()
         );
 
         $provider = [
@@ -1603,6 +1643,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $str
      * @param mixed $substring
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('surroundProvider')]
     public function testSurround($expected, $str, $substring)
     {
         $stringy = S::create($str);
@@ -1612,7 +1653,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function surroundProvider()
+    public static function surroundProvider()
     {
         return [
             ['__foobar__', 'foobar', '__'],
@@ -1632,6 +1673,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $index
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('insertProvider')]
     public function testInsert(
         $expected,
         $str,
@@ -1646,7 +1688,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function insertProvider()
+    public static function insertProvider()
     {
         return [
             ['foo bar', 'oo bar', 'f', 0],
@@ -1669,6 +1711,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('truncateProvider')]
     public function testTruncate(
         $expected,
         $str,
@@ -1683,7 +1726,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function truncateProvider()
+    public static function truncateProvider()
     {
         return [
             ['Test foo bar', 'Test foo bar', 12],
@@ -1720,6 +1763,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('safeTruncateProvider')]
     public function testSafeTruncate(
         $expected,
         $str,
@@ -1734,7 +1778,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function safeTruncateProvider()
+    public static function safeTruncateProvider()
     {
         return [
             ['Test foo bar', 'Test foo bar', 12],
@@ -1769,6 +1813,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('reverseProvider')]
     public function testReverse($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1778,7 +1823,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function reverseProvider()
+    public static function reverseProvider()
     {
         return [
             ['', ''],
@@ -1797,6 +1842,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $multiplier
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('repeatProvider')]
     public function testRepeat($expected, $str, $multiplier, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1806,7 +1852,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function repeatProvider()
+    public static function repeatProvider()
     {
         return [
             ['', 'foo', 0],
@@ -1825,6 +1871,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shuffleProvider')]
     public function testShuffle($str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1847,7 +1894,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function shuffleProvider()
+    public static function shuffleProvider()
     {
         return [
             ['foo bar'],
@@ -1864,6 +1911,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $chars
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimProvider')]
     public function testTrim($expected, $str, $chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -1873,7 +1921,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function trimProvider()
+    public static function trimProvider()
     {
         return [
             ['foo   bar', '  foo   bar  '],
@@ -1899,6 +1947,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $chars
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimLeftProvider')]
     public function testTrimLeft(
         $expected,
         $str,
@@ -1912,7 +1961,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function trimLeftProvider()
+    public static function trimLeftProvider()
     {
         return [
             ['foo   bar  ', '  foo   bar  '],
@@ -1939,6 +1988,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $chars
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimRightProvider')]
     public function testTrimRight(
         $expected,
         $str,
@@ -1952,7 +2002,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function trimRightProvider()
+    public static function trimRightProvider()
     {
         return [
             ['  foo   bar', '  foo   bar  '],
@@ -1979,6 +2029,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $otherStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonPrefixProvider')]
     public function testLongestCommonPrefix(
         $expected,
         $str,
@@ -1992,7 +2043,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function longestCommonPrefixProvider()
+    public static function longestCommonPrefixProvider()
     {
         return [
             ['foo', 'foobar', 'foo bar'],
@@ -2016,6 +2067,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $otherStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonSuffixProvider')]
     public function testLongestCommonSuffix(
         $expected,
         $str,
@@ -2029,7 +2081,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function longestCommonSuffixProvider()
+    public static function longestCommonSuffixProvider()
     {
         return [
             ['bar', 'foobar', 'foo bar'],
@@ -2053,6 +2105,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $otherStr
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonSubstringProvider')]
     public function testLongestCommonSubstring(
         $expected,
         $str,
@@ -2066,7 +2119,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function longestCommonSubstringProvider()
+    public static function longestCommonSubstringProvider()
     {
         return [
             ['foo', 'foobar', 'foo bar'],
@@ -2089,6 +2142,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lengthProvider')]
     public function testLength($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2098,7 +2152,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function lengthProvider()
+    public static function lengthProvider()
     {
         return [
             [11, '  foo bar  '],
@@ -2117,6 +2171,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $end
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('sliceProvider')]
     public function testSlice(
         $expected,
         $str,
@@ -2131,7 +2186,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function sliceProvider()
+    public static function sliceProvider()
     {
         return [
             ['foobar', 'foobar', 0],
@@ -2162,6 +2217,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $limit
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('splitProvider')]
     public function testSplit(
         $expected,
         $str,
@@ -2182,7 +2238,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function splitProvider()
+    public static function splitProvider()
     {
         return [
             [['foo,bar,baz'], 'foo,bar,baz', ''],
@@ -2214,6 +2270,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stripWhitespaceProvider')]
     public function testStripWhitespace($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2223,7 +2280,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function stripWhitespaceProvider()
+    public static function stripWhitespaceProvider()
     {
         return [
             ['foobar', '  foo   bar  '],
@@ -2250,6 +2307,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed|null $length
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('substrProvider')]
     public function testSubstr(
         $expected,
         $str,
@@ -2264,7 +2322,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function substrProvider()
+    public static function substrProvider()
     {
         return [
             ['foo bar', 'foo bar', 0],
@@ -2287,6 +2345,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $index
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('atProvider')]
     public function testAt($expected, $str, $index, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2296,7 +2355,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function atProvider()
+    public static function atProvider()
     {
         return [
             ['f', 'foo bar', 0],
@@ -2318,6 +2377,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $n
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('firstProvider')]
     public function testFirst($expected, $str, $n, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2327,7 +2387,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function firstProvider()
+    public static function firstProvider()
     {
         return [
             ['', 'foo bar', -5],
@@ -2353,6 +2413,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $n
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lastProvider')]
     public function testLast($expected, $str, $n, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2362,7 +2423,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function lastProvider()
+    public static function lastProvider()
     {
         return [
             ['', 'foo bar', -5],
@@ -2388,6 +2449,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ensureLeftProvider')]
     public function testEnsureLeft($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2397,7 +2459,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function ensureLeftProvider()
+    public static function ensureLeftProvider()
     {
         return [
             ['foobar', 'foobar', 'f'],
@@ -2421,6 +2483,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ensureRightProvider')]
     public function testEnsureRight($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2430,7 +2493,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function ensureRightProvider()
+    public static function ensureRightProvider()
     {
         return [
             ['foobar', 'foobar', 'r'],
@@ -2454,6 +2517,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeLeftProvider')]
     public function testRemoveLeft($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2463,7 +2527,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function removeLeftProvider()
+    public static function removeLeftProvider()
     {
         return [
             ['foo bar', 'foo bar', ''],
@@ -2489,6 +2553,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $substring
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeRightProvider')]
     public function testRemoveRight($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2498,7 +2563,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function removeRightProvider()
+    public static function removeRightProvider()
     {
         return [
             ['foo bar', 'foo bar', ''],
@@ -2523,6 +2588,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAlphaProvider')]
     public function testIsAlpha($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2532,7 +2598,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isAlphaProvider()
+    public static function isAlphaProvider()
     {
         return [
             [true, ''],
@@ -2555,6 +2621,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAlphanumericProvider')]
     public function testIsAlphanumeric($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2564,7 +2631,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isAlphanumericProvider()
+    public static function isAlphanumericProvider()
     {
         return [
             [true, ''],
@@ -2590,6 +2657,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBlankProvider')]
     public function testIsBlank($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2599,7 +2667,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isBlankProvider()
+    public static function isBlankProvider()
     {
         return [
             [true, ''],
@@ -2627,6 +2695,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isJsonProvider')]
     public function testIsJson($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2636,7 +2705,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isJsonProvider()
+    public static function isJsonProvider()
     {
         return [
             [false, ''],
@@ -2669,6 +2738,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isLowerCaseProvider')]
     public function testIsLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2678,7 +2748,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isLowerCaseProvider()
+    public static function isLowerCaseProvider()
     {
         return [
             [true, ''],
@@ -2699,6 +2769,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasLowerCaseProvider')]
     public function testHasLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2708,7 +2779,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function hasLowerCaseProvider()
+    public static function hasLowerCaseProvider()
     {
         return [
             [false, ''],
@@ -2733,6 +2804,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isSerializedProvider')]
     public function testIsSerialized($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2742,7 +2814,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isSerializedProvider()
+    public static function isSerializedProvider()
     {
         return [
             [false, ''],
@@ -2761,6 +2833,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed $expected
      * @param mixed $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBase64Provider')]
     public function testIsBase64($expected, $str)
     {
         $stringy = S::create($str);
@@ -2770,7 +2843,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isBase64Provider()
+    public static function isBase64Provider()
     {
         return [
             [false, ' '],
@@ -2790,6 +2863,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isUpperCaseProvider')]
     public function testIsUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2799,7 +2873,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isUpperCaseProvider()
+    public static function isUpperCaseProvider()
     {
         return [
             [true, ''],
@@ -2820,6 +2894,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasUpperCaseProvider')]
     public function testHasUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2829,7 +2904,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function hasUpperCaseProvider()
+    public static function hasUpperCaseProvider()
     {
         return [
             [false, ''],
@@ -2854,6 +2929,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $str
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isHexadecimalProvider')]
     public function testIsHexadecimal($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2863,7 +2939,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function isHexadecimalProvider()
+    public static function isHexadecimalProvider()
     {
         return [
             [true, ''],
@@ -2891,6 +2967,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $caseSensitive
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('countSubstrProvider')]
     public function testCountSubstr(
         $expected,
         $str,
@@ -2905,7 +2982,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function countSubstrProvider()
+    public static function countSubstrProvider()
     {
         return [
             [0, '', 'foo'],
@@ -2935,6 +3012,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $replacement
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceProvider')]
     public function testReplace(
         $expected,
         $str,
@@ -2949,7 +3027,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function replaceProvider()
+    public static function replaceProvider()
     {
         return [
             ['', '', '', ''],
@@ -2981,6 +3059,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $options
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('regexReplaceProvider')]
     public function testTestregexReplace(
         $expected,
         $str,
@@ -2996,7 +3075,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function regexReplaceProvider()
+    public static function regexReplaceProvider()
     {
         return [
             ['', '', '', ''],
@@ -3019,6 +3098,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $flags
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlEncodeProvider')]
     public function testHtmlEncode($expected, $str, $flags = \ENT_COMPAT, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3028,7 +3108,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function htmlEncodeProvider()
+    public static function htmlEncodeProvider()
     {
         return [
             ['&amp;', '&'],
@@ -3047,6 +3127,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
      * @param mixed      $flags
      * @param mixed|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlDecodeProvider')]
     public function testHtmlDecode($expected, $str, $flags = \ENT_COMPAT, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3056,7 +3137,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($str, $stringy);
     }
 
-    public function htmlDecodeProvider()
+    public static function htmlDecodeProvider()
     {
         return [
             ['&', '&amp;'],
