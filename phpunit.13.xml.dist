@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.4/phpunit.xsd">
+  <source>
+    <include>
+      <directory suffix=".php">./src/</directory>
+    </include>
+    <exclude>
+      <!-- Loaded conditionally only on PHP 8.1+; avoid duplicate declaration. -->
+      <file>./src/JsonSerializableReturnTypeTraitPhp81.php</file>
+    </exclude>
+  </source>
+  <coverage>
+    <report>
+      <clover outputFile="build/logs/clover.xml"/>
+    </report>
+  </coverage>
+  <testsuite name="Stringy">
+    <directory>tests</directory>
+  </testsuite>
+</phpunit>
