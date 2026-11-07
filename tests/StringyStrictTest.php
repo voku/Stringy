@@ -17,7 +17,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function appendProvider(): array
+    public static function appendProvider(): array
     {
         return [
             ['foobar', 'foo', 'bar'],
@@ -38,7 +38,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function atProvider(): array
+    public static function atProvider(): array
     {
         return [
             ['f', 'foo bar', 0],
@@ -60,7 +60,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function betweenProvider(): array
+    public static function betweenProvider(): array
     {
         return [
             ['', 'foo', '{', '}'],
@@ -85,7 +85,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function camelizeProvider(): array
+    public static function camelizeProvider(): array
     {
         return [
             ['camelCase', 'CamelCase'],
@@ -118,7 +118,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function capitalizePersonalNameProvider(): array
+    public static function capitalizePersonalNameProvider(): array
     {
         return [
             ['Marcus Aurelius', 'marcus aurelius'],
@@ -170,7 +170,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function charsProvider(): array
+    public static function charsProvider(): array
     {
         return [
             [[], ''],
@@ -182,7 +182,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function collapseWhitespaceProvider(): array
+    public static function collapseWhitespaceProvider(): array
     {
         return [
             ['foo bar', '  foo   bar  '],
@@ -203,7 +203,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function containsAllProvider(): array
+    public static function containsAllProvider(): array
     {
         // One needle
         $singleNeedle = \array_map(
@@ -212,7 +212,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
                 return $array;
             },
-            $this->containsProvider()
+            self::containsProvider()
         );
 
         $provider = [
@@ -249,7 +249,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function containsAnyProvider(): array
+    public static function containsAnyProvider(): array
     {
         // One needle
         $singleNeedle = \array_map(
@@ -258,7 +258,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
 
                 return $array;
             },
-            $this->containsProvider()
+            self::containsProvider()
         );
 
         $provider = [
@@ -294,7 +294,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function containsProvider(): array
+    public static function containsProvider(): array
     {
         return [
             [true, 'Str contains foo bar', 'foo bar'],
@@ -324,7 +324,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function countSubstrProvider(): array
+    public static function countSubstrProvider(): array
     {
         return [
             [0, '', 'foo'],
@@ -348,7 +348,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dasherizeProvider(): array
+    public static function dasherizeProvider(): array
     {
         return [
             ['test-case', 'testCase'],
@@ -376,7 +376,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function delimitProvider(): array
+    public static function delimitProvider(): array
     {
         return [
             ['test*case', 'testCase', '*'],
@@ -399,7 +399,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function endsWithAnyProvider(): array
+    public static function endsWithAnyProvider(): array
     {
         return [
             [true, 'foo bars', ['foo', 'o bars']],
@@ -419,7 +419,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function endsWithProvider(): array
+    public static function endsWithProvider(): array
     {
         return [
             [true, 'foo bars', 'o bars'],
@@ -439,7 +439,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function ensureLeftProvider(): array
+    public static function ensureLeftProvider(): array
     {
         return [
             ['foobar', 'foobar', 'f'],
@@ -458,7 +458,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function ensureRightProvider(): array
+    public static function ensureRightProvider(): array
     {
         return [
             ['foobar', 'foobar', 'r'],
@@ -477,7 +477,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function escapeProvider(): array
+    public static function escapeProvider(): array
     {
         return [
             ['', ''],
@@ -492,7 +492,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function firstProvider(): array
+    public static function firstProvider(): array
     {
         return [
             ['', 'foo bar', -5],
@@ -513,7 +513,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function hasLowerCaseProvider(): array
+    public static function hasLowerCaseProvider(): array
     {
         return [
             [false, ''],
@@ -534,7 +534,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function hasUpperCaseProvider(): array
+    public static function hasUpperCaseProvider(): array
     {
         return [
             [false, ''],
@@ -555,7 +555,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function htmlDecodeProvider(): array
+    public static function htmlDecodeProvider(): array
     {
         return [
             ['&', '&amp;'],
@@ -569,7 +569,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function htmlEncodeProvider(): array
+    public static function htmlEncodeProvider(): array
     {
         return [
             ['&amp;', '&'],
@@ -583,7 +583,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function humanizeProvider(): array
+    public static function humanizeProvider(): array
     {
         return [
             ['Author', 'author_id'],
@@ -595,7 +595,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function indexOfLastProvider(): array
+    public static function indexOfLastProvider(): array
     {
         return [
             [6, 'foo & bar', 'bar'],
@@ -614,7 +614,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function indexOfLastIgnoreCaseProvider(): array
+    public static function indexOfLastIgnoreCaseProvider(): array
     {
         return [
             [6, 'foo & bar', 'Bar'],
@@ -633,7 +633,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function indexOfIgnoreCaseProvider(): array
+    public static function indexOfIgnoreCaseProvider(): array
     {
         return [
             [6, 'foo & bar', 'Bar'],
@@ -652,7 +652,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function indexOfProvider(): array
+    public static function indexOfProvider(): array
     {
         return [
             [6, 'foo & bar', 'bar'],
@@ -671,7 +671,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function insertProvider(): array
+    public static function insertProvider(): array
     {
         return [
             ['foo bar', 'oo bar', 'f', 0],
@@ -688,7 +688,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isAlphaProvider(): array
+    public static function isAlphaProvider(): array
     {
         return [
             [true, ''],
@@ -707,7 +707,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isAlphanumericProvider(): array
+    public static function isAlphanumericProvider(): array
     {
         return [
             [true, ''],
@@ -729,7 +729,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isBase64Provider(): array
+    public static function isBase64Provider(): array
     {
         return [
             [false, ' '],
@@ -745,7 +745,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isBlankProvider(): array
+    public static function isBlankProvider(): array
     {
         return [
             [true, ''],
@@ -769,7 +769,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isHexadecimalProvider(): array
+    public static function isHexadecimalProvider(): array
     {
         return [
             [true, ''],
@@ -791,7 +791,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isJsonProvider(): array
+    public static function isJsonProvider(): array
     {
         return [
             [false, ''],
@@ -820,7 +820,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isLowerCaseProvider(): array
+    public static function isLowerCaseProvider(): array
     {
         return [
             [true, ''],
@@ -837,7 +837,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isProvider(): array
+    public static function isProvider(): array
     {
         return [
             [true, 'Gears\\String\\Str', 'Gears\\String\\Str'],
@@ -859,7 +859,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isSerializedProvider(): array
+    public static function isSerializedProvider(): array
     {
         return [
             [false, ''],
@@ -875,7 +875,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isUpperCaseProvider(): array
+    public static function isUpperCaseProvider(): array
     {
         return [
             [true, ''],
@@ -892,7 +892,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function lastProvider(): array
+    public static function lastProvider(): array
     {
         return [
             ['', 'foo bar', -5],
@@ -913,7 +913,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function lengthProvider(): array
+    public static function lengthProvider(): array
     {
         return [
             [11, '  foo bar  '],
@@ -926,7 +926,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function linesProvider(): array
+    public static function linesProvider(): array
     {
         return [
             [[], ''],
@@ -952,7 +952,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function longestCommonPrefixProvider(): array
+    public static function longestCommonPrefixProvider(): array
     {
         return [
             ['foo', 'foobar', 'foo bar'],
@@ -971,7 +971,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function longestCommonSubstringProvider(): array
+    public static function longestCommonSubstringProvider(): array
     {
         return [
             ['foo', 'foobar', 'foo bar'],
@@ -990,7 +990,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function longestCommonSuffixProvider(): array
+    public static function longestCommonSuffixProvider(): array
     {
         return [
             ['bar', 'foobar', 'foo bar'],
@@ -1009,7 +1009,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function lowerCaseFirstProvider(): array
+    public static function lowerCaseFirstProvider(): array
     {
         return [
             ['test', 'Test'],
@@ -1023,7 +1023,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function offsetExistsProvider(): array
+    public static function offsetExistsProvider(): array
     {
         return [
             [true, 0],
@@ -1038,7 +1038,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function padBothProvider(): array
+    public static function padBothProvider(): array
     {
         return [
             ['foo bar ', 'foo bar', 8],
@@ -1058,7 +1058,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function padLeftProvider(): array
+    public static function padLeftProvider(): array
     {
         return [
             ['  foo bar', 'foo bar', 9],
@@ -1074,7 +1074,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function padProvider(): array
+    public static function padProvider(): array
     {
         return [
             // length <= str
@@ -1102,7 +1102,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function padRightProvider(): array
+    public static function padRightProvider(): array
     {
         return [
             ['foo bar  ', 'foo bar', 9],
@@ -1118,7 +1118,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function prependProvider(): array
+    public static function prependProvider(): array
     {
         return [
             ['foobar', 'bar', 'foo'],
@@ -1129,7 +1129,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function regexReplaceProvider(): array
+    public static function regexReplaceProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1148,7 +1148,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function removeHtmlBreakProvider(): array
+    public static function removeHtmlBreakProvider(): array
     {
         return [
             ['', ''],
@@ -1167,7 +1167,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function removeHtmlProvider(): array
+    public static function removeHtmlProvider(): array
     {
         return [
             ['', ''],
@@ -1182,7 +1182,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function removeLeftProvider(): array
+    public static function removeLeftProvider(): array
     {
         return [
             ['foo bar', 'foo bar', ''],
@@ -1203,7 +1203,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function removeRightProvider(): array
+    public static function removeRightProvider(): array
     {
         return [
             ['foo bar', 'foo bar', ''],
@@ -1226,7 +1226,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      *
      * @noinspection CssUnknownTarget
      */
-    public function removeXssProvider(): array
+    public static function removeXssProvider(): array
     {
         return [
             ['', ''],
@@ -1247,7 +1247,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function equalsProvider(): array
+    public static function equalsProvider(): array
     {
         return [
             [
@@ -1280,7 +1280,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function emptyProvider(): array
+    public static function emptyProvider(): array
     {
         return [
             [
@@ -1309,7 +1309,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function repeatProvider(): array
+    public static function repeatProvider(): array
     {
         return [
             ['', 'foo', 0],
@@ -1325,7 +1325,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceAllProvider(): array
+    public static function replaceAllProvider(): array
     {
         return [
             ['', '', [], ''],
@@ -1364,7 +1364,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceBeginningProvider(): array
+    public static function replaceBeginningProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1389,7 +1389,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceFirstProvider(): array
+    public static function replaceFirstProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1414,7 +1414,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceLastProvider(): array
+    public static function replaceLastProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1438,7 +1438,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceEndingProvider(): array
+    public static function replaceEndingProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1463,7 +1463,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function replaceProvider(): array
+    public static function replaceProvider(): array
     {
         return [
             ['', '', '', ''],
@@ -1500,7 +1500,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function reverseProvider(): array
+    public static function reverseProvider(): array
     {
         return [
             ['', ''],
@@ -1514,7 +1514,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function safeTruncateProvider(): array
+    public static function safeTruncateProvider(): array
     {
         return [
             ['Test foo bar', 'Test foo bar', 12],
@@ -1546,7 +1546,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function shortenAfterWordProvider(): array
+    public static function shortenAfterWordProvider(): array
     {
         return [
             ['this...', 'this is a test', 5, '...'],
@@ -1562,7 +1562,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function shuffleProvider(): array
+    public static function shuffleProvider(): array
     {
         return [
             ['foo bar'],
@@ -1574,7 +1574,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function sliceProvider(): array
+    public static function sliceProvider(): array
     {
         return [
             ['foobar', 'foobar', 0],
@@ -1599,7 +1599,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function slugifyProvider(): array
+    public static function slugifyProvider(): array
     {
         return [
             ['bar', 'foooooo'],
@@ -1624,7 +1624,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function snakeizeProvider(): array
+    public static function snakeizeProvider(): array
     {
         return [
             ['snake_case', 'SnakeCase'],
@@ -1653,7 +1653,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function splitProvider(): array
+    public static function splitProvider(): array
     {
         return [
             [['foo,bar,baz'], 'foo,bar,baz', ''],
@@ -1678,7 +1678,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function chunkProvider(): array
+    public static function chunkProvider(): array
     {
         return [
             [
@@ -1725,7 +1725,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function startsWithProvider(): array
+    public static function startsWithProvider(): array
     {
         return [
             [true, 'foo bars', 'foo bar'],
@@ -1745,7 +1745,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function startsWithProviderAny(): array
+    public static function startsWithProviderAny(): array
     {
         return [
             [true, 'foo bars', ['foo bar']],
@@ -1766,7 +1766,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function stripWhitespaceProvider(): array
+    public static function stripWhitespaceProvider(): array
     {
         return [
             ['foobar', '  foo   bar  '],
@@ -1787,7 +1787,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function substrProvider(): array
+    public static function substrProvider(): array
     {
         return [
             ['foo bar', 'foo bar', 0],
@@ -1805,7 +1805,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function surroundProvider(): array
+    public static function surroundProvider(): array
     {
         return [
             ['__foobar__', 'foobar', '__'],
@@ -1819,7 +1819,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function swapCaseProvider(): array
+    public static function swapCaseProvider(): array
     {
         return [
             ['TESTcASE', 'testCase'],
@@ -2038,6 +2038,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $string
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('appendProvider')]
     public function testAppend($expected, $str, $string, $encoding = null)
     {
         $result = S::create($str, $encoding)->append($string);
@@ -2060,6 +2061,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $index
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('atProvider')]
     public function testAt($expected, $str, $index, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2176,6 +2178,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $offset
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('betweenProvider')]
     public function testBetween($expected, $str, $start, $end, $offset = 0, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2192,6 +2195,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('camelizeProvider')]
     public function testCamelize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2208,6 +2212,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string      $str
      * @param string|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('capitalizePersonalNameProvider')]
     public function testCapitalizePersonalName($expected, $str, $encoding = null)
     {
         /** @var S $stringy */
@@ -2232,6 +2237,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('charsProvider')]
     public function testChars($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->chars();
@@ -2249,6 +2255,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('collapseWhitespaceProvider')]
     public function testCollapseWhitespace($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2284,6 +2291,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsProvider')]
     public function testContains($expected, $haystack, $needle, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
@@ -2302,6 +2310,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool     $caseSensitive
      * @param string   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsAllProvider')]
     public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
@@ -2327,6 +2336,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('countSubstrProvider')]
     public function testCountSubstr($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2350,6 +2360,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dasherizeProvider')]
     public function testDasherize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2367,6 +2378,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $delimiter
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('delimitProvider')]
     public function testDelimit($expected, $str, $delimiter, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2392,6 +2404,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('endsWithProvider')]
     public function testEndsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2410,6 +2423,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool   $caseSensitive
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('endsWithAnyProvider')]
     public function testEndsWithAny($expected, $str, $substrings, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2427,6 +2441,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $substring
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ensureLeftProvider')]
     public function testEnsureLeft($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2444,6 +2459,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $substring
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ensureRightProvider')]
     public function testEnsureRight($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2460,6 +2476,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('escapeProvider')]
     public function testEscape($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2568,6 +2585,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $n
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('firstProvider')]
     public function testFirst($expected, $str, $n, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2602,6 +2620,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasLowerCaseProvider')]
     public function testHasLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2618,6 +2637,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasUpperCaseProvider')]
     public function testHasUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2635,6 +2655,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $flags
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlDecodeProvider')]
     public function testHtmlDecode($expected, $str, $flags = \ENT_COMPAT, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2652,6 +2673,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $flags
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlEncodeProvider')]
     public function testHtmlEncode($expected, $str, $flags = \ENT_COMPAT, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2668,6 +2690,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('humanizeProvider')]
     public function testHumanize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2686,6 +2709,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $offset
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfProvider')]
     public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOf($subStr, $offset);
@@ -2701,6 +2725,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $offset
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfIgnoreCaseProvider')]
     public function testIndexOfIgnoreCase($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOfIgnoreCase($subStr, $offset);
@@ -2716,6 +2741,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $offset
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfLastProvider')]
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOfLast($subStr, $offset);
@@ -2731,6 +2757,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int  $offset
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexOfLastIgnoreCaseProvider')]
     public function testIndexOfLastIgnoreCase($expected, $str, $subStr, $offset = 0, $encoding = null)
     {
         $result = S::create($str, $encoding)->indexOfLastIgnoreCase($subStr, $offset);
@@ -2746,6 +2773,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $index
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('insertProvider')]
     public function testInsert($expected, $str, $substring, $index, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2763,6 +2791,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $pattern
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isProvider')]
     public function testIs($expected, $string, $pattern, $encoding = null)
     {
         $str = S::create($string, $encoding);
@@ -2779,6 +2808,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAlphaProvider')]
     public function testIsAlpha($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2795,6 +2825,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAlphanumericProvider')]
     public function testIsAlphanumeric($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2810,6 +2841,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBase64Provider')]
     public function testIsBase64($expected, $str)
     {
         $stringy = S::create($str);
@@ -2837,6 +2869,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBlankProvider')]
     public function testIsBlank($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2896,6 +2929,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isHexadecimalProvider')]
     public function testIsHexadecimal($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2933,6 +2967,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $str
      * @param mixed  $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isJsonProvider')]
     public function testIsJson($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2960,6 +2995,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isLowerCaseProvider')]
     public function testIsLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2976,6 +3012,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isSerializedProvider')]
     public function testIsSerialized($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -2992,6 +3029,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isUpperCaseProvider')]
     public function testIsUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3009,6 +3047,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $n
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lastProvider')]
     public function testLast($expected, $str, $n, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3072,6 +3111,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lengthProvider')]
     public function testLength($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3088,6 +3128,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('linesProvider')]
     public function testLines($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->linesCollection();
@@ -3146,6 +3187,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $otherStr
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonPrefixProvider')]
     public function testLongestCommonPrefix($expected, $str, $otherStr, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3163,6 +3205,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $otherStr
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonSubstringProvider')]
     public function testLongestCommonSubstring($expected, $str, $otherStr, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3180,6 +3223,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $otherStr
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('longestCommonSuffixProvider')]
     public function testLongestCommonSuffix($expected, $str, $otherStr, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3196,6 +3240,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lowerCaseFirstProvider')]
     public function testLowerCaseFirst($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3223,6 +3268,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $offset
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('offsetExistsProvider')]
     public function testOffsetExists($expected, $offset)
     {
         $stringy = S::create('fòô', 'UTF-8');
@@ -3300,6 +3346,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $padType
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padProvider')]
     public function testPad($expected, $str, $length, $padStr = ' ', $padType = 'right', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3318,6 +3365,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $padStr
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padBothProvider')]
     public function testPadBoth($expected, $str, $length, $padStr = ' ', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3344,6 +3392,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $padStr
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padLeftProvider')]
     public function testPadLeft($expected, $str, $length, $padStr = ' ', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3362,6 +3411,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $padStr
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('padRightProvider')]
     public function testPadRight($expected, $str, $length, $padStr = ' ', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3379,6 +3429,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $string
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('prependProvider')]
     public function testPrepend($expected, $str, $string, $encoding = null)
     {
         $result = S::create($str, $encoding)->prepend($string);
@@ -3400,6 +3451,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('equalsProvider')]
     public function testEquals($expected, $str, $encoding = null)
     {
         $result = S::create('fòô bàř', $encoding)->isEquals($str);
@@ -3423,6 +3475,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyProvider')]
     public function testEmpty($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->isEmpty();
@@ -3436,6 +3489,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyProvider')]
     public function testNotEmpty($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->isNotEmpty();
@@ -3450,6 +3504,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $allowableTags
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeHtmlProvider')]
     public function testRemoveHtml($expected, $str, $allowableTags = '', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3467,6 +3522,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $replacement
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeHtmlBreakProvider')]
     public function testRemoveHtmlBreak($expected, $str, $replacement = '', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3484,6 +3540,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $substring
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeLeftProvider')]
     public function testRemoveLeft($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3501,6 +3558,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $substring
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeRightProvider')]
     public function testRemoveRight($expected, $str, $substring, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3517,6 +3575,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removeXssProvider')]
     public function testRemoveXss($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3534,6 +3593,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $multiplier
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('repeatProvider')]
     public function testRepeat($expected, $str, $multiplier, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3553,6 +3613,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null   $encoding
      * @param bool   $caseSensitive
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceProvider')]
     public function testReplace($expected, $str, $search, $replacement, $encoding = null, $caseSensitive = true)
     {
         $stringy = S::create($str, $encoding);
@@ -3572,6 +3633,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null   $encoding
      * @param bool   $caseSensitive
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceAllProvider')]
     public function testReplaceAll($expected, $str, $search, $replacement, $encoding = null, $caseSensitive = true)
     {
         $stringy = S::create($str, $encoding);
@@ -3590,6 +3652,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $replacement
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceBeginningProvider')]
     public function testReplaceBeginning($expected, $str, $search, $replacement, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3608,6 +3671,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $replacement
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceEndingProvider')]
     public function testReplaceEnding($expected, $str, $search, $replacement, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3626,6 +3690,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $replacement
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceFirstProvider')]
     public function testReplaceFirst($expected, $str, $search, $replacement, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3644,6 +3709,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $replacement
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('replaceLastProvider')]
     public function testReplaceLast($expected, $str, $search, $replacement, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3660,6 +3726,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('reverseProvider')]
     public function testReverse($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3678,6 +3745,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $substring
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('safeTruncateProvider')]
     public function testSafeTruncate($expected, $str, $length, $substring = '', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3696,6 +3764,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $strAddOn
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shortenAfterWordProvider')]
     public function testShortenAfterWord($expected, $str, $length, $strAddOn = '...', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3711,6 +3780,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shuffleProvider')]
     public function testShuffle($str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3743,6 +3813,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $end
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('sliceProvider')]
     public function testSlice($expected, $str, $start, $end = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3759,6 +3830,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param        $str
      * @param string $replacement
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('slugifyProvider')]
     public function testSlugify($expected, $str, $replacement = '-')
     {
         $stringy = S::create($str);
@@ -3775,6 +3847,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string      $str
      * @param string|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('snakeizeProvider')]
     public function testSnakeize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3792,6 +3865,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int      $length
      * @param null     $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('chunkProvider')]
     public function testChunk($expected, $str, $length = 1, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3850,6 +3924,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param int         $limit
      * @param string|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('splitProvider')]
     public function testSplit($expected, $str, $pattern, $limit = -1, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3875,6 +3950,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('startsWithProvider')]
     public function testStartsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3893,6 +3969,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('startsWithProviderAny')]
     public function testStartsWithAny($expected, $str, $substring, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3909,6 +3986,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stripWhitespaceProvider')]
     public function testStripWhitespace($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -3988,6 +4066,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $length
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('substrProvider')]
     public function testSubstr($expected, $str, $start, $length = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4028,6 +4107,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $str
      * @param $substring
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('surroundProvider')]
     public function testSurround($expected, $str, $substring)
     {
         $stringy = S::create($str);
@@ -4052,6 +4132,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('swapCaseProvider')]
     public function testSwapCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4067,6 +4148,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tidyProvider')]
     public function testTidy($expected, $str)
     {
         $stringy = S::create($str);
@@ -4085,6 +4167,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string|null $word_define_chars
      * @param string|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('titleizeProvider')]
     public function testTitleize($expected, $str, $ignore = null, $word_define_chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4102,6 +4185,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param array       $ignore
      * @param string|null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('titleizeForHumansProvider')]
     public function testTitleizeForHumans($str, $expected, $ignore = [], $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4111,7 +4195,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
         static::assertSame($str, $stringy->toString());
     }
 
-    public function titleizeForHumansProvider()
+    public static function titleizeForHumansProvider()
     {
         return [
             ['TITLE CASE', 'Title Case'],
@@ -4197,6 +4281,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toTransliterateProvider')]
     public function testTesttoTransliterate($expected, $str)
     {
         $stringy = S::create($str);
@@ -4214,6 +4299,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toBooleanProvider')]
     public function testToBoolean($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4230,6 +4316,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toLowerCaseProvider')]
     public function testToLowerCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4246,6 +4333,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param     $str
      * @param int $tabLength
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toSpacesProvider')]
     public function testToSpaces($expected, $str, $tabLength = 4)
     {
         $stringy = S::create($str);
@@ -4261,6 +4349,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @param $str
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toStringProvider')]
     public function testToString($expected, $str)
     {
         $stringy = new S($str);
@@ -4284,6 +4373,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param     $str
      * @param int $tabLength
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toTabsProvider')]
     public function testToTabs($expected, $str, $tabLength = 4)
     {
         $stringy = S::create($str);
@@ -4300,6 +4390,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toTitleCaseProvider')]
     public function testToTitleCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4316,6 +4407,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toUpperCaseProvider')]
     public function testToUpperCase($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4333,6 +4425,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $chars
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimProvider')]
     public function testTrim($expected, $str, $chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4350,6 +4443,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $chars
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimLeftProvider')]
     public function testTrimLeft($expected, $str, $chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4367,6 +4461,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param null $chars
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trimRightProvider')]
     public function testTrimRight($expected, $str, $chars = null, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4385,6 +4480,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $substring
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('truncateProvider')]
     public function testTruncate($expected, $str, $length, $substring = '', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4401,6 +4497,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('underscoredProvider')]
     public function testUnderscored($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4417,6 +4514,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('upperCamelizeProvider')]
     public function testUpperCamelize($expected, $str, $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4433,6 +4531,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param      $str
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('upperCaseFirstProvider')]
     public function testUpperCaseFirst($expected, $str, $encoding = null)
     {
         $result = S::create($str, $encoding)->upperCaseFirst();
@@ -4564,6 +4663,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param bool $caseSensitive
      * @param null $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsAnyProvider')]
     public function testTestcontainsAny($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
     {
         $stringy = S::create($haystack, $encoding);
@@ -4584,6 +4684,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param string $delimiter
      * @param null   $encoding
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('regexReplaceProvider')]
     public function testTestregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $delimiter = '/', $encoding = null)
     {
         $stringy = S::create($str, $encoding);
@@ -4596,7 +4697,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function tidyProvider(): array
+    public static function tidyProvider(): array
     {
         return [
             ['"I see..."', '“I see…”'],
@@ -4609,7 +4710,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function titleizeProvider(): array
+    public static function titleizeProvider(): array
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
 
@@ -4633,7 +4734,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toTransliterateProvider(): array
+    public static function toTransliterateProvider(): array
     {
         return [
             ['foo bar', 'fòô bàř'],
@@ -4659,7 +4760,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toBooleanProvider(): array
+    public static function toBooleanProvider(): array
     {
         return [
             [true, 'true'],
@@ -4683,7 +4784,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toLowerCaseProvider(): array
+    public static function toLowerCaseProvider(): array
     {
         return [
             ['foo bar', 'FOO BAR'],
@@ -4697,7 +4798,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toSpacesProvider(): array
+    public static function toSpacesProvider(): array
     {
         return [
             ['    foo    bar    ', '	foo	bar	'],
@@ -4712,7 +4813,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toStringProvider(): array
+    public static function toStringProvider(): array
     {
         return [
             ['', null],
@@ -4727,7 +4828,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toTabsProvider(): array
+    public static function toTabsProvider(): array
     {
         return [
             ['	foo	bar	', '    foo    bar    '],
@@ -4741,7 +4842,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toTitleCaseProvider(): array
+    public static function toTitleCaseProvider(): array
     {
         return [
             ['Foo Bar', 'foo bar'],
@@ -4755,7 +4856,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function toUpperCaseProvider(): array
+    public static function toUpperCaseProvider(): array
     {
         return [
             ['FOO BAR', 'foo bar'],
@@ -4770,7 +4871,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimLeftProvider(): array
+    public static function trimLeftProvider(): array
     {
         return [
             ['foo   bar  ', '  foo   bar  '],
@@ -4792,7 +4893,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimProvider(): array
+    public static function trimProvider(): array
     {
         return [
             ['foo   bar', '  foo   bar  '],
@@ -4813,7 +4914,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimRightProvider(): array
+    public static function trimRightProvider(): array
     {
         return [
             ['  foo   bar', '  foo   bar  '],
@@ -4835,7 +4936,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function truncateProvider(): array
+    public static function truncateProvider(): array
     {
         return [
             ['Test foo bar', 'Test foo bar', 12],
@@ -4866,7 +4967,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function underscoredProvider(): array
+    public static function underscoredProvider(): array
     {
         return [
             ['test_case', 'testCase'],
@@ -4891,7 +4992,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function upperCamelizeProvider(): array
+    public static function upperCamelizeProvider(): array
     {
         return [
             ['CamelCase', 'camelCase'],
@@ -4918,7 +5019,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function upperCaseFirstProvider(): array
+    public static function upperCaseFirstProvider(): array
     {
         return [
             ['Test', 'Test'],
@@ -4937,6 +5038,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $encodingParameter
      * @dataProvider strBeginsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('strBeginsProvider')]
     public function testStrBegins($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
     {
         static::assertSame(
@@ -4948,7 +5050,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function strBeginsProvider()
+    public static function strBeginsProvider()
     {
         $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
         $string_ascii = 'abc def';
@@ -4982,6 +5084,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $encodingParameter
      * @dataProvider strEndsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('strEndsProvider')]
     public function testStrEnds($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
     {
         static::assertSame(
@@ -4993,7 +5096,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function strEndsProvider()
+    public static function strEndsProvider()
     {
         $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
         $string_ascii = 'abc def';
@@ -5027,6 +5130,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $encodingParameter
      * @dataProvider strIbeginsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('strIbeginsProvider')]
     public function testStrIbegins($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
     {
         static::assertSame(
@@ -5038,7 +5142,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function strIbeginsProvider()
+    public static function strIbeginsProvider()
     {
         $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
         $string_ascii = 'abc def';
@@ -5073,6 +5177,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
      * @param $encodingParameter
      * @dataProvider strIendsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('strIendsProvider')]
     public function testStrIends($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
     {
         static::assertSame(
@@ -5138,7 +5243,7 @@ final class StringyStrictTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function strIendsProvider()
+    public static function strIendsProvider()
     {
         $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
         $string_ascii = 'abc def';
